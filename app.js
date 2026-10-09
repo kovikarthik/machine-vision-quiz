@@ -481,6 +481,20 @@
             </button>
             <div class="accordion-body">
               <p class="explain-summary">${escapeHtml(q.explanation.summary)}</p>
+              ${q.explanation.noobBreakdown ? `
+                <div class="explain-section explain-noob">
+                  <span class="noob-tag">🐣 Plain-English / Noob Breakdown</span>
+                  <p>${escapeHtml(q.explanation.noobBreakdown)}</p>
+                </div>
+              ` : ''}
+              ${q.explanation.terms ? `
+                <div class="explain-section explain-terms">
+                  <span class="terms-tag">📖 Detailed Term-by-Term Glossary</span>
+                  <ul class="terms-glossary-list">
+                    ${Object.entries(q.explanation.terms).map(([term, def]) => `<li><strong>${escapeHtml(term)}:</strong> ${escapeHtml(def)}</li>`).join('')}
+                  </ul>
+                </div>
+              ` : ''}
               <div class="explain-section">
                 <strong>Why This Answer Is Correct:</strong>
                 <p>${escapeHtml(q.explanation.whyCorrect)}</p>
@@ -873,6 +887,31 @@
     if (isInstant && hasAnswered) {
       explainBox.style.display = 'block';
       document.getElementById('activeExplainSummary').textContent = currentQ.explanation.summary;
+
+      const noobBox = document.getElementById('activeExplainNoob');
+      const noobWrap = document.getElementById('activeExplainNoobWrapper');
+      if (noobBox && noobWrap) {
+        if (currentQ.explanation.noobBreakdown) {
+          noobBox.textContent = currentQ.explanation.noobBreakdown;
+          noobWrap.style.display = 'block';
+        } else {
+          noobWrap.style.display = 'none';
+        }
+      }
+
+      const termsList = document.getElementById('activeExplainTerms');
+      const termsWrap = document.getElementById('activeExplainTermsWrapper');
+      if (termsList && termsWrap) {
+        if (currentQ.explanation.terms && Object.keys(currentQ.explanation.terms).length > 0) {
+          termsList.innerHTML = Object.entries(currentQ.explanation.terms)
+            .map(([t, d]) => `<li><strong>${escapeHtml(t)}:</strong> ${escapeHtml(d)}</li>`)
+            .join('');
+          termsWrap.style.display = 'block';
+        } else {
+          termsWrap.style.display = 'none';
+        }
+      }
+
       document.getElementById('activeExplainWhyCorrect').textContent = currentQ.explanation.whyCorrect;
       document.getElementById('activeExplainWhyWrong').textContent = currentQ.explanation.whyWrong;
 
@@ -1302,6 +1341,20 @@
               <span>Detailed Breakdown</span>
             </div>
             <p class="explain-summary">${escapeHtml(q.explanation.summary)}</p>
+            ${q.explanation.noobBreakdown ? `
+              <div class="explain-section explain-noob">
+                <span class="noob-tag">🐣 Plain-English / Noob Breakdown</span>
+                <p>${escapeHtml(q.explanation.noobBreakdown)}</p>
+              </div>
+            ` : ''}
+            ${q.explanation.terms ? `
+              <div class="explain-section explain-terms">
+                <span class="terms-tag">📖 Detailed Term-by-Term Glossary</span>
+                <ul class="terms-glossary-list">
+                  ${Object.entries(q.explanation.terms).map(([term, def]) => `<li><strong>${escapeHtml(term)}:</strong> ${escapeHtml(def)}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
             <div class="explain-section">
               <strong>Why This Is Correct:</strong>
               <p>${escapeHtml(q.explanation.whyCorrect)}</p>

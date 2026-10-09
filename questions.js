@@ -1,11 +1,12 @@
 // ==============================================================================
-// CECS 553 - MACHINE VISION | QUIZ 1 COMPREHENSIVE QUESTION BANK (110 MCQS)
+// CECS 553 - MACHINE VISION | QUIZ 1 COMPREHENSIVE QUESTION BANK (180 MCQS)
 // Grounded in Course Slides, MIT 6.S191 Lectures 1 & 3, Bonus Module 1 & Labs
 // Modules Covered:
 //   - Module 01: PT_Part1_Intro.ipynb, Part1_TensorFlow.ipynb, data_augmentation.ipynb
 //   - Module 02: Part1_MNIST.ipynb, PT_Part1_MNIST.ipynb, CNN2025.pdf
-//   - Module 03: autoencoder.ipynb (Denoising, Conv2DTranspose, Anomaly Detection)
-// Total Questions: 110 High-Yield Conceptual & Computational MCQs
+//   - Module 03: autoencoder.ipynb, PT_Part2_Debiasing.ipynb, Generative Models.pdf
+// Total Questions: 180 High-Yield Conceptual & Computational MCQs
+// Features: Full Plain-English / Noob Breakdowns & Term-by-Term Glossaries
 // ==============================================================================
 
 const QUESTION_BANK = [
@@ -22,10 +23,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "A linear combination (dot product of input features and weights plus bias)",
     "explanation": {
-      "summary": "A perceptron first computes the pre-activation linear combination z = \u03a3 (w_i * x_i) + b = W^T * X + b, which is then passed to the activation function g(z).",
-      "whyCorrect": "The forward pass of a basic artificial neuron decomposes into two distinct steps: (1) Linear combination of weighted inputs plus bias, z = W\u00b7X + b; (2) Non-linear transformation, y\u0302 = g(z).",
+      "summary": "A perceptron first computes the pre-activation linear combination z = Σ (w_i * x_i) + b = W^T * X + b, which is then passed to the activation function g(z).",
+      "whyCorrect": "The forward pass of a basic artificial neuron decomposes into two distinct steps: (1) Linear combination of weighted inputs plus bias, z = W·X + b; (2) Non-linear transformation, ŷ = g(z).",
       "whyWrong": "Softmax is applied at the output layer of multi-class networks, convolution is specific to convolutional layers, and batch normalization is an intermediate normalization layer across mini-batches.",
-      "keyConcept": "Perceptron Equation: z = W^T * X + b, y\u0302 = g(z)"
+      "keyConcept": "Perceptron Equation: z = W^T * X + b, ŷ = g(z)"
     },
     "difficulty": "Basic"
   },
@@ -45,7 +46,7 @@ const QUESTION_BANK = [
       "summary": "Composition of linear functions is always linear: W2 * (W1 * x + b1) + b2 = (W2 * W1) * x + (W2 * b1 + b2) = W' * x + b'.",
       "whyCorrect": "If g(z) = z (linear), then any depth network can be reduced to a single-layer perceptron. Non-linear activations allow networks to model non-linear decision boundaries and approximate any continuous function (Universal Approximation Theorem).",
       "whyWrong": "Deep learning loss landscapes are non-convex regardless of activations; backpropagation is still required for gradients; and weights can be positive or negative.",
-      "keyConcept": "Linear Collapse: W2 \u00b7 (W1 \u00b7 x) = (W2 \u00b7 W1) \u00b7 x"
+      "keyConcept": "Linear Collapse: W2 · (W1 · x) = (W2 · W1) · x"
     },
     "difficulty": "Basic"
   },
@@ -62,10 +63,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "Sigmoid (and Tanh)",
     "explanation": {
-      "summary": "Sigmoid \u03c3(z) = 1 / (1 + e^-z) has derivative \u03c3'(z) = \u03c3(z)(1 - \u03c3(z)), which saturates to near 0 for |z| >> 0, with a maximum derivative of only 0.25.",
-      "whyCorrect": "When backpropagating gradients through many layers, multiplying several numbers \u2264 0.25 exponentially shrinks the gradient toward 0, preventing early layers from updating.",
+      "summary": "Sigmoid σ(z) = 1 / (1 + e^-z) has derivative σ'(z) = σ(z)(1 - σ(z)), which saturates to near 0 for |z| >> 0, with a maximum derivative of only 0.25.",
+      "whyCorrect": "When backpropagating gradients through many layers, multiplying several numbers ≤ 0.25 exponentially shrinks the gradient toward 0, preventing early layers from updating.",
       "whyWrong": "ReLU has a constant derivative of 1 for all positive inputs, actively preventing vanishing gradients on positive inputs. Leaky ReLU and PReLU maintain non-zero derivatives on both sides.",
-      "keyConcept": "Max derivative of Sigmoid is \u03c3'(0) = 0.25. For N layers, gradient scales as (0.25)^N \u2192 0."
+      "keyConcept": "Max derivative of Sigmoid is σ'(0) = 0.25. For N layers, gradient scales as (0.25)^N → 0."
     },
     "difficulty": "Basic"
   },
@@ -84,7 +85,7 @@ const QUESTION_BANK = [
     "explanation": {
       "summary": "ReLU computes max(0, z), which requires just a simple threshold comparison (no expensive exponential evaluations) and has d/dz = 1 for z > 0.",
       "whyCorrect": "For positive inputs, the gradient does not saturate or vanish, allowing deep networks to train much faster with simple arithmetic operations.",
-      "whyWrong": "Tanh is zero-centered between -1 and 1, not ReLU (which is [0, \u221e)). Softmax normalizes to a probability distribution. ReLU has exactly 0 gradient for negative inputs (the 'dying ReLU' phenomenon).",
+      "whyWrong": "Tanh is zero-centered between -1 and 1, not ReLU (which is [0, ∞)). Softmax normalizes to a probability distribution. ReLU has exactly 0 gradient for negative inputs (the 'dying ReLU' phenomenon).",
       "keyConcept": "ReLU: g(z) = max(0, z); g'(z) = 1 if z > 0 else 0."
     },
     "difficulty": "Intermediate"
@@ -103,9 +104,9 @@ const QUESTION_BANK = [
     "correctAnswer": "The 'Dying ReLU' problem",
     "explanation": {
       "summary": "When z < 0, ReLU output is 0 and its derivative is 0. If a large gradient step moves weights such that z < 0 for all data points, the neuron will never activate again.",
-      "whyCorrect": "Since gradient is 0 for z < 0, gradient descent can never update the weights again; the neuron is functionally dead. This motivated Leaky ReLU (f(z) = max(\u03b1z, z)).",
+      "whyCorrect": "Since gradient is 0 for z < 0, gradient descent can never update the weights again; the neuron is functionally dead. This motivated Leaky ReLU (f(z) = max(αz, z)).",
       "whyWrong": "Internal covariate shift relates to changing distribution of internal activations (solved by Batch Norm). Exploding gradients mean gradient values become exponentially large (NaN/Inf).",
-      "keyConcept": "Dying ReLU: When z < 0 for all training examples, \u2202L/\u2202w = 0 and weights never update."
+      "keyConcept": "Dying ReLU: When z < 0 for all training examples, ∂L/∂w = 0 and weights never update."
     },
     "difficulty": "Intermediate"
   },
@@ -113,7 +114,7 @@ const QUESTION_BANK = [
     "id": 6,
     "category": "Perceptron & Activations",
     "module": "Module 1",
-    "question": "For a multi-class image classification task with 10 mutually exclusive classes (e.g., MNIST digits 0\u20139), which activation function is placed at the final output layer?",
+    "question": "For a multi-class image classification task with 10 mutually exclusive classes (e.g., MNIST digits 0–9), which activation function is placed at the final output layer?",
     "options": [
       "Softmax",
       "Sigmoid",
@@ -123,9 +124,9 @@ const QUESTION_BANK = [
     "correctAnswer": "Softmax",
     "explanation": {
       "summary": "Softmax turns a vector of arbitrary real logits into a normalized probability distribution where each value is in (0, 1) and their sum equals 1.0.",
-      "whyCorrect": "Softmax(z_i) = e^(z_i) / \u03a3_j e^(z_j). Since the classes are mutually exclusive, softmax enforces competition among classes so probabilities sum to 1.",
+      "whyCorrect": "Softmax(z_i) = e^(z_i) / Σ_j e^(z_j). Since the classes are mutually exclusive, softmax enforces competition among classes so probabilities sum to 1.",
       "whyWrong": "Sigmoid is used for binary classification or multi-label classification (where multiple classes can occur simultaneously). Tanh outputs values in [-1, 1] which cannot represent probabilities.",
-      "keyConcept": "Softmax Formula: P(y = i | z) = e^(z_i) / \u03a3_{j=1}^K e^(z_j)"
+      "keyConcept": "Softmax Formula: P(y = i | z) = e^(z_i) / Σ_{j=1}^K e^(z_j)"
     },
     "difficulty": "Intermediate"
   },
@@ -143,9 +144,9 @@ const QUESTION_BANK = [
     "correctAnswer": "Categorical Cross-Entropy (or Sparse Categorical Cross-Entropy)",
     "explanation": {
       "summary": "Cross-Entropy measures the distance between the true distribution (one-hot or integer labels) and the predicted probability distribution.",
-      "whyCorrect": "Cross-entropy loss L = -\u03a3 y_i * log(p_i) heavily penalizes confident incorrect predictions. When combined with Softmax, its gradient with respect to logits is elegant: (p_i - y_i).",
+      "whyCorrect": "Cross-entropy loss L = -Σ y_i * log(p_i) heavily penalizes confident incorrect predictions. When combined with Softmax, its gradient with respect to logits is elegant: (p_i - y_i).",
       "whyWrong": "MSE is designed for continuous regression problems and leads to non-convex optimization and severe gradient vanishing when paired with Softmax/Sigmoid. Hinge loss is typically used for SVMs.",
-      "keyConcept": "Cross-Entropy: L = - \u03a3 y_k log(p_k). If true label is c, L = -log(p_c)."
+      "keyConcept": "Cross-Entropy: L = - Σ y_k log(p_k). If true label is c, L = -log(p_c)."
     },
     "difficulty": "Exam Level"
   },
@@ -173,7 +174,7 @@ const QUESTION_BANK = [
     "id": 9,
     "category": "Loss & Optimization",
     "module": "Module 1",
-    "question": "During gradient descent, what happens if the learning rate (\u03b7) is chosen to be excessively large?",
+    "question": "During gradient descent, what happens if the learning rate (η) is chosen to be excessively large?",
     "options": [
       "The parameter updates overshoot the local minima, causing the loss to oscillate wildly or diverge toward infinity (NaN)",
       "The network will converge extremely slowly and get trapped in the very first plateau",
@@ -182,7 +183,7 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "The parameter updates overshoot the local minima, causing the loss to oscillate wildly or diverge toward infinity (NaN)",
     "explanation": {
-      "summary": "Weight update rule: W = W - \u03b7 * \u2207L. A huge \u03b7 causes steps larger than the curvature of the loss surface, skipping minima and climbing uphill.",
+      "summary": "Weight update rule: W = W - η * ∇L. A huge η causes steps larger than the curvature of the loss surface, skipping minima and climbing uphill.",
       "whyCorrect": "Large steps bounce back and forth across valleys of the loss landscape, frequently resulting in numeric overflow (divergence). Conversely, a very small learning rate causes painfully slow convergence.",
       "whyWrong": "Slow convergence is caused by an excessively small learning rate. Autoencoders and overfitting depend on architecture and generalization, not high learning rate divergence.",
       "keyConcept": "Learning rate tradeoff: Too small = slow/stuck; Too large = overshoot/diverge (NaN)."
@@ -225,7 +226,7 @@ const QUESTION_BANK = [
       "summary": "Adam stands for Adaptive Moment Estimation. It tracks m_t (mean of gradients, momentum) and v_t (uncentered variance of gradients, RMSprop scale).",
       "whyCorrect": "First moment m_t accelerates through shallow plateaus in consistent directions (momentum), while second moment v_t scales down updates for parameters with huge gradients (RMSprop), adapting individual learning rates per parameter.",
       "whyWrong": "Adam has nothing to do with training dual networks (which is ensembling) or alternating regularization forms.",
-      "keyConcept": "Adam updates: m_t = \u03b21*m_{t-1} + (1-\u03b21)*g; v_t = \u03b22*v_{t-1} + (1-\u03b22)*g^2."
+      "keyConcept": "Adam updates: m_t = β1*m_{t-1} + (1-β1)*g; v_t = β2*v_{t-1} + (1-β2)*g^2."
     },
     "difficulty": "Basic"
   },
@@ -236,16 +237,16 @@ const QUESTION_BANK = [
     "question": "In deep learning, backpropagation calculates the gradient of the loss with respect to all trainable weights by systematically applying which mathematical principle?",
     "options": [
       "The Calculus Chain Rule",
-      "L'H\u00f4pital's Rule",
+      "L'Hôpital's Rule",
       "The Central Limit Theorem",
       "Taylor Series expansion to order 5"
     ],
     "correctAnswer": "The Calculus Chain Rule",
     "explanation": {
-      "summary": "Backpropagation propagates the error gradient backward through composite functions: \u2202L/\u2202w_i = (\u2202L/\u2202y) * (\u2202y/\u2202z) * (\u2202z/\u2202w_i).",
+      "summary": "Backpropagation propagates the error gradient backward through composite functions: ∂L/∂w_i = (∂L/∂y) * (∂y/∂z) * (∂z/∂w_i).",
       "whyCorrect": "Because a deep neural network is a chain of nested composite functions f_L(f_{L-1}(...f_1(x))), the derivative with respect to any intermediate weight is evaluated via the chain rule of differential calculus.",
-      "whyWrong": "L'H\u00f4pital's rule is for evaluating 0/0 limits; Central Limit Theorem is for sample mean distributions.",
-      "keyConcept": "Chain rule: \u2202L/\u2202w = (\u2202L/\u2202output) * (\u2202output/\u2202preactivation) * (\u2202preactivation/\u2202w)"
+      "whyWrong": "L'Hôpital's rule is for evaluating 0/0 limits; Central Limit Theorem is for sample mean distributions.",
+      "keyConcept": "Chain rule: ∂L/∂w = (∂L/∂output) * (∂output/∂preactivation) * (∂preactivation/∂w)"
     },
     "difficulty": "Basic"
   },
@@ -302,10 +303,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "Normalizes the inputs of each layer across the mini-batch to have zero mean and unit variance, stabilizing training and smoothing the loss landscape",
     "explanation": {
-      "summary": "Batch Norm computes mean \u03bc_B and variance \u03c3_B^2 over the mini-batch, normalizes x\u0302 = (x - \u03bc_B) / \u221a(\u03c3_B^2 + \u03b5), and applies learnable scale \u03b3 and shift \u03b2.",
+      "summary": "Batch Norm computes mean μ_B and variance σ_B^2 over the mini-batch, normalizes x̂ = (x - μ_B) / √(σ_B^2 + ε), and applies learnable scale γ and shift β.",
       "whyCorrect": "It drastically speeds up convergence, allows higher learning rates, reduces sensitivity to weight initialization, and provides slight regularization.",
       "whyWrong": "Batch Normalization does not alter channel dimensions (pooling/1x1 conv does that) and does not replace non-linear activations.",
-      "keyConcept": "Batch Norm: y = \u03b3 * ((x - \u03bc) / \u221a(\u03c3\u00b2 + \u03b5)) + \u03b2, with learnable parameters \u03b3 and \u03b2."
+      "keyConcept": "Batch Norm: y = γ * ((x - μ) / √(σ² + ε)) + β, with learnable parameters γ and β."
     },
     "difficulty": "Intermediate"
   },
@@ -322,10 +323,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "L1 regularization drives small weights strictly to zero (inducing sparsity), while L2 shrinks weights smoothly toward zero without exact zeros",
     "explanation": {
-      "summary": "L1 penalty is proportional to \u03a3 |w| (constant derivative \u00b1\u03bb), which pushes weights all the way to 0. L2 penalty is proportional to \u03a3 w^2 (derivative 2\u03bbw), which shrinks weights proportionally.",
+      "summary": "L1 penalty is proportional to Σ |w| (constant derivative ±λ), which pushes weights all the way to 0. L2 penalty is proportional to Σ w^2 (derivative 2λw), which shrinks weights proportionally.",
       "whyCorrect": "L1 acts as a natural feature selector by producing sparse weight matrices with exact zeros. L2 penalizes large weights more heavily, distributing weights evenly and smoothly.",
       "whyWrong": "L2 does not create exact zero sparsity; neither alters layer counts or data loaders.",
-      "keyConcept": "L1 Penalty = \u03bb \u03a3 |w| (Sparse, feature selection); L2 Penalty = \u00bd \u03bb \u03a3 w\u00b2 (Smooth weight decay)."
+      "keyConcept": "L1 Penalty = λ Σ |w| (Sparse, feature selection); L2 Penalty = ½ λ Σ w² (Smooth weight decay)."
     },
     "difficulty": "Exam Level"
   },
@@ -423,9 +424,9 @@ const QUESTION_BANK = [
     "correctAnswer": "O = floor((W - K + 2P) / S) + 1",
     "explanation": {
       "summary": "The spatial dimension shrinks by the filter size, expands by twice the padding (both sides), steps by stride S, plus 1 for the initial position.",
-      "whyCorrect": "Formula: O = \u230a(W - K + 2P) / S\u230b + 1. For example, W=32, K=5, P=0, S=1 gives (32 - 5 + 0)/1 + 1 = 28.",
+      "whyCorrect": "Formula: O = ⌊(W - K + 2P) / S⌋ + 1. For example, W=32, K=5, P=0, S=1 gives (32 - 5 + 0)/1 + 1 = 28.",
       "whyWrong": "All other choices have incorrect algebraic forms that violate boundary conditions.",
-      "keyConcept": "Dimension Formula: O = \u230a(W - K + 2P) / S\u230b + 1"
+      "keyConcept": "Dimension Formula: O = ⌊(W - K + 2P) / S⌋ + 1"
     },
     "difficulty": "Exam Level"
   },
@@ -482,10 +483,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "31 x 31",
     "explanation": {
-      "summary": "Apply formula: O = \u230a(W - K + 2P) / S\u230b + 1 with W=64, K=4, P=1, S=2.",
-      "whyCorrect": "Calculation: O = \u230a(64 - 4 + 2(1)) / 2\u230b + 1 = \u230a(60 + 2) / 2\u230b + 1 = \u230a62 / 2\u230b + 1 = 31 + 1 = 32? Wait: 64 - 4 + 2 = 62. 62 / 2 = 31. 31 + 1 = 32? Let's check: (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 31 + 1 = 32! Wait: let's recalculate carefully!",
+      "summary": "Apply formula: O = ⌊(W - K + 2P) / S⌋ + 1 with W=64, K=4, P=1, S=2.",
+      "whyCorrect": "Calculation: O = ⌊(64 - 4 + 2(1)) / 2⌋ + 1 = ⌊(60 + 2) / 2⌋ + 1 = ⌊62 / 2⌋ + 1 = 31 + 1 = 32? Wait: 64 - 4 + 2 = 62. 62 / 2 = 31. 31 + 1 = 32? Let's check: (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 31 + 1 = 32! Wait: let's recalculate carefully!",
       "whyWrong": "Let's re-verify: W=64, K=4, P=1, S=2 -> (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 31 + 1 = 32! If P=0: (64-4)/2 + 1 = 31. Here with P=1, output is 32x32.",
-      "keyConcept": "O = \u230a(64 - 4 + 2) / 2\u230b + 1 = 31 + 1 = 32."
+      "keyConcept": "O = ⌊(64 - 4 + 2) / 2⌋ + 1 = 31 + 1 = 32."
     },
     "difficulty": "Exam Level"
   },
@@ -625,7 +626,7 @@ const QUESTION_BANK = [
       "summary": "Global Average Pooling computes the spatial average of each entire channel slice (e.g. 7x7x512 -> 1x1x512 = 512-dim vector).",
       "whyCorrect": "GAP replaces massive Flatten + Dense layers (which often contained 80%+ of model parameters in AlexNet/VGG), drastically reducing parameters and making the network robust to overfitting.",
       "whyWrong": "GAP does not average across batch samples or collapse channels; it averages across spatial H and W.",
-      "keyConcept": "Global Average Pooling: (H, W, C) \u2192 (1, 1, C), eliminating millions of dense parameters."
+      "keyConcept": "Global Average Pooling: (H, W, C) → (1, 1, C), eliminating millions of dense parameters."
     },
     "difficulty": "Intermediate"
   },
@@ -703,9 +704,9 @@ const QUESTION_BANK = [
     "correctAnswer": "H(x) = F(x) + x, where F(x) is the residual mapping and x is the identity shortcut",
     "explanation": {
       "summary": "Instead of hoping layers directly fit the target mapping H(x), ResNet forces layers to fit the residual F(x) = H(x) - x, so H(x) = F(x) + x.",
-      "whyCorrect": "By adding the identity shortcut (+ x), the gradient \u2202L/\u2202x = \u2202L/\u2202H * (\u2202F/\u2202x + 1). The '+ 1' ensures gradient can flow directly backward without vanishing, even if \u2202F/\u2202x is near zero!",
+      "whyCorrect": "By adding the identity shortcut (+ x), the gradient ∂L/∂x = ∂L/∂H * (∂F/∂x + 1). The '+ 1' ensures gradient can flow directly backward without vanishing, even if ∂F/∂x is near zero!",
       "whyWrong": "Multiplication or division would alter the identity flow and can vanish or divide by zero. Addition creates an uninterrupted gradient highway.",
-      "keyConcept": "Residual Formula: H(x) = F(x) + x. Gradient: \u2202L/\u2202x = \u2202L/\u2202H \u00b7 (\u2202F/\u2202x + 1)."
+      "keyConcept": "Residual Formula: H(x) = F(x) + x. Gradient: ∂L/∂x = ∂L/∂H · (∂F/∂x + 1)."
     },
     "difficulty": "Intermediate"
   },
@@ -725,7 +726,7 @@ const QUESTION_BANK = [
       "summary": "A 1x1 convolution acts as a pixel-wise linear combination across channels followed by a non-linear activation.",
       "whyCorrect": "It changes channel depth (e.g. from 256 channels down to 64 channels) without changing spatial dimensions (H, W), drastically reducing FLOPs before expensive 3x3 convs.",
       "whyWrong": "A 1x1 filter has spatial size 1, so it cannot extract spatial context across neighboring pixels.",
-      "keyConcept": "1x1 Conv: Modifies channel depth (C_in \u2192 C_out) while preserving spatial (H, W)."
+      "keyConcept": "1x1 Conv: Modifies channel depth (C_in → C_out) while preserving spatial (H, W)."
     },
     "difficulty": "Intermediate"
   },
@@ -783,9 +784,9 @@ const QUESTION_BANK = [
     "correctAnswer": "Intersection over Union (IoU / Jaccard Index)",
     "explanation": {
       "summary": "IoU = Area of Overlap / Area of Union between predicted box/mask and ground-truth box/mask.",
-      "whyCorrect": "IoU ranges from 0 (no overlap) to 1.0 (perfect match). A detection is commonly counted as a True Positive if IoU \u2265 0.5 (or mAP@0.5:0.95).",
+      "whyCorrect": "IoU ranges from 0 (no overlap) to 1.0 (perfect match). A detection is commonly counted as a True Positive if IoU ≥ 0.5 (or mAP@0.5:0.95).",
       "whyWrong": "BLEU and Perplexity are NLP evaluation metrics for language generation. MSE is for regression.",
-      "keyConcept": "IoU Formula: IoU = Area(Prediction \u2229 Ground Truth) / Area(Prediction \u222a Ground Truth)"
+      "keyConcept": "IoU Formula: IoU = Area(Prediction ∩ Ground Truth) / Area(Prediction ∪ Ground Truth)"
     },
     "difficulty": "Intermediate"
   },
@@ -795,15 +796,15 @@ const QUESTION_BANK = [
     "module": "Module 3",
     "question": "What is the primary architecture and objective of an Autoencoder in deep learning?",
     "options": [
-      "An Encoder compresses input x into a low-dimensional bottleneck latent code z, and a Decoder reconstructs x\u0302 from z by minimizing reconstruction loss",
+      "An Encoder compresses input x into a low-dimensional bottleneck latent code z, and a Decoder reconstructs x̂ from z by minimizing reconstruction loss",
       "A Generator and Discriminator compete in an adversarial zero-sum game",
       "A single Dense layer classifies input images into 1,000 ImageNet categories",
       "An algorithm that removes all convolutional filters from a network"
     ],
-    "correctAnswer": "An Encoder compresses input x into a low-dimensional bottleneck latent code z, and a Decoder reconstructs x\u0302 from z by minimizing reconstruction loss",
+    "correctAnswer": "An Encoder compresses input x into a low-dimensional bottleneck latent code z, and a Decoder reconstructs x̂ from z by minimizing reconstruction loss",
     "explanation": {
-      "summary": "Autoencoders learn efficient, compressed representations (latent space) in an unsupervised self-supervised manner: x \u2192 z \u2192 x\u0302.",
-      "whyCorrect": "The bottleneck forces the network to capture the most salient features rather than trivial identity copying. Loss = ||x - x\u0302||^2 (MSE reconstruction error).",
+      "summary": "Autoencoders learn efficient, compressed representations (latent space) in an unsupervised self-supervised manner: x → z → x̂.",
+      "whyCorrect": "The bottleneck forces the network to capture the most salient features rather than trivial identity copying. Loss = ||x - x̂||^2 (MSE reconstruction error).",
       "whyWrong": "A Generator and Discriminator competing describes a Generative Adversarial Network (GAN), not a standard autoencoder.",
       "keyConcept": "Autoencoder: Encoder q(z|x), Bottleneck z, Decoder p(x|z), Loss = Reconstruction Error."
     },
@@ -862,10 +863,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "55 x 55",
     "explanation": {
-      "summary": "Apply formula: O = \u230a(W - K + 2P)/S\u230b + 1 with W=224, K=11, P=2, S=4.",
-      "whyCorrect": "Numerator: 224 - 11 + 2(2) = 224 - 11 + 4 = 217. \u230a217 / 4\u230b = 54. Adding 1: 54 + 1 = 55. Result is 55 x 55.",
+      "summary": "Apply formula: O = ⌊(W - K + 2P)/S⌋ + 1 with W=224, K=11, P=2, S=4.",
+      "whyCorrect": "Numerator: 224 - 11 + 2(2) = 224 - 11 + 4 = 217. ⌊217 / 4⌋ = 54. Adding 1: 54 + 1 = 55. Result is 55 x 55.",
       "whyWrong": "This is the exact first layer calculation from the famous AlexNet paper (224x224 input -> 55x55 output).",
-      "keyConcept": "AlexNet Layer 1: \u230a(224 - 11 + 4) / 4\u230b + 1 = \u230a217 / 4\u230b + 1 = 54 + 1 = 55."
+      "keyConcept": "AlexNet Layer 1: ⌊(224 - 11 + 4) / 4⌋ + 1 = ⌊217 / 4⌋ + 1 = 54 + 1 = 55."
     },
     "difficulty": "Exam Level"
   },
@@ -913,7 +914,7 @@ const QUESTION_BANK = [
     "id": 46,
     "category": "CNN Fundamentals",
     "module": "Module 2",
-    "question": "Why do we typically increase the number of filters (channels) in deeper layers of a CNN (e.g. 32 \u2192 64 \u2192 128 \u2192 256) while decreasing spatial dimensions with pooling?",
+    "question": "Why do we typically increase the number of filters (channels) in deeper layers of a CNN (e.g. 32 → 64 → 128 → 256) while decreasing spatial dimensions with pooling?",
     "options": [
       "Early layers capture simple local spatial patterns (edges), while deeper layers combine them into richer, more complex high-level semantic representations requiring more channels",
       "Because deeper layers cannot process small numbers of channels on GPUs",
@@ -937,15 +938,15 @@ const QUESTION_BANK = [
     "options": [
       "(-1, 1)",
       "(0, 1)",
-      "[0, \u221e)",
-      "(-\u221e, \u221e)"
+      "[0, ∞)",
+      "(-∞, ∞)"
     ],
     "correctAnswer": "(-1, 1)",
     "explanation": {
       "summary": "Tanh(z) = (e^z - e^-z) / (e^z + e^-z). Its range is strictly between -1 and +1.",
       "whyCorrect": "Because Tanh is zero-centered (unlike Sigmoid whose range is (0, 1)), it often converges faster in shallow networks than Sigmoid.",
-      "whyWrong": "(0, 1) is Sigmoid; [0, \u221e) is ReLU; (-\u221e, \u221e) is Linear/Identity.",
-      "keyConcept": "Ranges: Sigmoid = (0, 1); Tanh = (-1, 1); ReLU = [0, \u221e); LeakyReLU = (-\u221e, \u221e)."
+      "whyWrong": "(0, 1) is Sigmoid; [0, ∞) is ReLU; (-∞, ∞) is Linear/Identity.",
+      "keyConcept": "Ranges: Sigmoid = (0, 1); Tanh = (-1, 1); ReLU = [0, ∞); LeakyReLU = (-∞, ∞)."
     },
     "difficulty": "Intermediate"
   },
@@ -965,7 +966,7 @@ const QUESTION_BANK = [
       "summary": "In thousands of dimensions, local minima where ALL directions curve up are rare; saddle points with zero gradient in mixed directions are far more common.",
       "whyCorrect": "Saddle points can slow down gradient descent because gradients become close to 0. Momentum and adaptive optimizers (like Adam) help escape saddle points rapidly.",
       "whyWrong": "Saddle points are not global minima (loss is not necessarily minimal).",
-      "keyConcept": "Saddle Point: \u2207L = 0, but Hessian has both positive and negative eigenvalues."
+      "keyConcept": "Saddle Point: ∇L = 0, but Hessian has both positive and negative eigenvalues."
     },
     "difficulty": "Exam Level"
   },
@@ -975,17 +976,17 @@ const QUESTION_BANK = [
     "module": "Module 2",
     "question": "In ResNet-50 and ResNet-101, what is a 'Bottleneck' residual block?",
     "options": [
-      "A block of three layers: 1x1 conv (dim reduction) \u2192 3x3 conv \u2192 1x1 conv (dim restoration)",
+      "A block of three layers: 1x1 conv (dim reduction) → 3x3 conv → 1x1 conv (dim restoration)",
       "A single layer with 10,000 neurons that bottlenecks GPU RAM",
       "A Max Pooling layer with stride 10",
       "A Dropout layer with rate 0.99"
     ],
-    "correctAnswer": "A block of three layers: 1x1 conv (dim reduction) \u2192 3x3 conv \u2192 1x1 conv (dim restoration)",
+    "correctAnswer": "A block of three layers: 1x1 conv (dim reduction) → 3x3 conv → 1x1 conv (dim restoration)",
     "explanation": {
       "summary": "For deep ResNets (50+), 2-layer 3x3 blocks become computationally heavy. The bottleneck uses 1x1 to reduce channels, 3x3 to compute spatial features, and 1x1 to restore channels.",
       "whyCorrect": "For instance: 256 channels -> 1x1 conv (64 ch) -> 3x3 conv (64 ch) -> 1x1 conv (256 ch). This cuts computation dramatically while maintaining representational power.",
       "whyWrong": "Bottleneck blocks do not use extreme dropout or massive dense layers.",
-      "keyConcept": "ResNet Bottleneck: 1x1 Conv (reduce) \u2192 3x3 Conv \u2192 1x1 Conv (expand)."
+      "keyConcept": "ResNet Bottleneck: 1x1 Conv (reduce) → 3x3 Conv → 1x1 Conv (expand)."
     },
     "difficulty": "Intermediate"
   },
@@ -1022,7 +1023,7 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "True mathematical convolution flips the kernel 180 degrees before sliding dot products; deep learning libraries omit the flip and perform cross-correlation, but call it convolution",
     "explanation": {
-      "summary": "In signal processing, convolution requires flipping the filter horizontally and vertically: (f * g)(t) = \u222b f(\u03c4) g(t - \u03c4) d\u03c4.",
+      "summary": "In signal processing, convolution requires flipping the filter horizontally and vertically: (f * g)(t) = ∫ f(τ) g(t - τ) dτ.",
       "whyCorrect": "Since the filter weights are learned from scratch by gradient descent anyway, flipping the filter beforehand does not change what the network can learn, so libraries omit the flip for efficiency.",
       "whyWrong": "Deep learning conv layers are technically cross-correlation, but the terminology is used interchangeably.",
       "keyConcept": "Deep learning conv = Cross-Correlation (kernel is NOT flipped because weights are learned)."
@@ -1043,7 +1044,7 @@ const QUESTION_BANK = [
     "correctAnswer": "The spatial dimensions are roughly halved, achieving downsampling without a pooling layer",
     "explanation": {
       "summary": "Stride S is the step size. Stepping 2 pixels at a time skips every other location, approximately halving H and W.",
-      "whyCorrect": "Strided convolution (S \u2265 2) is widely used in modern networks (like ResNet) to replace pooling layers because it downsamples while simultaneously learning feature transformations.",
+      "whyCorrect": "Strided convolution (S ≥ 2) is widely used in modern networks (like ResNet) to replace pooling layers because it downsamples while simultaneously learning feature transformations.",
       "whyWrong": "Stride 2 halves, not doubles. Stride does not change filter weight count or channel count.",
       "keyConcept": "Strided Convolution (S=2): Learnable downsampling alternative to pooling."
     },
@@ -1053,7 +1054,7 @@ const QUESTION_BANK = [
     "id": 53,
     "category": "Parameter Counting",
     "module": "Module 2",
-    "question": "A CNN has: Input (32x32x3) \u2192 Conv1 (16 filters 3x3, P=1, S=1) \u2192 MaxPool (2x2, S=2) \u2192 Conv2 (32 filters 3x3, P=1, S=1). How many total parameters are in Conv2 (with bias)?",
+    "question": "A CNN has: Input (32x32x3) → Conv1 (16 filters 3x3, P=1, S=1) → MaxPool (2x2, S=2) → Conv2 (32 filters 3x3, P=1, S=1). How many total parameters are in Conv2 (with bias)?",
     "options": [
       "4,640",
       "4,608",
@@ -1115,14 +1116,14 @@ const QUESTION_BANK = [
     "module": "Module 1",
     "question": "When training a model with Cross-Entropy loss and Softmax, what happens if the network predicts probability p = 0.0001 for the true class?",
     "options": [
-      "The loss -log(p) produces a massive penalty (-log(0.0001) \u2248 9.21), driving large gradient updates to correct the mistake",
+      "The loss -log(p) produces a massive penalty (-log(0.0001) ≈ 9.21), driving large gradient updates to correct the mistake",
       "The loss becomes 0 and no update occurs",
       "The loss becomes negative",
       "The learning rate is automatically doubled"
     ],
-    "correctAnswer": "The loss -log(p) produces a massive penalty (-log(0.0001) \u2248 9.21), driving large gradient updates to correct the mistake",
+    "correctAnswer": "The loss -log(p) produces a massive penalty (-log(0.0001) ≈ 9.21), driving large gradient updates to correct the mistake",
     "explanation": {
-      "summary": "Cross-entropy loss for the correct class is -log(p). As p \u2192 0, -log(p) \u2192 +\u221e.",
+      "summary": "Cross-entropy loss for the correct class is -log(p). As p → 0, -log(p) → +∞.",
       "whyCorrect": "This severe logarithmic penalty ensures that confident incorrect predictions are heavily penalized, generating strong error signals through backpropagation.",
       "whyWrong": "Probabilities are bounded in (0, 1), so -log(p) is strictly positive, never negative.",
       "keyConcept": "Cross-Entropy penalty: -log(1.0) = 0 (perfect); -log(0.0001) = 9.21 (heavy penalty)."
@@ -1142,10 +1143,10 @@ const QUESTION_BANK = [
     ],
     "correctAnswer": "It introduces a small positive slope (e.g. 0.01) for negative inputs (f(z) = max(0.01z, z)), ensuring gradients never become completely zero",
     "explanation": {
-      "summary": "Leaky ReLU: f(z) = z if z > 0, else \u03b1z (typically \u03b1 = 0.01).",
-      "whyCorrect": "Because the gradient for z < 0 is \u03b1 (non-zero), negative neurons can still receive gradient updates and recover, solving the Dying ReLU deadlock.",
+      "summary": "Leaky ReLU: f(z) = z if z > 0, else αz (typically α = 0.01).",
+      "whyCorrect": "Because the gradient for z < 0 is α (non-zero), negative neurons can still receive gradient updates and recover, solving the Dying ReLU deadlock.",
       "whyWrong": "Capping at 1.0 is ReLU6 or Hard Sigmoid. Dropping inputs is Dropout.",
-      "keyConcept": "Leaky ReLU: f'(z) = 1 if z > 0; f'(z) = \u03b1 if z \u2264 0 (gradient never reaches 0)."
+      "keyConcept": "Leaky ReLU: f'(z) = 1 if z > 0; f'(z) = α if z ≤ 0 (gradient never reaches 0)."
     },
     "difficulty": "Intermediate"
   },
@@ -1264,7 +1265,7 @@ const QUESTION_BANK = [
     "correctAnswer": "Flipping handwritten digits can alter their semantic class (e.g., flipping a 6 or a 9), corrupting ground truth labels",
     "explanation": {
       "summary": "Augmentations must preserve the semantics of the ground-truth label; directional symbols are sensitive to reflections.",
-      "whyCorrect": "A horizontal or vertical flip of a handwritten digit '6' can turn it into a '9', an 'e' into an '\u0259', or create non-existent numeral symbols, introducing label noise. In CIFAR-10, an airplane or cat is still an airplane or cat when flipped horizontally.",
+      "whyCorrect": "A horizontal or vertical flip of a handwritten digit '6' can turn it into a '9', an 'e' into an 'ə', or create non-existent numeral symbols, introducing label noise. In CIFAR-10, an airplane or cat is still an airplane or cat when flipped horizontally.",
       "whyWrong": "Flipping does not change channel count or numeric datatypes, and convolution operates identically on any 2D tensor.",
       "keyConcept": "Domain Rule: Augmentations must be class-preserving (invariance under realistic domain transformations)."
     }
@@ -1314,7 +1315,7 @@ const QUESTION_BANK = [
     "category": "Data Augmentation",
     "module": "Module 1",
     "difficulty": "Basic",
-    "question": "Why is it standard practice to normalize raw image pixel intensities from [0, 255] down to [0, 1] or to zero mean (\u03bc=0, \u03c3=1) prior to neural network training?",
+    "question": "Why is it standard practice to normalize raw image pixel intensities from [0, 255] down to [0, 1] or to zero mean (μ=0, σ=1) prior to neural network training?",
     "options": [
       "To prevent exploding pre-activations, improve numerical stability, and ensure uniform gradient descent scaling",
       "Because TensorFlow and PyTorch tensor operations cannot physically accept integer values greater than 1",
@@ -1444,7 +1445,7 @@ const QUESTION_BANK = [
     "correctAnswer": "The Multivariable Chain Rule of calculus for computing partial derivatives of loss with respect to weights",
     "explanation": {
       "summary": "Backpropagation recursively applies the chain rule backward from the loss through each layer.",
-      "whyCorrect": "By applying \u2202L/\u2202w = (\u2202L/\u2202y) * (\u2202y/\u2202z) * (\u2202z/\u2202w), backpropagation calculates the exact gradient contribution of every weight and bias across deep cascades of layers.",
+      "whyCorrect": "By applying ∂L/∂w = (∂L/∂y) * (∂y/∂z) * (∂z/∂w), backpropagation calculates the exact gradient contribution of every weight and bias across deep cascades of layers.",
       "whyWrong": "Backpropagation is a first-order gradient method; it does not compute Hessians, Laplace transforms, or SVDs.",
       "keyConcept": "Backpropagation = Systematic application of the Multivariable Chain Rule backward through the computational graph."
     }
@@ -1506,7 +1507,7 @@ const QUESTION_BANK = [
       "summary": "Layers with training-specific behaviors (Dropout and BatchNorm) must transition to deterministic inference mode.",
       "whyCorrect": "During training, Dropout zeros out activations at rate p, and BatchNorm computes mean/variance from the current batch. During evaluation, Dropout must be OFF (all pathways active and scaled), and BatchNorm must use accumulated running population mean/variance.",
       "whyWrong": "model.eval() does not quantize weights, does not change the loss function, and does not alter learning rates (no updates happen in eval).",
-      "keyConcept": "model.eval(): Dropout = OFF (keep all units); BatchNorm = uses frozen running stats (\u03bc, \u03c3\u00b2)."
+      "keyConcept": "model.eval(): Dropout = OFF (keep all units); BatchNorm = uses frozen running stats (μ, σ²)."
     }
   },
   {
@@ -1514,7 +1515,7 @@ const QUESTION_BANK = [
     "category": "Loss & Optimization",
     "module": "Module 1",
     "difficulty": "Basic",
-    "question": "What occurs when the gradient descent learning rate (\u03b7) is configured excessively high?",
+    "question": "What occurs when the gradient descent learning rate (η) is configured excessively high?",
     "options": [
       "Weight updates take overly large steps, causing the loss to oscillate wildly, overshoot the minimum, or diverge to infinity (NaN)",
       "The model gets trapped permanently in the very first local minimum encountered",
@@ -1564,7 +1565,7 @@ const QUESTION_BANK = [
     "correctAnswer": "Softmax activation paired with Categorical Cross-Entropy loss",
     "explanation": {
       "summary": "Softmax converts raw logits into a valid probability distribution summing to 1; Categorical Cross-Entropy maximizes the likelihood of the true class.",
-      "whyCorrect": "Softmax produces normalized probabilities p_i = exp(z_i) / \u03a3 exp(z_j). Paired with Categorical Cross-Entropy L = -log(p_true), the gradient simplifies elegantly to (p_i - y_i), preventing gradient vanishing when predictions are incorrect.",
+      "whyCorrect": "Softmax produces normalized probabilities p_i = exp(z_i) / Σ exp(z_j). Paired with Categorical Cross-Entropy L = -log(p_true), the gradient simplifies elegantly to (p_i - y_i), preventing gradient vanishing when predictions are incorrect.",
       "whyWrong": "Sigmoid with MSE suffers from saturated gradients; ReLU outputs unbounded positive values; Tanh outputs negative numbers unsuitable for probability.",
       "keyConcept": "Multi-class exclusive: Softmax + Categorical Cross-Entropy. Binary: Sigmoid + Binary Cross-Entropy."
     }
@@ -1764,7 +1765,7 @@ const QUESTION_BANK = [
     "correctAnswer": "It computes the mean across all spatial pixels for each channel, yielding a 1 x 1 x C (or 1D vector of length C) representation with zero parameters",
     "explanation": {
       "summary": "Global Average Pooling averages out the entire spatial plane of each feature map into a single summary number.",
-      "whyCorrect": "For each channel c, GAP computes (1 / (H * W)) * \u03a3_x \u03a3_y F(x, y, c). This collapses H x W to 1 x 1 while preserving all C channels, requiring 0 trainable parameters.",
+      "whyCorrect": "For each channel c, GAP computes (1 / (H * W)) * Σ_x Σ_y F(x, y, c). This collapses H x W to 1 x 1 while preserving all C channels, requiring 0 trainable parameters.",
       "whyWrong": "It does not produce a single scalar, does not use learnable weights (unlike Flatten + Dense), and has nothing to do with video frames.",
       "keyConcept": "Global Average Pooling (GAP): Maps (H, W, C) -> (1, 1, C) with 0 parameters."
     }
@@ -1859,14 +1860,14 @@ const QUESTION_BANK = [
       "y = F(x) + x  (followed by a ReLU activation)",
       "y = F(x) * x  (element-wise multiplication)",
       "y = F(x) - x  (residual subtraction)",
-      "y = F(x) / (x + \u03b5)  (batch ratio normalization)"
+      "y = F(x) / (x + ε)  (batch ratio normalization)"
     ],
     "correctAnswer": "y = F(x) + x  (followed by a ReLU activation)",
     "explanation": {
       "summary": "Residual blocks learn the perturbation F(x) = H(x) - x, outputting H(x) = F(x) + x via an identity shortcut.",
       "whyCorrect": "Instead of forcing layers to fit an unreferenced underlying mapping H(x), ResNet explicitly fits the residual F(x) = H(x) - x. Adding the input x via a skip connection gives y = F(x) + x. If optimal mapping is identity, weights easily decay F(x) to 0.",
       "whyWrong": "Residual connections use addition (+), not multiplication, subtraction, or division.",
-      "keyConcept": "Residual Formula: y = F(x) + x. Gradient during backprop: \u2202L/\u2202x = \u2202L/\u2202y * (\u2202F/\u2202x + 1), ensuring a direct highway of 1 for gradients."
+      "keyConcept": "Residual Formula: y = F(x) + x. Gradient during backprop: ∂L/∂x = ∂L/∂y * (∂F/∂x + 1), ensuring a direct highway of 1 for gradients."
     }
   },
   {
@@ -1896,12 +1897,12 @@ const QUESTION_BANK = [
     "difficulty": "Basic",
     "question": "In object detection, how is the Intersection over Union (IoU) metric computed between a predicted bounding box (B_pred) and a ground-truth box (B_gt)?",
     "options": [
-      "IoU = Area(B_pred \u2229 B_gt) / Area(B_pred \u222a B_gt)",
-      "IoU = Area(B_pred \u2229 B_gt) * Area(B_pred \u222a B_gt)",
+      "IoU = Area(B_pred ∩ B_gt) / Area(B_pred ∪ B_gt)",
+      "IoU = Area(B_pred ∩ B_gt) * Area(B_pred ∪ B_gt)",
       "IoU = Area(B_pred) / Area(B_gt)",
-      "IoU = Area(B_pred \u222a B_gt) - Area(B_pred \u2229 B_gt)"
+      "IoU = Area(B_pred ∪ B_gt) - Area(B_pred ∩ B_gt)"
     ],
-    "correctAnswer": "IoU = Area(B_pred \u2229 B_gt) / Area(B_pred \u222a B_gt)",
+    "correctAnswer": "IoU = Area(B_pred ∩ B_gt) / Area(B_pred ∪ B_gt)",
     "explanation": {
       "summary": "IoU (Jaccard Index) measures overlap accuracy by dividing intersection area by union area.",
       "whyCorrect": "The metric divides the overlapping area shared by both boxes by the total combined area encompassed by both boxes. Values range from 0 (no overlap) to 1 (perfect alignment). In PASCAL VOC and COCO, IoU >= 0.5 is standard for a True Positive.",
@@ -1944,9 +1945,9 @@ const QUESTION_BANK = [
     "correctAnswer": "An encoder compresses the input into a low-dimensional bottleneck latent representation z, and a decoder reconstructs the original input by minimizing reconstruction loss",
     "explanation": {
       "summary": "Autoencoders perform self-supervised dimensionality reduction by learning to compress and reconstruct inputs.",
-      "whyCorrect": "An autoencoder consists of Encoder q_\u03b8(z|x) mapping input x to latent code z, and Decoder p_\u03d5(x|z) reconstructing x\u0302. The network is trained end-to-end to minimize reconstruction loss L(x, x\u0302) = ||x - x\u0302||\u00b2.",
+      "whyCorrect": "An autoencoder consists of Encoder q_θ(z|x) mapping input x to latent code z, and Decoder p_ϕ(x|z) reconstructing x̂. The network is trained end-to-end to minimize reconstruction loss L(x, x̂) = ||x - x̂||².",
       "whyWrong": "Two competing networks describes a GAN (Generative Adversarial Network), ImageNet classification is supervised learning, and optical flow is video analysis.",
-      "keyConcept": "Autoencoder Architecture: Input x -> Encoder -> Latent Bottleneck z -> Decoder -> Reconstruction x\u0302."
+      "keyConcept": "Autoencoder Architecture: Input x -> Encoder -> Latent Bottleneck z -> Decoder -> Reconstruction x̂."
     }
   },
   {
@@ -1976,17 +1977,17 @@ const QUESTION_BANK = [
     "difficulty": "Intermediate",
     "question": "When training an autoencoder on normalized grayscale images (pixel values in [0, 1], such as MNIST), which reconstruction loss functions are standard?",
     "options": [
-      "Mean Squared Error (MSE) or Binary Cross-Entropy (BCE) evaluated between input pixels x and reconstructed pixels x\u0302",
+      "Mean Squared Error (MSE) or Binary Cross-Entropy (BCE) evaluated between input pixels x and reconstructed pixels x̂",
       "Categorical Cross-Entropy over 1,000 one-hot image classes",
       "Triplet Loss comparing anchor, positive, and negative embeddings",
       "Connectionist Temporal Classification (CTC) loss"
     ],
-    "correctAnswer": "Mean Squared Error (MSE) or Binary Cross-Entropy (BCE) evaluated between input pixels x and reconstructed pixels x\u0302",
+    "correctAnswer": "Mean Squared Error (MSE) or Binary Cross-Entropy (BCE) evaluated between input pixels x and reconstructed pixels x̂",
     "explanation": {
-      "summary": "Reconstruction loss measures pixel-by-pixel dissimilarity between the ground truth image x and the reconstructed image x\u0302.",
-      "whyCorrect": "MSE loss L = (1/N) * \u03a3 (x_i - x\u0302_i)\u00b2 measures squared Euclidean distance. If pixels are treated as Bernoulli probabilities [0, 1], BCE loss L = -\u03a3 [x_i * log(x\u0302_i) + (1 - x_i) * log(1 - x\u0302_i)] with a Sigmoid output is also widely used.",
+      "summary": "Reconstruction loss measures pixel-by-pixel dissimilarity between the ground truth image x and the reconstructed image x̂.",
+      "whyCorrect": "MSE loss L = (1/N) * Σ (x_i - x̂_i)² measures squared Euclidean distance. If pixels are treated as Bernoulli probabilities [0, 1], BCE loss L = -Σ [x_i * log(x̂_i) + (1 - x_i) * log(1 - x̂_i)] with a Sigmoid output is also widely used.",
       "whyWrong": "Categorical cross-entropy requires discrete classes, Triplet loss is for metric learning, and CTC is for speech/OCR sequence alignment.",
-      "keyConcept": "Autoencoder Reconstruction Loss: MSE = ||x - x\u0302||\u00b2 or BCE (for normalized [0, 1] pixels)."
+      "keyConcept": "Autoencoder Reconstruction Loss: MSE = ||x - x̂||² or BCE (for normalized [0, 1] pixels)."
     }
   },
   {
@@ -2024,7 +2025,7 @@ const QUESTION_BANK = [
     "correctAnswer": "Within a 'with tf.GradientTape() as tape:' context block that records forward operations and evaluates tape.gradient(target, sources)",
     "explanation": {
       "summary": "TensorFlow uses tf.GradientTape to record operations on a tape during the forward pass, and then plays it backward to compute exact reverse-mode automatic differentiation.",
-      "whyCorrect": "As coded in Lab 1 (Part1_TensorFlow.ipynb Section 1.4), operations executed inside 'with tf.GradientTape() as tape:' are recorded. Calling tape.gradient(y, x) computes \u2202y/\u2202x efficiently and analytically via the chain rule.",
+      "whyCorrect": "As coded in Lab 1 (Part1_TensorFlow.ipynb Section 1.4), operations executed inside 'with tf.GradientTape() as tape:' are recorded. Calling tape.gradient(y, x) computes ∂y/∂x efficiently and analytically via the chain rule.",
       "whyWrong": "Numerical finite differences are too slow and prone to truncation error; symbolic differentiation creates massive expressions; manual derivatives are not required with autograd.",
       "keyConcept": "Lab Reference (Module 01 Part1_TensorFlow.ipynb): with tf.GradientTape() as tape: y = x**2; dy_dx = tape.gradient(y, x)."
     }
@@ -2076,17 +2077,17 @@ const QUESTION_BANK = [
     "difficulty": "Exam Level",
     "question": "In Module 01 (data_augmentation.ipynb), what does the parameter value in tf.keras.layers.RandomRotation(0.2) represent?",
     "options": [
-      "A random rotation angle sampled from the range [-20%, +20%] of 2\u03c0 (or approximately -72 degrees to +72 degrees)",
+      "A random rotation angle sampled from the range [-20%, +20%] of 2π (or approximately -72 degrees to +72 degrees)",
       "A constant static rotation of precisely 0.2 radians applied to all images",
       "A 20% probability of dropping the entire image from the training batch",
       "A 0.2 pixel spatial shift along the vertical y-axis"
     ],
-    "correctAnswer": "A random rotation angle sampled from the range [-20%, +20%] of 2\u03c0 (or approximately -72 degrees to +72 degrees)",
+    "correctAnswer": "A random rotation angle sampled from the range [-20%, +20%] of 2π (or approximately -72 degrees to +72 degrees)",
     "explanation": {
-      "summary": "In tf.keras.layers.RandomRotation, float factor represents a fraction of 2\u03c0 (a full circle).",
-      "whyCorrect": "In Keras preprocessing layers, passing factor=0.2 defines an upper and lower bound interval [-factor, +factor] expressed as a fraction of 2\u03c0: [-0.2 * 360\u00b0, +0.2 * 360\u00b0] = [-72\u00b0, +72\u00b0].",
+      "summary": "In tf.keras.layers.RandomRotation, float factor represents a fraction of 2π (a full circle).",
+      "whyCorrect": "In Keras preprocessing layers, passing factor=0.2 defines an upper and lower bound interval [-factor, +factor] expressed as a fraction of 2π: [-0.2 * 360°, +0.2 * 360°] = [-72°, +72°].",
       "whyWrong": "It is not a static constant angle (it is randomly sampled per image), not a dropout probability, and not a pixel translation.",
-      "keyConcept": "Lab Reference (Module 01 data_augmentation.ipynb): RandomRotation(0.2) samples angles in [-20% * 2\u03c0, +20% * 2\u03c0]."
+      "keyConcept": "Lab Reference (Module 01 data_augmentation.ipynb): RandomRotation(0.2) samples angles in [-20% * 2π, +20% * 2π]."
     }
   },
   {
@@ -2226,7 +2227,13 @@ const QUESTION_BANK = [
       "summary": "Standard vision models trained on imbalanced datasets inherit demographic disparities, exhibiting drastically higher error rates on minority subgroups.",
       "whyCorrect": "As demonstrated in Lab 2 Part 2 (Section 2.1 & 2.2), datasets like CelebA are predominantly light-skinned. When a standard CNN is trained naively, it achieves high overall accuracy by maximizing performance on the majority group while failing significantly on under-represented demographics (e.g. darker females).",
       "whyWrong": "Algorithmic bias is caused by data distribution skew and optimization incentives, not activation types or filter kernel sizes.",
-      "keyConcept": "Lab Reference (MIT Lab 2 PT_Part2_Debiasing.ipynb): Dataset Demographic Imbalance -> Skewed Latent Representations -> Algorithmic Bias."
+      "keyConcept": "Lab Reference (MIT Lab 2 PT_Part2_Debiasing.ipynb): Dataset Demographic Imbalance -> Skewed Latent Representations -> Algorithmic Bias.",
+      "noobBreakdown": "Imagine an AI trained exclusively on photos of celebrities with light skin. When it encounters darker-skinned faces in the real world, it fails because it never saw enough examples to learn their facial features! Garbage in, garbage out.",
+      "terms": {
+        "Algorithmic Bias": "When an AI model makes systematic errors or performs worse on certain demographic groups (e.g., race, gender) due to flawed or unrepresentative data.",
+        "Demographic Imbalance": "When a dataset heavily over-represents one group (e.g., 80% light-skinned males) while drastically under-representing others.",
+        "CelebA": "A popular public benchmark of 200,000+ celebrity images, notorious for being heavily skewed toward light-skinned faces."
+      }
     }
   },
   {
@@ -2246,7 +2253,14 @@ const QUESTION_BANK = [
       "summary": "Standard random sampling is a non-differentiable stochastic operation with zero defined gradients. The reparameterization trick rewrites sampling as a differentiable affine transformation of random noise.",
       "whyCorrect": "As derived in Section 2.4 (Reparameterization): Directly sampling z ~ N(mu, sigma^2) prevents gradient flow through the network. Setting z = mu + sigma * eps (where eps ~ N(0, I) has no learned parameters) ensures dz/dmu = 1 and dz/dsigma = eps, making the entire model end-to-end differentiable via standard backpropagation.",
       "whyWrong": "It does not compress weight precision, does not equate latent size to input resolution, and does not bypass reconstruction loss.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): Reparameterization Trick: z = mu + exp(0.5 * logsigma) * eps (Differentiable Backprop through Stochastic Nodes)."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): Reparameterization Trick: z = mu + exp(0.5 * logsigma) * eps (Differentiable Backprop through Stochastic Nodes).",
+      "noobBreakdown": "You cannot calculate a mathematical derivative (gradient) through a random dice roll! The reparameterization trick rolls the dice outside the network (pure random noise epsilon), then stretches and shifts it. Now calculus flows smoothly through the mean and variance without hitting a random roadblock.",
+      "terms": {
+        "Reparameterization Trick": "A mathematical technique that isolates randomness into an independent noise variable so the network remains fully differentiable for backpropagation.",
+        "Stochastic Sampling": "Drawing a random number or vector from a probability distribution (like rolling dice).",
+        "Differentiable": "A property where a function's rate of change (derivative/gradient) can be computed mathematically.",
+        "Prior Distribution N(0, I)": "A standard bell curve centered at 0 with a spread (variance) of 1."
+      }
     }
   },
   {
@@ -2266,7 +2280,13 @@ const QUESTION_BANK = [
       "summary": "KL Divergence measures statistical distance between the encoder's predicted distribution and a standard unit Gaussian prior, ensuring a continuous, clustered, and smooth latent manifold.",
       "whyCorrect": "Without the KL penalty, the encoder would isolate individual training points into distant, infinitesimally narrow clusters (overfitting, acting like a deterministic autoencoder). The KL term forces the latent space to center around mean 0 with variance 1, enabling smooth interpolation.",
       "whyWrong": "KL divergence does not binarize latents, does not intentionally corrupt training, and works alongside (rather than replacing) classification/reconstruction losses.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): L_VAE = c * L_KL + L_recon. KL term prevents arbitrary latent cluster collapse."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): L_VAE = c * L_KL + L_recon. KL term prevents arbitrary latent cluster collapse.",
+      "noobBreakdown": "Without KL Divergence, the encoder would scatter memories all across an infinite empty void with huge dead zones. KL Divergence acts like an elastic band, pulling all encoded points together into a neat, smooth bell curve around zero so we can sample brand-new faces from anywhere in the space.",
+      "terms": {
+        "KL Divergence": "A formula measuring how much one probability distribution differs from a reference target distribution.",
+        "Latent Space": "The compressed, hidden coordinate space where the model stores high-level concepts (e.g., smile, skin tone, glasses).",
+        "Posterior Distribution q(z|x)": "The specific probability distribution that the encoder outputs for a given image x."
+      }
     }
   },
   {
@@ -2286,7 +2306,14 @@ const QUESTION_BANK = [
       "summary": "The KL divergence between N(mu, diag(sigma)) and N(0, I) has a closed-form analytical equation that can be computed without Monte Carlo sampling.",
       "whyCorrect": "As explicitly coded in Section 2.4 of PT_Part2_Debiasing.ipynb: D_KL(N(mu, sigma) || N(0, I)) = 0.5 * sum(sigma + mu^2 - 1 - log(sigma)). When parameterized via log(sigma), it is written as 0.5 * sum(exp(2*logsigma) + mu^2 - 1 - 2*logsigma).",
       "whyWrong": "The other options represent mean products, MSE reconstruction loss, or invalid heuristic exponentials.",
-      "keyConcept": "Lab Equation (PT_Part2_Debiasing.ipynb): L_KL = 0.5 * sum(sigma_j + mu_j^2 - 1 - log(sigma_j))."
+      "keyConcept": "Lab Equation (PT_Part2_Debiasing.ipynb): L_KL = 0.5 * sum(sigma_j + mu_j^2 - 1 - log(sigma_j)).",
+      "noobBreakdown": "Because both the encoder's guess and the target prior are clean bell curves (Gaussians), mathematicians solved the calculus by hand into an exact, instant formula: 0.5 * sum(sigma + mu^2 - 1 - log(sigma)).",
+      "terms": {
+        "Analytical Formula": "An exact closed-form math equation that gives the answer directly without expensive approximations.",
+        "Mean (mu)": "The average value or center of the probability distribution.",
+        "Variance (sigma)": "The measure of how wide or spread out the distribution is.",
+        "Diagonal Covariance": "Assuming that each latent variable is independent of the others."
+      }
     }
   },
   {
@@ -2306,7 +2333,13 @@ const QUESTION_BANK = [
       "summary": "Non-face images should only train the binary classifier; they must NOT be reconstructed by the face decoder.",
       "whyCorrect": "As derived in Section 2.5 ('Defining the DB-VAE loss function'): The goal is to learn the latent distribution of faces to debias facial detection. Non-faces (e.g. background trees, cars from ImageNet) are needed only for the binary classification task L_y. Thus, VAE loss is multiplied by I_f(y) where I_f=1 for faces and 0 for non-faces.",
       "whyWrong": "Multiplying or dividing losses produces zero or undefined gradients, and applying VAE loss only to non-faces defeats the purpose of learning face latents.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): L_total = L_y(y, y_pred) + I_f(y) * [L_VAE]."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): L_total = L_y(y, y_pred) + I_f(y) * [L_VAE].",
+      "noobBreakdown": "The network does two jobs simultaneously: (1) Deciding if the picture is a face or a background wall (classification). (2) If and ONLY if it is a face, reconstructing the facial features with the VAE. If it is just a wall, we don't waste energy reconstructing it as a face!",
+      "terms": {
+        "Indicator Function I_f(y)": "An on/off switch: equals 1 if the image is a face, and 0 if it is not.",
+        "Classification Loss L_y": "The penalty incurred when the model misclassifies an image (e.g., mistaking a face for background).",
+        "Multi-Task Learning": "Training a single model to perform multiple related tasks at the same time."
+      }
     }
   },
   {
@@ -2326,7 +2359,13 @@ const QUESTION_BANK = [
       "summary": "DB-VAE discovers rare latent attributes in an unsupervised fashion, and re-weights sampling probabilities so rare features are visited equally during training.",
       "whyCorrect": "In Section 2.5 ('Adaptive resampling for automated debiasing'): The encoder outputs latent means mu for all training faces. A histogram computes the marginal density Q(z_i). Samples residing in low-density bins (rare attributes like darker skin, hats, sunglasses) are assigned higher sampling weights W(x) = 1 / (Q(z) + alpha), achieving automated unsupervised debiasing.",
       "whyWrong": "DB-VAE requires no external labels or web crawling, does not destroy image resolution with blur, and does not discard majority data.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): Adaptive Resampling: p_sample(x) ~ 1 / (Q(z|x) + alpha)."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): Adaptive Resampling: p_sample(x) ~ 1 / (Q(z|x) + alpha).",
+      "noobBreakdown": "An automated teacher that notices which faces are rare. If a face has unusual features that the model rarely sees in its latent space, it automatically boosts the chance of picking that photo again during practice so the model becomes equally good at recognizing all people!",
+      "terms": {
+        "Adaptive Resampling": "Dynamically changing how often training examples are picked so rare examples get selected more frequently.",
+        "Unsupervised Debiasing": "Balancing an AI's performance automatically without needing humans to manually tag people by race or skin color.",
+        "Empirical Density Q(z)": "How crowded or common a particular set of facial features is in the latent space."
+      }
     }
   },
   {
@@ -2346,7 +2385,13 @@ const QUESTION_BANK = [
       "summary": "The PPB dataset (Buolamwini & Gebru, 2018) is the standard benchmark designed explicitly for evaluating demographic fairness in commercial and academic facial recognition.",
       "whyCorrect": "As documented in Section 2.6 ('Evaluation of DB-VAE on Test Dataset'): The model is evaluated on the PPB dataset, which is balanced across skin type (Fitzpatrick scale) and gender, verifying that DB-VAE significantly closes the accuracy gap between Light Males and Dark Females.",
       "whyWrong": "MNIST is for digits, COCO is for general object detection/segmentation, and CIFAR-10 is for 32x32 toy vehicle and animal classification.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.6): Pilot Parliaments Benchmark (PPB) evaluates intersectional accuracy across demographics."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.6): Pilot Parliaments Benchmark (PPB) evaluates intersectional accuracy across demographics.",
+      "noobBreakdown": "A famous audit dataset created by researcher Joy Buolamwini containing 1,270 photos of parliamentarians from African and European nations, specifically balanced across skin tones and genders to test facial AI fairness.",
+      "terms": {
+        "PPB (Pilot Parliaments Benchmark)": "The gold-standard dataset specifically constructed to evaluate facial recognition bias.",
+        "Intersectional Demographics": "Evaluating combinations of traits simultaneously (e.g., darker females vs. lighter males).",
+        "Benchmark": "A standardized test dataset used to measure and compare model performance."
+      }
     }
   },
   {
@@ -2366,7 +2411,13 @@ const QUESTION_BANK = [
       "summary": "Standard autoencoders learn deterministic mappings prone to gaps in latent space; VAEs learn a continuous probability density over the latent manifold.",
       "whyCorrect": "In a standard autoencoder, z = Encoder(x). In a VAE (Section 2.4), mu, logsigma = Encoder(x), and z ~ N(mu, sigma^2). This probabilistic formulation ensures the latent space is continuous, complete, and generative.",
       "whyWrong": "Both models possess decoders, both support convolutional layers, and both are standardly applied across vision and images.",
-      "keyConcept": "Autoencoder: x -> z (point) -> x_hat | VAE: x -> (mu, sigma) -> z ~ N(mu, sigma^2) -> x_hat."
+      "keyConcept": "Autoencoder: x -> z (point) -> x_hat | VAE: x -> (mu, sigma) -> z ~ N(mu, sigma^2) -> x_hat.",
+      "noobBreakdown": "A standard autoencoder squashes an image into a single rigid point on a map. A Variational Autoencoder (VAE) squashes the image into a fuzzy cloud (mean and variance). This turns the entire latent space into smooth terrain with zero dead zones!",
+      "terms": {
+        "Standard Autoencoder": "A deterministic compression network with an encoder and decoder.",
+        "Deterministic": "Always produces the exact same static number for the same input.",
+        "Probabilistic": "Outputs a probability distribution (mean and variance) rather than a single number."
+      }
     }
   },
   {
@@ -2386,7 +2437,12 @@ const QUESTION_BANK = [
       "summary": "DB-VAE uses a 100-dimensional latent code to represent facial attributes (e.g. skin tone, pose, gender, accessories).",
       "whyCorrect": "As explicitly specified in the DB-VAE architecture section (Cell 39 & 41): 'We will use a latent space with 100 latent variables' (self.fc_mu = nn.Linear(..., 100), self.fc_logsigma = nn.Linear(..., 100)).",
       "whyWrong": "2 dimensions are typically used only for simple 2D toy visualizations; 10,000 would fail to compress the 64x64x3 image; 1 is too small to capture rich facial geometry.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): DB-VAE Latent Space Dimension = 100."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): DB-VAE Latent Space Dimension = 100.",
+      "noobBreakdown": "Squeezing a full-resolution image containing thousands of pixels into just 100 numbers forces the network to throw away useless noise and keep only the 100 most crucial facial traits.",
+      "terms": {
+        "Bottleneck": "The narrowest middle layer of the network that restricts data flow to force compression.",
+        "Latent Dimensions": "The number of individual variables used to represent the compressed image (here, 100)."
+      }
     }
   },
   {
@@ -2406,7 +2462,12 @@ const QUESTION_BANK = [
       "summary": "L1 loss produces sharper reconstructed images compared to L2 (MSE), which tends to average pixel colors and create blurrier outputs.",
       "whyCorrect": "In Section 2.4 ('Understanding VAEs: loss function'): 'Reconstruction loss (L_x(x, x_hat)): measures how accurately the reconstructed outputs match the input and is given by the L^1 norm of the input image and its reconstructed output: L_x(x, x_hat) = ||x - x_hat||_1'.",
       "whyWrong": "Categorical cross-entropy is for discrete classification, Hinge loss is for SVMs, and Perplexity is for language modeling.",
-      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): VAE Reconstruction Loss L_x(x, x_hat) = ||x - x_hat||_1."
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): VAE Reconstruction Loss L_x(x, x_hat) = ||x - x_hat||_1.",
+      "noobBreakdown": "L1 loss measures the raw absolute pixel difference |x - x_hat|. In facial generation, L1 loss produces sharper, clearer pictures than squared error (L2) because squared error over-punishes tiny pixel shifts, resulting in blurry faces.",
+      "terms": {
+        "L1 Norm (MAE)": "Mean Absolute Error: the average raw difference between predicted pixels and original pixels.",
+        "Reconstruction Fidelity": "How accurately and sharply the reconstructed image matches the original input."
+      }
     }
   },
   {
@@ -2426,7 +2487,13 @@ const QUESTION_BANK = [
       "summary": "Discriminative models separate classes by learning decision boundaries p(y|x); generative models understand how the data itself was generated by modeling p(x).",
       "whyCorrect": "As established in Module 3 (Generative Models.pdf Slide 5-8): Given input x and label y, discriminative models compute p(y|x) (e.g. is this image a dog or cat?). Generative models learn the data distribution p(x) (or p(x, y)), enabling the model to draw new synthetic samples x ~ p(x).",
       "whyWrong": "Discriminative models are typically supervised, do not generate images, and both use deep neural networks extensively.",
-      "keyConcept": "Discriminative: Learns decision boundary p(y|x) | Generative: Models data distribution p(x) to synthesize new data."
+      "keyConcept": "Discriminative: Learns decision boundary p(y|x) | Generative: Models data distribution p(x) to synthesize new data.",
+      "noobBreakdown": "A discriminative model is a judge deciding between categories (e.g. Dog vs. Cat, P(Y|X)). A generative model is an artist that learns how dogs and cats look so it can paint brand-new ones from scratch (P(X)).",
+      "terms": {
+        "Discriminative Model": "Learns the boundary separating different classes to predict labels given data (P(Y|X)).",
+        "Generative Model": "Learns the true distribution of data itself (P(X)) to generate realistic new examples.",
+        "Conditional Probability P(Y|X)": "The probability of category Y occurring given input image X."
+      }
     }
   },
   {
@@ -2446,7 +2513,13 @@ const QUESTION_BANK = [
       "summary": "Generative models divide into explicit density estimation (tractable or approximate) and implicit density sampling.",
       "whyCorrect": "In Lecture 4 (Taxonomy of Generative Models): Explicit density models define and optimize an expression for p(x); VAEs do this by maximizing the Evidence Lower Bound (ELBO) on log p(x). GANs are implicit: they never write down or evaluate p(x), but instead learn a generator G that maps noise z into the data distribution via adversarial feedback.",
       "whyWrong": "PixelRNN/PixelCNN are explicit tractable; VAEs are approximate explicit; GANs are implicit.",
-      "keyConcept": "Generative Taxonomy: Explicit Density (Approximate: VAEs) vs Implicit Density (GANs, Diffusion)."
+      "keyConcept": "Generative Taxonomy: Explicit Density (Approximate: VAEs) vs Implicit Density (GANs, Diffusion).",
+      "noobBreakdown": "VAEs write down a mathematical formula for how likely an image is (Explicit density). GANs cannot calculate the formula; they just spit out realistic pictures directly through competition (Implicit density).",
+      "terms": {
+        "Explicit Density": "A generative model that directly defines and optimizes a mathematical probability function for data.",
+        "Implicit Density": "A model that generates realistic samples without ever calculating the exact probability formula.",
+        "Tractable Lower Bound": "A solvable approximation (like ELBO) used when the true probability is impossible to compute directly."
+      }
     }
   },
   {
@@ -2466,7 +2539,13 @@ const QUESTION_BANK = [
       "summary": "GANs optimize a minimax zero-sum game between Discriminator D (maximizing real/fake classification accuracy) and Generator G (minimizing Discriminator success).",
       "whyCorrect": "In Goodfellow et al. (2014) and Module 3 slides: D wants D(x)=1 (real) and D(G(z))=0 (fake), maximizing log D(x) + log(1 - D(G(z))). G wants D(G(z))=1 (fooling D), minimizing log(1 - D(G(z))).",
       "whyWrong": "Option B is an autoencoder MSE loss; Option C is a perceptron linear equation; Option D is an incorrect heuristic.",
-      "keyConcept": "GAN Minimax Formulation: min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))]."
+      "keyConcept": "GAN Minimax Formulation: min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))].",
+      "noobBreakdown": "A game between an Art Forger (Generator) and an Art Detective (Discriminator). The detective tries to maximize its detection accuracy; the forger tries to minimize the detective's score by creating convincing fakes.",
+      "terms": {
+        "Generator (G)": "The network that takes random noise z and paints fake images G(z).",
+        "Discriminator (D)": "The network that inspects images and guesses whether they are 1 (real) or 0 (fake).",
+        "Minimax Game": "A game theory setup where one player's gain is the exact loss of the opponent."
+      }
     }
   },
   {
@@ -2486,7 +2565,12 @@ const QUESTION_BANK = [
       "summary": "The minimax formulation suffers from vanishing generator gradients early in training. The non-saturating objective provides strong gradients when G needs them most.",
       "whyCorrect": "When G is weak, D(G(z)) ≈ 0. The slope of log(1 - p) at p=0 is very flat, starving G of gradient signal. By flipping the objective to maximize log D(G(z)), the derivative at p=0 is steep (1/p), providing strong learning gradients early in training.",
       "whyWrong": "It does not crash CUDA, does not stop D's backprop, and still requires latent z.",
-      "keyConcept": "Non-Saturating GAN Trick: Replace min_G log(1 - D(G(z))) with max_G log D(G(z)) to avoid early vanishing gradients."
+      "keyConcept": "Non-Saturating GAN Trick: Replace min_G log(1 - D(G(z))) with max_G log D(G(z)) to avoid early vanishing gradients.",
+      "noobBreakdown": "When the forger first starts out, its fake paintings look like terrible static, so the detective easily catches them with 100% confidence. If the forger tries to minimize log(1 - D), the curve is completely flat, giving zero learning signal. Maximizing log(D) provides huge gradients when you are failing, kicking off fast learning!",
+      "terms": {
+        "Saturation": "When a mathematical function flattens out, causing its derivative (gradient) to drop to zero.",
+        "Non-Saturating Game": "A math reformulation of the generator's objective that prevents vanishing gradients early in training."
+      }
     }
   },
   {
@@ -2506,7 +2590,12 @@ const QUESTION_BANK = [
       "summary": "Mode collapse occurs when G finds a single successful 'trick' sample that tricks D, mapping all latent codes z to this single output mode instead of covering the whole distribution.",
       "whyCorrect": "In Module 3 (Generative Models.pdf): If the training data contains 10 digits (0-9), a collapsed generator might only output the digit '8' because it reliably tricks D, completely ignoring digits 0-7 and 9. Solutions include Wasserstein GAN (WGAN), unrolled GANs, and minibatch discrimination.",
       "whyWrong": "Mode collapse is an algorithmic representation failure, not a hardware out-of-memory crash or learning rate sign bug.",
-      "keyConcept": "Mode Collapse: Generator outputs only a single mode/style that fools D, losing all sample diversity."
+      "keyConcept": "Mode Collapse: Generator outputs only a single mode/style that fools D, losing all sample diversity.",
+      "noobBreakdown": "Imagine an artist asked to paint all 10 digits (0 to 9), but they realize the detective is easily tricked by their drawing of an '8'. The artist gets lazy and ONLY paints the digit 8 forever, completely ignoring all other digits!",
+      "terms": {
+        "Mode": "A distinct cluster or peak in a data distribution (e.g., different digits or face types).",
+        "Mode Collapse": "A common GAN failure where the generator only produces one or a few identical outputs, ignoring the diversity of the dataset."
+      }
     }
   },
   {
@@ -2526,7 +2615,12 @@ const QUESTION_BANK = [
       "summary": "CycleGAN enforces that domain mappings are bijections: translating forward then backward must yield the original input.",
       "whyCorrect": "In unpaired image translation, no (x, y) ground-truth pairs exist. CycleGAN trains two generators G: X -> Y and F: Y -> X with two discriminators, penalizing reconstruction loss L_cyc = E[||F(G(x)) - x||_1] + E[||G(F(y)) - y||_1]. This prevents G and F from mapping all inputs to a random unrelated image.",
       "whyWrong": "CycleGAN does not require paired images (that is Pix2Pix), does not share a single filter, and does not rely on simple 180-degree rotations.",
-      "keyConcept": "CycleGAN Principle: Forward-Backward Consistency: F(G(x)) ≈ x (Unpaired Domain Translation)."
+      "keyConcept": "CycleGAN Principle: Forward-Backward Consistency: F(G(x)) ≈ x (Unpaired Domain Translation).",
+      "noobBreakdown": "Translating English to French, and French back to English. If the round-trip gives back your exact original sentence, the translation was meaningful! This lets CycleGAN turn Horses into Zebras without needing photos of the exact same horse as a zebra.",
+      "terms": {
+        "Cycle Consistency": "The principle that translating an image from Domain A to B and back to A must reconstruct the original image.",
+        "Unpaired Data": "Datasets where images in one category do not have corresponding one-to-one matched pairs in the other category."
+      }
     }
   },
   {
@@ -2546,7 +2640,13 @@ const QUESTION_BANK = [
       "summary": "Diffusion models generate data by iteratively denoising a sample initialized from pure Gaussian noise.",
       "whyCorrect": "As presented in modern deep generative modeling: Forward diffusion q(x_t | x_{t-1}) adds Gaussian noise according to a variance schedule beta_t. The reverse process p_theta(x_{t-1} | x_t) uses a neural network to estimate the noise epsilon_theta(x_t, t), iteratively subtracting noise to reconstruct sharp images.",
       "whyWrong": "Diffusion models do not use DCT filtering, do not run dual discriminators (that is GANs), and do not perform nearest neighbor averaging.",
-      "keyConcept": "Diffusion Mechanism: Forward Process (Add Noise) -> Reverse Process (Learned Denoising via U-Net)."
+      "keyConcept": "Diffusion Mechanism: Forward Process (Add Noise) -> Reverse Process (Learned Denoising via U-Net).",
+      "noobBreakdown": "Slowly adding static noise to a photo step-by-step until it becomes pure snow (Forward process), then training a neural network (U-Net) to reverse the process and remove the noise grain-by-grain to reveal a brand-new masterpiece!",
+      "terms": {
+        "Diffusion": "Gradually corrupting an image by adding small amounts of Gaussian noise over many time steps.",
+        "Denoising (DDPM)": "Training a neural network to predict and remove noise step-by-step to generate clean images.",
+        "Markov Chain": "A sequence of states where each state depends only on the state immediately before it."
+      }
     }
   },
   {
@@ -2566,7 +2666,12 @@ const QUESTION_BANK = [
       "summary": "Because the true marginal data log-likelihood log p(x) is intractable, VAEs maximize its variational lower bound (ELBO).",
       "whyCorrect": "In VAE derivation: log p(x) = E_{q}[log(p(x,z)/q(z|x))] + D_KL(q(z|x) || p(z|x)) >= E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z)). Maximizing the ELBO simultaneously maximizes reconstruction likelihood and minimizes latent prior divergence.",
       "whyWrong": "Option B is F1-score; Option C and D are fabricated heuristics.",
-      "keyConcept": "ELBO Formulation: Maximizes Reconstruction Log-Likelihood while Minimizing KL Divergence to Prior."
+      "keyConcept": "ELBO Formulation: Maximizes Reconstruction Log-Likelihood while Minimizing KL Divergence to Prior.",
+      "noobBreakdown": "We want to maximize the probability of real images, but the math is impossible to solve directly. The Evidence Lower Bound (ELBO) provides a solvable mathematical floor: make the image reconstruction sharp while keeping the latent codes simple and normal.",
+      "terms": {
+        "ELBO (Evidence Lower Bound)": "A mathematically solvable lower bound on the true log-likelihood of data in a VAE.",
+        "Prior p(z)": "The initial assumed distribution of latent variables, typically a standard Gaussian N(0, I)."
+      }
     }
   },
   {
@@ -2586,7 +2691,12 @@ const QUESTION_BANK = [
       "summary": "Standard autoencoders learn deterministic point encodings with irregular, discontinuous latent spaces, making them unsuitable for generation.",
       "whyCorrect": "In Module 3 (Autoencoders vs VAEs): A standard AE only optimizes reconstruction loss ||x - x_hat||^2. It has no incentive to organize the latent space smoothly or center it at 0. Sampling random points z lands in unmapped regions, producing garbage. VAEs enforce a smooth Gaussian latent space using KL divergence.",
       "whyWrong": "Decoders are not deleted, autoencoders process 2D images, and matrix multiplication works for any tensor.",
-      "keyConcept": "Autoencoder Latent Space: Discontinuous and unregularized. VAE solves this by enforcing a continuous Gaussian prior."
+      "keyConcept": "Autoencoder Latent Space: Discontinuous and unregularized. VAE solves this by enforcing a continuous Gaussian prior.",
+      "noobBreakdown": "A standard autoencoder leaves giant empty gaps between its memory points. If you pick a random point in one of those gaps, the decoder panics and outputs a scrambled mess of random pixels because it was never trained there.",
+      "terms": {
+        "Discontinuous Latent Space": "A latent space containing gaps, voids, or holes where the decoder cannot produce sensible images.",
+        "Latent Regularization": "Constraining the latent codes so that nearby points always translate to visually similar images."
+      }
     }
   },
   {
@@ -2606,7 +2716,12 @@ const QUESTION_BANK = [
       "summary": "Conditional GANs condition both G and D on auxiliary information y, steering the generative process toward a specified target mode.",
       "whyCorrect": "In Mirza & Osindero (2014) and Module 3 slides: G takes [z, y] to produce G(z, y). D takes [x, y] to determine if x is a real image matching condition y. This allows conditional generation of specific classes, text-to-image synthesis, or image translation.",
       "whyWrong": "Retraining from scratch is inefficient, multiplying pixels by class integers ruins images, and activations remain necessary.",
-      "keyConcept": "cGAN Conditioning: G(z, y) synthesizes target class y; D(x, y) validates whether image x matches class y."
+      "keyConcept": "cGAN Conditioning: G(z, y) synthesizes target class y; D(x, y) validates whether image x matches class y.",
+      "noobBreakdown": "Adding an order slip to the kitchen! Instead of the generator making a random surprise image, you hand both the generator and discriminator a tag saying 'Make a digit 7' (conditioning label y).",
+      "terms": {
+        "Conditional GAN (cGAN)": "A GAN where both generator and discriminator receive a class label or prompt to control the output.",
+        "One-Hot Vector": "A list of zeros with a single 1 indicating the chosen category (e.g., [0, 0, 1] for class 2)."
+      }
     }
   },
   {
@@ -2626,7 +2741,12 @@ const QUESTION_BANK = [
       "summary": "This is the exact opening definition of an artificial neuron in Module 1: z = W^T * X + b, followed by y_hat = g(z).",
       "whyCorrect": "Module 1 Slide Text: 'A perceptron computes a linear combination of its inputs and applies a non-linear activation function.' The two distinct steps are (1) linear weighting plus bias, (2) non-linear transformation g(z).",
       "whyWrong": "It does not compute convolutions (that is CNNs) and the activation cannot be linear if depth is to be preserved.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'A perceptron computes a linear combination of its inputs and applies a non-linear activation function.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'A perceptron computes a linear combination of its inputs and applies a non-linear activation function.'",
+      "noobBreakdown": "The two fundamental steps of an artificial brain cell: first multiply inputs by weights and add a bias (linear combination), then pass that total through a curved on/off switch (non-linear activation function).",
+      "terms": {
+        "Linear Combination": "Multiplying each input feature by its weight and summing them up plus a bias: z = W^T * X + b.",
+        "Non-linear Activation": "A curved mathematical rule (like ReLU or Sigmoid) that decides if and how strongly the neuron fires."
+      }
     }
   },
   {
@@ -2646,7 +2766,12 @@ const QUESTION_BANK = [
       "summary": "The Universal Approximation Theorem proves that non-linear activation functions give even a 2-layer network arbitrary function approximation capacity.",
       "whyCorrect": "Module 1 Slide Verbatim: 'Universal Approximation Theorem: A single hidden layer neural network containing a finite number of non-linear neurons can approximate any continuous function on compact subsets of R^n.'",
       "whyWrong": "Linear networks can never solve XOR regardless of depth; networks do not need infinite epochs; CNN superiority depends on spatial structure.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Universal Approximation: A single hidden layer neural network with a non-linear activation function can approximate any continuous function.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Universal Approximation: A single hidden layer neural network with a non-linear activation function can approximate any continuous function.'",
+      "noobBreakdown": "Even with just one hidden layer of curved building blocks (non-linear neurons), if you have enough of them, a neural network can approximate any continuous shape or mathematical curve in the universe!",
+      "terms": {
+        "Universal Approximation": "A mathematical proof showing that neural networks can approximate any continuous function given enough neurons.",
+        "Hidden Layer": "The layer of neurons located between the raw inputs and final outputs."
+      }
     }
   },
   {
@@ -2666,7 +2791,12 @@ const QUESTION_BANK = [
       "summary": "Training optimizes the empirical average loss across all n available training examples.",
       "whyCorrect": "Module 1 Slide Formulation: 'Empirical Risk Minimization: We want to find network weights that minimize the cost over our entire training dataset: argmin_W J(W) where J(W) = (1/n) * sum_{i=1}^n L(f(x^(i); W), y^(i)).'",
       "whyWrong": "We minimize (not maximize) loss, zeroing weights destroys expressiveness, and determinants do not optimize loss.",
-      "keyConcept": "Exact Slide Formulation (Module 1): J(W) = (1/n) * sum_{i=1}^n L(f(x^(i); W), y^(i))."
+      "keyConcept": "Exact Slide Formulation (Module 1): J(W) = (1/n) * sum_{i=1}^n L(f(x^(i); W), y^(i)).",
+      "noobBreakdown": "Training an AI simply means turning the weight dial knobs until the network's prediction mistakes (loss) are as small as humanly possible across all training examples.",
+      "terms": {
+        "Weights (W)": "The learnable numerical parameters inside a neural network that scale input signals.",
+        "Loss Function J(W)": "The mathematical score measuring the error between model predictions and true answers."
+      }
     }
   },
   {
@@ -2686,7 +2816,12 @@ const QUESTION_BANK = [
       "summary": "The derivative of sigmoid is sigma(z) * (1 - sigma(z)). Its maximum value occurs when sigma(z) = 0.5, giving 0.5 * 0.5 = 0.25.",
       "whyCorrect": "Module 1 Slide Text: 'Sigmoid derivative: d/dz sigma(z) = sigma(z)(1 - sigma(z)). The maximum derivative is 0.25 at z=0. Stacking N layers multiplies gradients by at most (0.25)^N, vanishing exponentially.'",
       "whyWrong": "ReLU has a maximum derivative of 1.0, not Sigmoid. Sigmoid's derivative peaks at exactly 0.25.",
-      "keyConcept": "Exact Slide Fact (Module 1): 'Max derivative of Sigmoid = 0.25 at z=0; multiplying derivatives across depth causes exponential gradient decay.'"
+      "keyConcept": "Exact Slide Fact (Module 1): 'Max derivative of Sigmoid = 0.25 at z=0; multiplying derivatives across depth causes exponential gradient decay.'",
+      "noobBreakdown": "The slope (derivative) of a Sigmoid curve is flattest at the far left and right, and reaches its absolute peak steepness of only 0.25 right in the dead center (z = 0).",
+      "terms": {
+        "Derivative": "The rate of change or slope of a mathematical function at a given point.",
+        "Sigmoid Function": "A squashing function sigma(z) = 1 / (1 + e^-z) whose maximum derivative is 0.25."
+      }
     }
   },
   {
@@ -2706,7 +2841,12 @@ const QUESTION_BANK = [
       "summary": "Dying ReLU occurs because the gradient of ReLU for z <= 0 is zero, preventing any further weight updates.",
       "whyCorrect": "Module 1 Slide Text: 'The Dying ReLU Problem: For inputs z <= 0, the gradient is 0. If a large gradient causes a neuron to update such that it never activates on any training sample, its gradient remains 0 forever and the neuron dies.'",
       "whyWrong": "Dying ReLU is a zero-gradient freezing state, not an exploding weight or memory allocation event.",
-      "keyConcept": "Exact Slide Statement (Module 1): 'Dying ReLU: Gradient is 0 for z <= 0; neurons that never activate get stuck and stop learning.'"
+      "keyConcept": "Exact Slide Statement (Module 1): 'Dying ReLU: Gradient is 0 for z <= 0; neurons that never activate get stuck and stop learning.'",
+      "noobBreakdown": "When the input to a ReLU neuron is negative, it outputs 0 and its slope is 0. With a slope of zero, gradient descent cannot provide any update signal, so the neuron falls into a permanent coma and never learns again!",
+      "terms": {
+        "Dying ReLU": "A problem where neurons become permanently inactive (outputting 0 with 0 gradient) for all inputs.",
+        "Pre-activation": "The weighted sum z = W*x + b before the activation function is applied."
+      }
     }
   },
   {
@@ -2726,7 +2866,12 @@ const QUESTION_BANK = [
       "summary": "Dropout forces neurons to learn robust features independently rather than relying on specific neighboring neurons.",
       "whyCorrect": "Module 1 Slide Text: 'Dropout: During training, randomly set a fraction p of activations to 0 on each forward pass. This prevents neurons from co-adapting and forces the network to learn redundant representations.'",
       "whyWrong": "Dropout drops activations to 0 (zero), not 1, and prevents co-adaptation.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Dropout: Randomly sets activations to 0 with probability p to prevent feature co-adaptation.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Dropout: Randomly sets activations to 0 with probability p to prevent feature co-adaptation.'",
+      "noobBreakdown": "Preventing students from relying on one smart classmate! By randomly muting a percentage of neurons during each training step, every neuron is forced to learn useful features independently.",
+      "terms": {
+        "Dropout": "A regularization method that randomly sets a fraction of neuron outputs to 0 during training.",
+        "Co-adaptation": "When neurons become overly dependent on specific partner neurons to correct their mistakes."
+      }
     }
   },
   {
@@ -2746,7 +2891,13 @@ const QUESTION_BANK = [
       "summary": "Convolution slides a small kernel across local patches, computing element-wise dot products.",
       "whyCorrect": "Module 2 Slide Text: 'The Convolution Operation: Apply a filter (or kernel) to local spatial neighborhoods of an image, compute dot products, and slide across the image to produce a feature map.'",
       "whyWrong": "Matrix transposition, channel averaging, or pixel shuffling do not describe 2D spatial convolution.",
-      "keyConcept": "Exact Slide Definition (Module 2): 'Convolution: Sliding a filter across local spatial neighborhoods to produce a feature map.'"
+      "keyConcept": "Exact Slide Definition (Module 2): 'Convolution: Sliding a filter across local spatial neighborhoods to produce a feature map.'",
+      "noobBreakdown": "Sliding a small magnifying glass (filter) across an image, multiplying matching pixels, and adding them up to spot local visual features like lines, edges, and corners.",
+      "terms": {
+        "Convolution": "A mathematical operation sliding a filter over an input to generate a feature map.",
+        "Kernel / Filter": "A small grid of learnable weights (e.g. 3x3) designed to detect specific visual patterns.",
+        "Feature Map": "The output grid highlighting where the filter detected its target feature."
+      }
     }
   },
   {
@@ -2766,7 +2917,12 @@ const QUESTION_BANK = [
       "summary": "Weight sharing ensures that an edge detector learned in the top-left also detects edges in the bottom-right.",
       "whyCorrect": "Module 2 Slide Text: 'Weight Sharing: Instead of having separate weights for every pixel, the same filter is applied across the entire image. This dramatically reduces the number of learnable parameters and introduces translation equivariance.'",
       "whyWrong": "Layers do not share weights with other layers; it refers to spatial sharing within a single convolutional layer.",
-      "keyConcept": "Exact Slide Definition (Module 2): 'Weight Sharing: Same filter applied across all spatial positions -> translation equivariance + parameter efficiency.'"
+      "keyConcept": "Exact Slide Definition (Module 2): 'Weight Sharing: Same filter applied across all spatial positions -> translation equivariance + parameter efficiency.'",
+      "noobBreakdown": "Using the EXACT same filter everywhere across the image. A 'cat ear detector' works whether the ear is in the top-left or bottom-right corner! This cuts parameter count from millions down to just a few dozen weights.",
+      "terms": {
+        "Weight Sharing": "Using the same set of kernel weights across all spatial locations of an image.",
+        "Translation Equivariance": "If a feature moves in the input image, its detection moves by the same amount in the feature map."
+      }
     }
   },
   {
@@ -2786,7 +2942,12 @@ const QUESTION_BANK = [
       "summary": "Valid means no padding (shrinkage). Same means padding with (K-1)/2 zeros to maintain dimensions.",
       "whyCorrect": "Module 2 Slide Text: 'Valid Padding: No zero padding (P=0). The filter only visits valid image locations, causing spatial dimensions to shrink. Same Padding: Pad input with zeros such that the output spatial size is identical to the input spatial size when stride S=1.'",
       "whyWrong": "Padding types apply to both training and testing; valid does not pad with ones.",
-      "keyConcept": "Exact Slide Definition (Module 2): 'Valid: P=0 (shrink output). Same: Pad zeros so Output Size = Input Size when S=1.'"
+      "keyConcept": "Exact Slide Definition (Module 2): 'Valid: P=0 (shrink output). Same: Pad zeros so Output Size = Input Size when S=1.'",
+      "noobBreakdown": "Valid padding adds no extra border (P=0), so the picture shrinks after filtering. Same padding adds a border of zeros so the output stays the exact same width and height as the original image.",
+      "terms": {
+        "Valid Padding": "Applying zero padding (P=0); the output spatial dimensions shrink.",
+        "Same Padding": "Adding zero borders such that output height and width match the input height and width."
+      }
     }
   },
   {
@@ -2806,7 +2967,12 @@ const QUESTION_BANK = [
       "summary": "Pooling applies a fixed aggregation function (max or average) without any weights or biases.",
       "whyCorrect": "Module 2 Slide Text: 'Pooling Layers: Progressively reduce the spatial size of the representation to reduce parameters, memory, and provide translation invariance. Crucial note: Pooling layers perform a fixed mathematical operation and have NO learnable parameters.'",
       "whyWrong": "Pooling has zero learnable weights, downsamples (halves) rather than doubles resolution, and has no weight matrices.",
-      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling layers downsample spatial dimensions and possess exactly 0 learnable parameters.'"
+      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling layers downsample spatial dimensions and possess exactly 0 learnable parameters.'",
+      "noobBreakdown": "Shrinking a high-resolution photo into a smaller thumbnail. Pooling reduces the width and height, saving memory and making the model less sensitive to tiny pixel shifts.",
+      "terms": {
+        "Pooling": "A downsampling operation that reduces spatial dimensions without adding any learnable parameters.",
+        "Spatial Invariance": "Recognizing an object even if it is shifted slightly in position."
+      }
     }
   },
   {
@@ -2826,7 +2992,12 @@ const QUESTION_BANK = [
       "summary": "VGG proved that deep architectures using homogeneous 3x3 filters outperform shallower networks with large filters.",
       "whyCorrect": "Module 2 Slide Text: 'VGG Principle: Why 3x3 filters? A stack of two 3x3 conv layers has an effective receptive field of 5x5, but uses 2*(3^2*C^2) = 18C^2 params vs 5^2*C^2 = 25C^2 params (28% fewer), while adding an extra non-linear ReLU between them.'",
       "whyWrong": "VGG pioneered stacks of 3x3 filters, not 7x7 or depthwise convolutions.",
-      "keyConcept": "Exact Slide Statement (Module 2): 'Two 3x3 filters = 5x5 receptive field with 28% fewer parameters + more non-linearities.'"
+      "keyConcept": "Exact Slide Statement (Module 2): 'Two 3x3 filters = 5x5 receptive field with 28% fewer parameters + more non-linearities.'",
+      "noobBreakdown": "Stacking two small 3x3 filters covers the exact same area as one big 5x5 filter, but uses 28% fewer weights (18 vs. 25) and gives you an extra non-linear activation in between!",
+      "terms": {
+        "Receptive Field": "The region of the input image that directly influences the activation of a particular neuron.",
+        "VGGNet": "A classic deep CNN architecture famous for using uniform 3x3 convolutions throughout."
+      }
     }
   },
   {
@@ -2846,7 +3017,12 @@ const QUESTION_BANK = [
       "summary": "ResNet reformulates target mapping H(x) into residual mapping F(x) + x.",
       "whyCorrect": "Module 2 Slide Text: 'Residual Learning: Instead of hoping layers directly fit H(x), we let layers fit a residual mapping F(x) = H(x) - x. The original mapping is recast as H(x) = F(x) + x. The identity shortcut (+ x) allows gradients to flow directly backward without vanishing.'",
       "whyWrong": "Multiplication, subtraction, or min-max transformations disrupt the uninterrupted identity gradient highway.",
-      "keyConcept": "Exact Slide Formulation (Module 2): 'Residual Block: H(x) = F(x) + x with identity shortcut connection.'"
+      "keyConcept": "Exact Slide Formulation (Module 2): 'Residual Block: H(x) = F(x) + x with identity shortcut connection.'",
+      "noobBreakdown": "An express bridge! Instead of forcing the layer to invent the whole image from scratch, the input x skips over the layer and gets added directly. The layer only has to learn the tiny leftover difference F(x).",
+      "terms": {
+        "Residual Learning": "Reformulating layers to learn a residual mapping F(x) = H(x) - x instead of the full unreferenced mapping.",
+        "Skip Connection": "An identity shortcut path that bypasses one or more layers, allowing gradients to flow unimpeded."
+      }
     }
   },
   {
@@ -2866,7 +3042,12 @@ const QUESTION_BANK = [
       "summary": "CNN representations build hierarchically from local primitive features to complex global semantic concepts.",
       "whyCorrect": "Module 2 Slide Text: 'Hierarchical Feature Representation: Early layers: low-level features (edges, color gradients). Mid-level layers: motifs, textures, and object parts (wheels, eyes). Deep layers: high-level semantic entities (faces, cars, animals).'",
       "whyWrong": "The hierarchy moves from local to global, never from complex objects to low-level pixels.",
-      "keyConcept": "Exact Slide Statement (Module 2): 'Feature Hierarchy: Edges & Textures (Early) -> Object Parts (Mid) -> Semantic Objects (Deep).'"
+      "keyConcept": "Exact Slide Statement (Module 2): 'Feature Hierarchy: Edges & Textures (Early) -> Object Parts (Mid) -> Semantic Objects (Deep).'",
+      "noobBreakdown": "Early layers detect simple lines and colors; middle layers combine lines into eyes, wheels, and textures; deep layers combine parts into entire faces, dogs, and cars!",
+      "terms": {
+        "Low-Level Features": "Basic visual primitives such as edges, gradients, and simple textures.",
+        "High-Level Features": "Complex semantic concepts such as object parts, full objects, and scene categories."
+      }
     }
   },
   {
@@ -2886,7 +3067,12 @@ const QUESTION_BANK = [
       "summary": "Generative models learn to approximate the underlying data distribution p(x) in an unsupervised manner.",
       "whyCorrect": "Module 3 Slide 5 Text: 'Generative Modeling: Goal is to take training samples from some distribution and learn a model that represents that distribution to generate new samples.'",
       "whyWrong": "Classification is supervised label mapping; Gaussian elimination and polynomial regression are not generative modeling.",
-      "keyConcept": "Exact Slide Definition (Module 3 Slide 5): 'Generative Modeling: Learn a model representing the data distribution to generate new samples.'"
+      "keyConcept": "Exact Slide Definition (Module 3 Slide 5): 'Generative Modeling: Learn a model representing the data distribution to generate new samples.'",
+      "noobBreakdown": "An unsupervised task where an AI learns how training data is organized so it can dream up brand-new, realistic examples that look like they came from the real world.",
+      "terms": {
+        "Generative Modeling": "An unsupervised learning task modeling the underlying data distribution to generate new samples.",
+        "Probability Distribution": "The mathematical map showing the likelihood of different data samples occurring."
+      }
     }
   },
   {
@@ -2906,7 +3092,12 @@ const QUESTION_BANK = [
       "summary": "An undercomplete bottleneck prevents the network from memorizing an uncompressed identity mapping.",
       "whyCorrect": "Module 3 Slide Text: 'Autoencoder Bottleneck: Why dim(z) < dim(x)? If the latent dimension were equal or larger than input dimension, the network could trivially memorize the identity function I(x) = x without learning meaningful features. The bottleneck forces non-linear compression.'",
       "whyWrong": "GPUs handle massive dimensions, reconstruction loss is still computed, and weights can be positive or negative.",
-      "keyConcept": "Exact Slide Statement (Module 3): 'Undercomplete Bottleneck: Forces the network to learn compressed features instead of trivial identity mapping.'"
+      "keyConcept": "Exact Slide Statement (Module 3): 'Undercomplete Bottleneck: Forces the network to learn compressed features instead of trivial identity mapping.'",
+      "noobBreakdown": "If your summary notes were as long as the entire textbook, you'd just memorize the words without understanding them. Forcing the code to be short forces the AI to keep only the core meaning!",
+      "terms": {
+        "Trivial Identity": "Simply copying inputs directly to outputs without learning any meaningful representation.",
+        "Bottleneck": "A low-dimensional middle layer that forces the network to discover compressed, meaningful features."
+      }
     }
   },
   {
@@ -2926,7 +3117,12 @@ const QUESTION_BANK = [
       "summary": "Reparameterization rewrites sampling as an affine transformation of external Gaussian noise.",
       "whyCorrect": "Module 3 Slide & Notebook Equation: 'Reparameterization Trick: z = mu + sigma * eps = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I).' This isolates stochasticity into eps, enabling backprop into mu and sigma.",
       "whyWrong": "The standard deviation sigma = exp(0.5 * logsigma); other choices are non-differentiable or mathematically incorrect heuristics.",
-      "keyConcept": "Exact Slide Equation (Module 3 & PT_Part2_Debiasing.ipynb): z = mu + exp(0.5 * logsigma) * eps."
+      "keyConcept": "Exact Slide Equation (Module 3 & PT_Part2_Debiasing.ipynb): z = mu + exp(0.5 * logsigma) * eps.",
+      "noobBreakdown": "The exact formula: z = mu + exp(0.5 * log_var) * eps. We predict log-variance to prevent negative numbers, take half to get standard deviation, multiply by pure random noise, and shift by the average.",
+      "terms": {
+        "Log-Variance": "Predicting log(sigma^2) guarantees that variance is always strictly positive after exponentiation.",
+        "Epsilon (eps)": "A random sample drawn from a standard normal distribution N(0, I)."
+      }
     }
   },
   {
@@ -2946,7 +3142,12 @@ const QUESTION_BANK = [
       "summary": "Goodfellow et al.'s original minimax objective balances discriminator log-probability on real data and log-rejection of fake data.",
       "whyCorrect": "Module 3 Slide Text: 'GAN Objective: min_G max_D V(D, G) = E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]. D maximizes probability of correct label; G minimizes log(1 - D(G(z))).'",
       "whyWrong": "Option B is an MSE loss, Option C and D are fabricated equations.",
-      "keyConcept": "Exact Slide Equation (Module 3): min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))]."
+      "keyConcept": "Exact Slide Equation (Module 3): min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))].",
+      "noobBreakdown": "Real images should make the detective say 1 (log D(x)); fake images should make the detective say 0 (log(1 - D(G(z)))). The detective wants this sum high; the generator wants it low.",
+      "terms": {
+        "Minimax Objective": "min_G max_D E[log D(x)] + E[log(1 - D(G(z)))].",
+        "Latent Vector z": "A vector of random numbers input into the generator to create an image."
+      }
     }
   },
   {
@@ -2966,7 +3167,12 @@ const QUESTION_BANK = [
       "summary": "Mode collapse is the failure mode where G lacks diversity and maps all noise to a single high-reward pattern.",
       "whyCorrect": "Module 3 Slide Text: 'Mode Collapse: A major challenge in GAN training where the generator collapses to producing samples from only a few modes (or a single mode) of the target distribution, failing to capture full data diversity.'",
       "whyWrong": "Mode collapse does not mean discriminator reaches 0%, does not run out of layers, and has nothing to do with infinite noise.",
-      "keyConcept": "Exact Slide Definition (Module 3): 'Mode Collapse: Generator outputs only a few modes of the distribution, losing sample diversity.'"
+      "keyConcept": "Exact Slide Definition (Module 3): 'Mode Collapse: Generator outputs only a few modes of the distribution, losing sample diversity.'",
+      "noobBreakdown": "When the generator finds one trick that works (like drawing a single convincing dog) and completely gives up on learning how to draw cats, birds, or cars.",
+      "terms": {
+        "Mode Collapse": "When a generative model produces only a very limited variety of outputs, failing to capture dataset diversity.",
+        "Sample Diversity": "Having a wide variety of distinct and diverse outputs across all classes."
+      }
     }
   },
   {
@@ -2986,7 +3192,12 @@ const QUESTION_BANK = [
       "summary": "Cycle consistency enforces that mapping from domain X to Y and back from Y to X reproduces the original image.",
       "whyCorrect": "Module 3 Slide Text: 'Cycle Consistency Loss: Translating from domain X to Y (G(x)) and back from Y to X (F(G(x))) should reconstruct x: F(G(x)) ≈ x. Similarly, G(F(y)) ≈ y. Loss: L_cyc = ||F(G(x)) - x||_1 + ||G(F(y)) - y||_1.'",
       "whyWrong": "Options B, C, and D do not define the forward-backward bijection loss.",
-      "keyConcept": "Exact Slide Formulation (Module 3 CycleGAN): F(G(x)) ≈ x and G(F(y)) ≈ y (Forward-Backward Cycle Consistency)."
+      "keyConcept": "Exact Slide Formulation (Module 3 CycleGAN): F(G(x)) ≈ x and G(F(y)) ≈ y (Forward-Backward Cycle Consistency).",
+      "noobBreakdown": "F(G(x)) ≈ x (translating horse to zebra and back to horse returns the original horse) and G(F(y)) ≈ y (zebra to horse and back to zebra returns the original zebra).",
+      "terms": {
+        "Cycle Consistency Loss": "A penalty ensuring that a round-trip translation across domains preserves the original content.",
+        "CycleGAN": "A neural network that performs image-to-image translation between unpaired datasets."
+      }
     }
   },
   {
@@ -3006,7 +3217,12 @@ const QUESTION_BANK = [
       "summary": "TensorFlow implements reverse-mode autodiff through its GradientTape recording abstraction.",
       "whyCorrect": "Module 1 Lab Text: 'Automatic differentiation in TensorFlow: TensorFlow provides the tf.GradientTape API for automatic differentiation. All operations executed inside the context of a with tf.GradientTape() as tape block are recorded on a \"tape\". TensorFlow then uses that tape to compute gradients using reverse mode differentiation.'",
       "whyWrong": "TensorFlow does not rely on sympy symbolic math, numerical finite difference quotients, or manual derivation.",
-      "keyConcept": "Exact Notebook Statement (Module 1 Section 1.4): 'Operations inside with tf.GradientTape() as tape: are recorded to compute gradients via reverse-mode autodiff.'"
+      "keyConcept": "Exact Notebook Statement (Module 1 Section 1.4): 'Operations inside with tf.GradientTape() as tape: are recorded to compute gradients via reverse-mode autodiff.'",
+      "noobBreakdown": "TensorFlow only records and calculates gradients for math operations that happen inside the active 'with tf.GradientTape()' block. If an operation happens outside, the tape never saw it!",
+      "terms": {
+        "tf.GradientTape": "TensorFlow's automatic differentiation engine that records operations on a tape for gradient computation.",
+        "Context Manager": "A Python 'with' statement controlling when tape recording starts and stops."
+      }
     }
   },
   {
@@ -3026,7 +3242,12 @@ const QUESTION_BANK = [
       "summary": "Non-linearities prevent deep feedforward networks from collapsing mathematically into a single linear layer.",
       "whyCorrect": "Module 1 Slide Text: 'Why non-linearities? Without non-linearities, no matter how many layers you have, the entire network is just a single linear transformation: W_2(W_1 x) = W' x. Non-linear activation functions allow networks to learn complex non-linear functions.'",
       "whyWrong": "Linearity does not cause exploding gradients or require infinite memory; it simply deprives the network of representation capacity beyond a linear hyperplane.",
-      "keyConcept": "Exact Slide Statement (Module 1): 'Without non-linearities, no matter how many layers you have, the entire network is just a single linear transformation: W2(W1 x) = W' x.'"
+      "keyConcept": "Exact Slide Statement (Module 1): 'Without non-linearities, no matter how many layers you have, the entire network is just a single linear transformation: W2(W1 x) = W' x.'",
+      "noobBreakdown": "Multiplying numbers is still multiplication. Without curved non-linear activations, stacking 1,000 linear layers collapses into just one single giant multiplication equation!",
+      "terms": {
+        "Linear Collapse": "W2 * (W1 * x) = (W2 * W1) * x = W' * x. Stacking linear layers yields only a single linear transformation.",
+        "Universal Approximation": "Non-linearities are required for neural networks to approximate non-linear functions."
+      }
     }
   },
   {
@@ -3046,7 +3267,12 @@ const QUESTION_BANK = [
       "summary": "Tanh outputs are zero-centered in [-1, 1], unlike Sigmoid [0, 1] which forces all gradient updates to have the same sign.",
       "whyCorrect": "Module 1 Slide Text: 'Hyperbolic Tangent (Tanh): Range [-1, 1], zero-centered. Solves the issue of non-zero-centered outputs of the sigmoid function, where gradients on weights during backpropagation are always all positive or all negative.'",
       "whyWrong": "Tanh still suffers from vanishing gradients for large |z| (its maximum derivative is 1.0 at z=0), still uses exponentials (e^z - e^-z)/(e^z + e^-z), and does not set negative inputs to zero.",
-      "keyConcept": "Exact Slide Fact (Module 1): 'Tanh: Output range [-1, 1] is zero-centered, unlike sigmoid [0, 1] whose all-positive outputs cause zig-zag gradient updates.'"
+      "keyConcept": "Exact Slide Fact (Module 1): 'Tanh: Output range [-1, 1] is zero-centered, unlike sigmoid [0, 1] whose all-positive outputs cause zig-zag gradient updates.'",
+      "noobBreakdown": "Sigmoid outputs are all positive (0 to 1), causing weight updates to zig-zag. Tanh outputs balance around zero (-1 to +1), which makes training much faster and smoother!",
+      "terms": {
+        "Zero-Centered": "Having an average output value of 0, which prevents undesirable zig-zagging in weight updates.",
+        "Tanh": "Hyperbolic tangent activation function squashing inputs to the range [-1, +1]."
+      }
     }
   },
   {
@@ -3066,7 +3292,13 @@ const QUESTION_BANK = [
       "summary": "Binary Cross-Entropy measures the distance between the Bernoulli true label y and predicted probability y_hat.",
       "whyCorrect": "Module 1 Slide Formula: 'Binary Cross Entropy Loss: L(y_hat, y) = - [ y log(y_hat) + (1 - y) log(1 - y_hat) ]'. When y=1, only -log(y_hat) remains; when y=0, only -log(1 - y_hat) remains.",
       "whyWrong": "0.5*(y - y_hat)^2 is Mean Squared Error (for regression); max(0, 1 - y*y_hat) is Hinge Loss (for SVMs); -sum(y_i * log(y_hat_i)) is Categorical Cross-Entropy (multi-class).",
-      "keyConcept": "Exact Slide Formula (Module 1): Binary Cross Entropy Loss = -[y * log(y_hat) + (1 - y) * log(1 - y_hat)]."
+      "keyConcept": "Exact Slide Formula (Module 1): Binary Cross Entropy Loss = -[y * log(y_hat) + (1 - y) * log(1 - y_hat)].",
+      "noobBreakdown": "L = -[y * log(y_hat) + (1-y) * log(1-y_hat)]. If the true answer is 1, only the first part matters; if the true answer is 0, only the second part matters.",
+      "terms": {
+        "Binary Cross-Entropy": "The standard loss function for two-class classification problems.",
+        "Ground Truth y": "The actual target label (1 or 0).",
+        "Predicted Probability y_hat": "The model's predicted confidence score between 0 and 1."
+      }
     }
   },
   {
@@ -3086,7 +3318,12 @@ const QUESTION_BANK = [
       "summary": "Softmax transforms unconstrained logits z into a probability distribution via softmax(z)_i = e^{z_i} / sum_j e^{z_j}.",
       "whyCorrect": "Module 1 Slide Text: 'Softmax Activation: S(z)_i = e^{z_i} / sum_{j=1}^k e^{z_j}. Normalizes logits into probabilities such that 0 <= S(z)_i <= 1 and sum_i S(z)_i = 1.'",
       "whyWrong": "Softmax does not take hard argmax (which is non-differentiable), clip negative scores like ReLU, or evaluate normal CDFs.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Softmax: S(z)_i = e^{z_i} / sum(e^{z_j}); maps unconstrained logits to valid probability distribution summing to 1.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Softmax: S(z)_i = e^{z_i} / sum(e^{z_j}); maps unconstrained logits to valid probability distribution summing to 1.'",
+      "noobBreakdown": "Taking a list of raw score numbers, raising e to their power so they become positive, and dividing by the sum so they add up to a perfect 100% probability pie!",
+      "terms": {
+        "Softmax": "A function that normalizes a vector of raw scores (logits) into a valid probability distribution summing to 1.0.",
+        "Logits": "The raw, unnormalized outputs of a neural network before applying the softmax function."
+      }
     }
   },
   {
@@ -3106,7 +3343,12 @@ const QUESTION_BANK = [
       "summary": "Gradient descent moves in the opposite direction of the gradient to minimize loss.",
       "whyCorrect": "Module 1 Slide Formula: 'Gradient Descent update rule: W <- W - eta * grad_W J(W)'. The negative sign ensures steps move in the direction of steepest decrease of cost J(W).",
       "whyWrong": "W + eta * grad J is gradient ascent (maximizing loss); eta * W subtracts weight decay without gradient; (1/eta) * J is dimensionally invalid.",
-      "keyConcept": "Exact Slide Equation (Module 1): Gradient Descent update rule: W <- W - eta * grad_W J(W)."
+      "keyConcept": "Exact Slide Equation (Module 1): Gradient Descent update rule: W <- W - eta * grad_W J(W).",
+      "noobBreakdown": "W_new = W - eta * grad_W J(W). New weights equal old weights minus your step size (learning rate) times the slope of your mistake.",
+      "terms": {
+        "Gradient Descent": "An optimization algorithm updating weights in the opposite direction of the loss gradient.",
+        "Learning Rate (eta)": "The step size multiplier controlling how far weights move on each update step."
+      }
     }
   },
   {
@@ -3126,7 +3368,12 @@ const QUESTION_BANK = [
       "summary": "An excessively large learning rate causes overshooting and unstable optimization divergence.",
       "whyCorrect": "Module 1 Slide Text: 'Setting the learning rate: Too small: converges very slowly, easily trapped in local minima. Too large: overshoots the minimum, oscillates, and may diverge to infinity.'",
       "whyWrong": "Slow convergence is caused by small learning rates; dying neurons are caused by negative inputs in ReLUs; identical weights are caused by symmetric zero initialization.",
-      "keyConcept": "Exact Slide Statement (Module 1): 'Learning Rate: Too small -> converges very slowly; Too large -> overshoots, oscillates, and diverges.'"
+      "keyConcept": "Exact Slide Statement (Module 1): 'Learning Rate: Too small -> converges very slowly; Too large -> overshoots, oscillates, and diverges.'",
+      "noobBreakdown": "Taking giant leaps in the dark! Instead of walking gently to the bottom of the valley, you leap clean over the valley and bounce off into infinity (NaN loss).",
+      "terms": {
+        "Overshooting": "When a large learning rate causes updates to jump over the local minimum.",
+        "Divergence": "When the loss increases uncontrollably toward infinity instead of decreasing."
+      }
     }
   },
   {
@@ -3146,7 +3393,12 @@ const QUESTION_BANK = [
       "summary": "Mini-batch gradient descent exploits hardware matrix parallelism while reducing gradient noise compared to pure SGD.",
       "whyCorrect": "Module 1 Slide Text: 'Mini-batch Gradient Descent: Combines the efficiency of vectorization on GPU/TPU with stable gradient estimates (less noisy than pure SGD) while making frequent weight updates (unlike slow full-batch GD). Typical batch size: 32, 64, 128.'",
       "whyWrong": "No optimizer guarantees the global minimum on non-convex neural network surfaces; backpropagation is still required; learning rates are still necessary.",
-      "keyConcept": "Exact Slide Statement (Module 1): 'Mini-batch GD: Combines fast vectorization on GPUs with stable gradient estimates and regular updates.'"
+      "keyConcept": "Exact Slide Statement (Module 1): 'Mini-batch GD: Combines fast vectorization on GPUs with stable gradient estimates and regular updates.'",
+      "noobBreakdown": "The goldilocks zone: checking 1 image at a time (pure SGD) is noisy and slow on GPUs; checking all 50,000 images at once takes too much RAM. A mini-batch (e.g. 64 images) gives fast parallel GPU speed with steady learning!",
+      "terms": {
+        "Mini-Batch GD": "Training using small batches of data (e.g., 32 or 64 samples) on each gradient update.",
+        "Vectorized Computation": "Running operations on entire matrices simultaneously using GPU hardware."
+      }
     }
   },
   {
@@ -3166,7 +3418,12 @@ const QUESTION_BANK = [
       "summary": "Momentum accumulates past velocity v to maintain momentum in consistent descent directions.",
       "whyCorrect": "Module 1 Slide Text: 'SGD with Momentum: v <- beta * v + eta * grad J(W); W <- W - v. Helps accelerate gradients in the right direction and dampens oscillations through ravines whose surface curves much more steeply in one dimension.'",
       "whyWrong": "Dropping units is Dropout; second-order optimization is Newton/L-BFGS; shrinking learning rate is a schedule or decay.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Momentum: v <- beta * v + eta * grad J(W); accelerates along shallow directions and dampens oscillations.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Momentum: v <- beta * v + eta * grad J(W); accelerates along shallow directions and dampens oscillations.'",
+      "noobBreakdown": "Rolling a heavy snowball downhill. As it builds speed, its momentum plows right through tiny bumps and flat stretches without getting stuck.",
+      "terms": {
+        "Momentum (beta)": "Adding a fraction of the previous velocity to the current gradient update step.",
+        "Oscillation Dampening": "Smoothing out rapid zig-zag bounces along steep valley walls."
+      }
     }
   },
   {
@@ -3186,7 +3443,13 @@ const QUESTION_BANK = [
       "summary": "Adam maintains exponentially decaying averages of past gradients (m_t) and past squared gradients (v_t).",
       "whyCorrect": "Module 1 Slide Text: 'Adam (Adaptive Moment Estimation): Combines the advantages of Momentum (stores 1st moment: exponentially decaying average of past gradients) and RMSprop (stores 2nd moment: exponentially decaying average of squared gradients), with bias correction for zero initialization.'",
       "whyWrong": "Adam is not an L1/L2 regularization method, a stochastic depth dropout technique, or a finite difference scheme.",
-      "keyConcept": "Exact Slide Statement (Module 1): 'Adam Optimizer: Combines the benefits of Momentum (1st moment of gradient) and RMSprop (2nd moment of squared gradient) with bias corrections.'"
+      "keyConcept": "Exact Slide Statement (Module 1): 'Adam Optimizer: Combines the benefits of Momentum (1st moment of gradient) and RMSprop (2nd moment of squared gradient) with bias corrections.'",
+      "noobBreakdown": "The ultimate self-driving optimizer. It uses Momentum (1st moment) to keep rolling forward, and RMSprop (2nd moment) to adjust step sizes so infrequent features get bigger steps.",
+      "terms": {
+        "Adam (Adaptive Moment Estimation)": "An optimization algorithm combining momentum and adaptive learning rates.",
+        "First Moment": "Exponential moving average of past gradients (momentum).",
+        "Second Moment": "Exponential moving average of past squared gradients (step size scaling)."
+      }
     }
   },
   {
@@ -3206,7 +3469,12 @@ const QUESTION_BANK = [
       "summary": "Batch Normalization normalizes activations x at each layer across the current mini-batch.",
       "whyCorrect": "Module 1 Slide Text: 'Batch Normalization: Normalizes layer inputs across each mini-batch to have zero mean and unit variance: x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps). Then applies learnable scale and shift: y = gamma * x_hat + beta. Accelerates training and allows higher learning rates.'",
       "whyWrong": "Batch Normalization does not scale weights, clip gradients (that is gradient clipping), or normalize target labels.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Batch Normalization: Normalizes layer inputs across each mini-batch: x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps), then scales and shifts: y = gamma * x_hat + beta.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Batch Normalization: Normalizes layer inputs across each mini-batch: x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps), then scales and shifts: y = gamma * x_hat + beta.'",
+      "noobBreakdown": "Recalibrating the microphone between songs so the volume never gets deafeningly loud or whisper-quiet as sound passes through deep amplifier layers.",
+      "terms": {
+        "Batch Normalization": "Normalizing layer inputs across each mini-batch to have zero mean and unit variance.",
+        "Internal Covariate Shift": "The undesirable shifting of layer input distributions during training as prior layers update."
+      }
     }
   },
   {
@@ -3226,7 +3494,12 @@ const QUESTION_BANK = [
       "summary": "L1 penalty |w| has constant derivative at zero driving weights to 0, while L2 penalty w^2 decays weights smoothly.",
       "whyCorrect": "Module 1 Slide Text: 'Regularization comparison: L1 Regularization (Lasso): Penalty lambda * sum |w|. Encourages sparsity (drives non-critical weights to 0, useful for feature selection). L2 Regularization (Ridge / Weight Decay): Penalty 0.5 * lambda * sum w^2. Penalizes large weights, spreading weight values smoothly without driving them to exact zero.'",
       "whyWrong": "L2 does not produce sparsity; both can be applied across all layers; L1 and L2 add comparable computational overhead.",
-      "keyConcept": "Exact Slide Fact (Module 1): 'L1 Regularization (Lasso): Promotes sparsity (drives weights to 0). L2 Regularization (Ridge): Penalizes large weights (weight decay).'"
+      "keyConcept": "Exact Slide Fact (Module 1): 'L1 Regularization (Lasso): Promotes sparsity (drives weights to 0). L2 Regularization (Ridge): Penalizes large weights (weight decay).'",
+      "noobBreakdown": "L1 is ruthless—it sets useless weights to absolute zero (automatic feature selection). L2 is gentle—it shrinks all weights smoothly so no single neuron becomes a bully.",
+      "terms": {
+        "L1 Regularization (Lasso)": "Penalizes the sum of absolute weight values, driving unimportant weights to exactly zero.",
+        "L2 Regularization (Ridge / Weight Decay)": "Penalizes the sum of squared weights, shrinking them smoothly toward zero."
+      }
     }
   },
   {
@@ -3246,7 +3519,12 @@ const QUESTION_BANK = [
       "summary": "Early stopping stops gradient descent when validation loss reaches its minimum and starts climbing.",
       "whyCorrect": "Module 1 Slide Text: 'Early Stopping: Stop training before the network has a chance to overfit. Monitor the loss on a validation set: when validation loss begins to rise (even though training loss keeps decreasing), stop training and restore the model weights from the best epoch.'",
       "whyWrong": "Early stopping does not truncate backpropagation, quit after 1 epoch, or halt on scheduler reductions.",
-      "keyConcept": "Exact Slide Definition (Module 1): 'Early Stopping: Stop training when validation loss starts to increase to prevent overfitting on the training set.'"
+      "keyConcept": "Exact Slide Definition (Module 1): 'Early Stopping: Stop training when validation loss starts to increase to prevent overfitting on the training set.'",
+      "noobBreakdown": "Hitting the stop button on the oven when the cake is perfectly golden brown, right before it starts burning!",
+      "terms": {
+        "Early Stopping": "Halting model training when error on a held-out validation dataset begins to rise.",
+        "Overfitting": "When a model memorizes training noise and loses the ability to generalize to new data."
+      }
     }
   },
   {
@@ -3266,7 +3544,12 @@ const QUESTION_BANK = [
       "summary": "Fully connected layers destroy 2D spatial locality and cause severe parameter explosion when applied directly to images.",
       "whyCorrect": "Module 2 Slide Text: 'Why Convolutions? 1. Parameter explosion: An input image of 1000x1000x3 pixels flattened into 3,000,000 inputs connected to 1,000 hidden units requires 3 billion parameters for a single layer! 2. Spatial structure is lost: Flattening throws away 2D spatial arrangement and correlation of neighboring pixels.'",
       "whyWrong": "Fully connected layers operate on floats and backpropagate perfectly; their limitation on vision is parameter explosion and loss of spatial inductive bias.",
-      "keyConcept": "Exact Slide Motivation (Module 2): 'Why not Fully Connected? 1) Explosion of parameters (1000x1000x3 = 3M inputs -> billions of weights). 2) Spatial structure is lost upon flattening.'"
+      "keyConcept": "Exact Slide Motivation (Module 2): 'Why not Fully Connected? 1) Explosion of parameters (1000x1000x3 = 3M inputs -> billions of weights). 2) Spatial structure is lost upon flattening.'",
+      "noobBreakdown": "Flattening a photo into a 1D line turns neighbor pixels into strangers and creates billions of weights that melt your computer's memory!",
+      "terms": {
+        "Spatial Topology": "The 2D geometric neighborhood relationship between adjacent pixels.",
+        "Parameter Explosion": "The massive increase in weights when connecting millions of image pixels to dense hidden neurons."
+      }
     }
   },
   {
@@ -3286,7 +3569,12 @@ const QUESTION_BANK = [
       "summary": "The receptive field is the spatial footprint in the input that feeds into a given unit.",
       "whyCorrect": "Module 2 Slide Text: 'Receptive Field: The receptive field of a unit in a convolutional network is defined as the region of the input image that can affect or influence that unit's activation. Receptive field size grows linearly as we stack deeper convolutional layers.'",
       "whyWrong": "The receptive field is not the parameter count, GPU RAM allocation, or a learning rate hyperparameter.",
-      "keyConcept": "Exact Slide Definition (Module 2): 'Receptive Field: The region of the input space that affects a particular unit of the network.'"
+      "keyConcept": "Exact Slide Definition (Module 2): 'Receptive Field: The region of the input space that affects a particular unit of the network.'",
+      "noobBreakdown": "The cone of vision! The specific patch of the original input picture that a particular neuron can see through all the preceding layers.",
+      "terms": {
+        "Receptive Field": "The region of the input space that affects a particular unit's activation.",
+        "Spatial Hierarchy": "Building large semantic receptive fields by stacking multiple small convolutional layers."
+      }
     }
   },
   {
@@ -3306,7 +3594,13 @@ const QUESTION_BANK = [
       "summary": "The spatial output dimension formula computes how many kernel windows fit across the padded input.",
       "whyCorrect": "Module 2 Slide Formula: 'Output size formula: Output Dimension O = floor((W - K + 2P) / S) + 1, where W = input size, K = filter size, P = padding amount on each side, S = stride.'",
       "whyWrong": "All other mathematical combinations fail dimensional consistency with kernel sliding windows.",
-      "keyConcept": "Exact Slide Formula (Module 2): Output Dimension Formula: O = floor((W - K + 2P) / S) + 1."
+      "keyConcept": "Exact Slide Formula (Module 2): Output Dimension Formula: O = floor((W - K + 2P) / S) + 1.",
+      "noobBreakdown": "Output width = ((Input Width - Kernel Size + 2*Padding) / Stride) + 1. It tells you the exact pixel size of your new feature map!",
+      "terms": {
+        "Output Dimension Formula": "O = floor((W - K + 2*P) / S) + 1.",
+        "Stride (S)": "The step size in pixels by which the kernel slides across the image.",
+        "Padding (P)": "The number of zero pixels added to the outer borders of the input."
+      }
     }
   },
   {
@@ -3326,7 +3620,12 @@ const QUESTION_BANK = [
       "summary": "Max pooling detects the presence of the strongest feature, whereas average pooling aggregates overall presence.",
       "whyCorrect": "Module 2 Slide Text: 'Pooling Operations: Max Pooling: Takes the maximum value in each window. Retains the most prominent/salient feature while discarding weaker background signals, offering robust translation invariance. Average Pooling: Computes the average value across the window, producing a smoothed summary of the region.'",
       "whyWrong": "Neither pooling layer contains learnable parameters (both have 0 weights); both reduce spatial dimensions by the pool size / stride.",
-      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling: Max Pooling outputs the maximum activation in the window (salient feature detection); Average Pooling computes the average (smooth feature reduction).'"
+      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling: Max Pooling outputs the maximum activation in the window (salient feature detection); Average Pooling computes the average (smooth feature reduction).'",
+      "noobBreakdown": "Max pooling is a shout detector—it only reports the loudest sound in the room (strongest feature). Average pooling reports the average background chatter.",
+      "terms": {
+        "Max Pooling": "Selects the maximum value in each pooling window to extract the most prominent feature.",
+        "Average Pooling": "Computes the arithmetic mean in each pooling window to retain smooth background context."
+      }
     }
   },
   {
@@ -3346,7 +3645,12 @@ const QUESTION_BANK = [
       "summary": "A 1x1 convolution pools across channels to project depth up or down while preserving H and W.",
       "whyCorrect": "Module 2 Slide Text: '1x1 Convolutions (Network-in-Network): A 1x1 convolution performs a cross-channel parametric pooling. It allows increasing or decreasing the number of channels (feature map depth) without changing the spatial dimensions (H x W), dramatically reducing computation when used as a bottleneck.'",
       "whyWrong": "A 1x1 convolution has a spatial kernel size of 1, so it cannot aggregate spatial information across adjacent pixels.",
-      "keyConcept": "Exact Slide Statement (Module 2): '1x1 Convolutions: Cross-channel pooling / projection. Changes channel depth (dimensionality reduction/expansion) while keeping spatial H x W dimensions unchanged.'"
+      "keyConcept": "Exact Slide Statement (Module 2): '1x1 Convolutions: Cross-channel pooling / projection. Changes channel depth (dimensionality reduction/expansion) while keeping spatial H x W dimensions unchanged.'",
+      "noobBreakdown": "A channel blender! It doesn't change the picture's height or width, but it mixes 256 color channels down to 64 channels to save computational power.",
+      "terms": {
+        "1x1 Convolution": "A convolution with kernel size 1x1 that pools and mixes information across channels.",
+        "Dimensionality Reduction": "Reducing the number of feature channels while keeping spatial resolution untouched."
+      }
     }
   },
   {
@@ -3366,7 +3670,12 @@ const QUESTION_BANK = [
       "summary": "Global Average Pooling collapses each H x W feature map into 1 scalar, drastically cutting parameters.",
       "whyCorrect": "Module 2 Slide Text: 'Global Average Pooling: Instead of flattening feature maps into large fully connected layers (which hold up to 90% of model parameters and overfit), GAP takes the average of each feature map across all spatial locations (H x W -> 1x1). It has 0 parameters and directly feeds into softmax.'",
       "whyWrong": "GAP is an architectural layer before classification, not an input preprocessing step, normalization layer, or testing metric.",
-      "keyConcept": "Exact Slide Fact (Module 2): 'Global Average Pooling (GAP): Computes average of each feature map (spatial H x W -> 1x1), drastically reducing parameters compared to Dense/FC layers.'"
+      "keyConcept": "Exact Slide Fact (Module 2): 'Global Average Pooling (GAP): Computes average of each feature map (spatial H x W -> 1x1), drastically reducing parameters compared to Dense/FC layers.'",
+      "noobBreakdown": "Squeezing an entire 2D feature map into a single average score. It replaces huge, memory-hungry fully connected layers at the end of the network!",
+      "terms": {
+        "Global Average Pooling (GAP)": "Computing the average of an entire 2D feature map into a single scalar value.",
+        "Fully Connected Replacement": "Eliminating dense classification layers to drastically reduce total parameters and prevent overfitting."
+      }
     }
   },
   {
@@ -3386,7 +3695,12 @@ const QUESTION_BANK = [
       "summary": "AlexNet won ImageNet 2012 using ReLUs, Dropout, GPU training, and data augmentation.",
       "whyCorrect": "Module 2 Slide Text: 'AlexNet (2012): The ImageNet breakthrough that sparked modern deep learning: 1. ReLU activation (converges 6x faster than tanh). 2. Dropout (p=0.5 in FC layers). 3. Heavy Data Augmentation (flips, crops, color jitter). 4. Multi-GPU training (split across two NVIDIA GTX 580s).'",
       "whyWrong": "AlexNet did not use depthwise separable convs (MobileNet) or skip connections (ResNet).",
-      "keyConcept": "Exact Slide Summary (Module 2): 'AlexNet (2012): First deep CNN breakthrough on ImageNet: ReLU (6x faster convergence), Dropout (0.5), Data Augmentation, GPU implementation.'"
+      "keyConcept": "Exact Slide Summary (Module 2): 'AlexNet (2012): First deep CNN breakthrough on ImageNet: ReLU (6x faster convergence), Dropout (0.5), Data Augmentation, GPU implementation.'",
+      "noobBreakdown": "The landmark paper that launched modern AI in 2012: used ReLU to train fast, GPUs to crunch massive data, and Dropout to stop memorization!",
+      "terms": {
+        "AlexNet": "The deep CNN that won the 2012 ImageNet competition, sparking the deep learning revolution.",
+        "GPU Training": "Using graphics cards designed for video games to accelerate matrix multiplication 50x faster."
+      }
     }
   },
   {
@@ -3406,7 +3720,12 @@ const QUESTION_BANK = [
       "summary": "Inception modules process representations at multiple scales in parallel within each block.",
       "whyCorrect": "Module 2 Slide Text: 'Inception Module: Why choose a 3x3 or 5x5 filter when you can do both? The Inception architecture applies parallel filters of different sizes (1x1, 3x3, 5x5) and 3x3 max pooling to the same input, then concatenates all filter outputs along the channel dimension. Uses 1x1 convs for bottleneck dimensionality reduction.'",
       "whyWrong": "Inception relies on multi-scale parallel convolutions with 1x1 bottlenecks, not sequential 7x7 filters or attention.",
-      "keyConcept": "Exact Slide Statement (Module 2): 'Inception Module: Apply parallel convolutional filters of different sizes (1x1, 3x3, 5x5) and max pooling, then concatenate channel outputs.'"
+      "keyConcept": "Exact Slide Statement (Module 2): 'Inception Module: Apply parallel convolutional filters of different sizes (1x1, 3x3, 5x5) and max pooling, then concatenate channel outputs.'",
+      "noobBreakdown": "Instead of guessing whether a 1x1, 3x3, or 5x5 filter is best, GoogLeNet runs all of them in parallel at the same time and lets the network decide!",
+      "terms": {
+        "Inception Module": "An architectural block executing multiple filter sizes (1x1, 3x3, 5x5, pooling) in parallel.",
+        "Multi-Scale Processing": "Extracting features at different visual scales simultaneously in the same layer."
+      }
     }
   },
   {
@@ -3426,7 +3745,12 @@ const QUESTION_BANK = [
       "summary": "ResNet was designed to solve the degradation problem where deeper plain networks exhibit higher training error.",
       "whyCorrect": "Module 2 Slide Text: 'The Degradation Problem: As plain deep networks get deeper, accuracy saturates and then degrades rapidly. Crucially, this degradation is NOT caused by overfitting: the 56-layer plain network has HIGHER training error than the 20-layer network! ResNet solves this optimization obstacle with residual identity shortcuts.'",
       "whyWrong": "Overfitting would produce low training error and high validation error; the degradation problem exhibits high training error.",
-      "keyConcept": "Exact Slide Motivation (Module 2): 'Degradation Problem: Deeper plain networks exhibit HIGHER training error (not overfitting, but optimization difficulty due to vanishing gradients). Solved by ResNet.'"
+      "keyConcept": "Exact Slide Motivation (Module 2): 'Degradation Problem: Deeper plain networks exhibit HIGHER training error (not overfitting, but optimization difficulty due to vanishing gradients). Solved by ResNet.'",
+      "noobBreakdown": "Paradoxically, a plain 56-layer network had worse training scores than a 20-layer network! ResNet solved this with shortcut wires (F(x) + x) so gradients never get lost in deep architectures.",
+      "terms": {
+        "Degradation Problem": "The counter-intuitive problem where plain networks get higher training error as depth increases.",
+        "ResNet": "Deep Residual Network that solved the degradation problem using identity shortcut connections."
+      }
     }
   },
   {
@@ -3446,7 +3770,12 @@ const QUESTION_BANK = [
       "summary": "MobileNet factorizes 2D convolutions into spatial depthwise convolutions and 1x1 pointwise convolutions.",
       "whyCorrect": "Module 2 Slide Text: 'Depthwise Separable Convolution: Factorizes standard convolution into two separate steps: 1) Depthwise convolution: applies a single spatial filter to each input channel independently. 2) Pointwise convolution: a 1x1 convolution that linearly combines the outputs across channels. Computation reduction: 1/N + 1/D_k^2 (approx 8x to 9x speedup for 3x3 filters).'",
       "whyWrong": "MobileNet is an architectural factorization, not 1-bit quantization or frame skipping.",
-      "keyConcept": "Exact Slide Definition (Module 2): 'Depthwise Separable Convolution: Factorizes standard conv into 1) Depthwise conv (spatial per channel) + 2) Pointwise conv (1x1 across channels) -> ~8-9x computation reduction.'"
+      "keyConcept": "Exact Slide Definition (Module 2): 'Depthwise Separable Convolution: Factorizes standard conv into 1) Depthwise conv (spatial per channel) + 2) Pointwise conv (1x1 across channels) -> ~8-9x computation reduction.'",
+      "noobBreakdown": "A smart shortcut that filters each channel separately first, then mixes channels with a 1x1 filter. It achieves almost the same accuracy as regular convolution with 85% less battery and compute!",
+      "terms": {
+        "Depthwise Separable Convolution": "Splitting standard convolution into a depthwise convolution and a pointwise (1x1) convolution.",
+        "MobileNet": "An efficient lightweight CNN architecture designed specifically for smartphones and edge devices."
+      }
     }
   },
   {
@@ -3466,7 +3795,12 @@ const QUESTION_BANK = [
       "summary": "Discriminative models learn class boundaries P(Y|X); Generative models learn the underlying data distribution P(X).",
       "whyCorrect": "Module 3 Slide Text: 'Discriminative vs. Generative Models: Discriminative Model: Learns the conditional probability P(Y|X) to separate classes with a decision boundary. Generative Model: Learns the probability distribution of the data P(X) or joint distribution P(X, Y) to model how the data was generated and create new samples x_new ~ P(X).'",
       "whyWrong": "Discriminative models are typically supervised, while generative models are typically unsupervised.",
-      "keyConcept": "Exact Slide Definition (Module 3 Slide 4): 'Discriminative: Learns P(Y|X) (decision boundary). Generative: Learns P(X) or P(X, Y) (how data is generated).'"
+      "keyConcept": "Exact Slide Definition (Module 3 Slide 4): 'Discriminative: Learns P(Y|X) (decision boundary). Generative: Learns P(X) or P(X, Y) (how data is generated).'",
+      "noobBreakdown": "Discriminative models learn where to draw the boundary line between classes (P(Y|X)). Generative models learn how each class is actually constructed (P(X) or P(X, Y)).",
+      "terms": {
+        "Conditional Probability P(Y|X)": "The probability of a class label Y given an input observation X.",
+        "Joint Probability P(X, Y)": "The full probability distribution describing how data X and labels Y appear together."
+      }
     }
   },
   {
@@ -3486,7 +3820,12 @@ const QUESTION_BANK = [
       "summary": "VAEs approximate an explicit density function, whereas GANs model an implicit sampling process.",
       "whyCorrect": "Module 3 Slide Text: 'Taxonomy of Generative Models: Explicit Density: 1. Tractable Density: PixelRNN, PixelCNN. 2. Approximate Density: Variational Autoencoder (VAE), Boltzmann Machines. Implicit Density: Generative Adversarial Networks (GANs) - can sample without explicitly defining a density function p(x).'",
       "whyWrong": "GANs do not provide an explicit likelihood or density function p(x); they learn an implicit sampling generator.",
-      "keyConcept": "Exact Slide Taxonomy (Module 3 Slide 8): 'Generative Models Taxonomy: Explicit Density -> Approximate density (VAEs); Implicit Density -> GANs.'"
+      "keyConcept": "Exact Slide Taxonomy (Module 3 Slide 8): 'Generative Models Taxonomy: Explicit Density -> Approximate density (VAEs); Implicit Density -> GANs.'",
+      "noobBreakdown": "Explicit density models (like VAEs) estimate a mathematical probability formula. Implicit density models (like GANs) create images directly without formulas.",
+      "terms": {
+        "Explicit Density": "A model that explicitly computes or bounds the probability density function p(x).",
+        "Implicit Density": "A model that generates realistic data samples without defining an explicit probability function."
+      }
     }
   },
   {
@@ -3506,7 +3845,12 @@ const QUESTION_BANK = [
       "summary": "Deterministic autoencoders leave the latent space unregularized, causing holes and non-generative representations.",
       "whyCorrect": "Module 3 Slide Text: 'Why can't standard Autoencoders generate new data? Standard autoencoders map inputs to isolated points in latent space. The space between these points is empty ('holes'). If you sample a random vector z from empty space, the decoder will produce an unrealistic, garbled image.'",
       "whyWrong": "Autoencoders work on multi-channel images and are trained with MSE; the issue is that their latent space is not a smooth prior distribution.",
-      "keyConcept": "Exact Slide Statement (Module 3): 'Why not standard AE for generation? Latent space is not continuous and has gaps/holes. Random sampling produces nonsensical outputs.'"
+      "keyConcept": "Exact Slide Statement (Module 3): 'Why not standard AE for generation? Latent space is not continuous and has gaps/holes. Random sampling produces nonsensical outputs.'",
+      "noobBreakdown": "A standard autoencoder has empty gaps and dead zones in its latent space. Picking a random point lands in a gap, creating noisy garbage pixels.",
+      "terms": {
+        "Unregularized Latent Space": "A hidden space without constraints, leading to empty voids where the decoder fails.",
+        "Latent Continuity": "The property that moving smoothly in latent space produces smooth, realistic changes in generated images."
+      }
     }
   },
   {
@@ -3526,7 +3870,12 @@ const QUESTION_BANK = [
       "summary": "VAE loss optimizes the Evidence Lower Bound (ELBO): reconstruction fidelity plus KL divergence prior alignment.",
       "whyCorrect": "Module 3 Slide Text: 'VAE Loss Function: L(theta, phi; x) = -E_{q_phi(z|x)}[log p_theta(x|z)] + D_{KL}(q_phi(z|x) || p(z)). Term 1: Reconstruction Loss: makes reconstructed image match input. Term 2: KL Divergence Loss: acts as a regularizer forcing latent distribution q(z|x) close to standard Gaussian p(z) ~ N(0, I).'",
       "whyWrong": "VAEs do not optimize adversarial games (GANs), classification cross-entropy, or contrastive margins.",
-      "keyConcept": "Exact Slide Formulation (Module 3): L_VAE = L_reconstruction(x, x_hat) + D_KL(q_phi(z|x) || p(z)), where p(z) ~ N(0, I)."
+      "keyConcept": "Exact Slide Formulation (Module 3): L_VAE = L_reconstruction(x, x_hat) + D_KL(q_phi(z|x) || p(z)), where p(z) ~ N(0, I).",
+      "noobBreakdown": "(1) Reconstruction Loss: Did you rebuild the original photo clearly? (2) KL Divergence: Did you keep the code organized in a neat bell curve?",
+      "terms": {
+        "Reconstruction Loss": "Measures the pixel fidelity between the original input image and reconstructed output.",
+        "KL Regularization Loss": "Measures how closely the latent distribution matches a standard Gaussian distribution N(0, I)."
+      }
     }
   },
   {
@@ -3546,7 +3895,12 @@ const QUESTION_BANK = [
       "summary": "KL divergence acts as a regularizer pulling the approximate posterior toward a unit Gaussian prior.",
       "whyCorrect": "Module 3 Slide Text: 'Role of KL Divergence in VAE: Without KL divergence, the network maximizes reconstruction by placing encodings far apart with tiny variance (reverting to a standard AE). The KL term forces mean mu close to 0 and variance sigma close to 1, ensuring the latent space is continuous, smooth, and complete for sampling.'",
       "whyWrong": "KL divergence regularizes latent distributions; it does not constrain decoder weights, balance discriminators, or alter pixel means.",
-      "keyConcept": "Exact Slide Fact (Module 3): 'KL Divergence: Regularizes latent space by forcing posterior distribution q(z|x) to match standard normal Gaussian prior N(0, I).'"
+      "keyConcept": "Exact Slide Fact (Module 3): 'KL Divergence: Regularizes latent space by forcing posterior distribution q(z|x) to match standard normal Gaussian prior N(0, I).'",
+      "noobBreakdown": "It acts like a rubber band pulling all the codes towards a standard bell curve centered at 0, ensuring there are no gaps or voids in the map.",
+      "terms": {
+        "Isotropic Gaussian N(0, I)": "A standard normal distribution with mean 0 and variance 1 across all dimensions.",
+        "Smooth Latent Manifold": "A continuous geometric surface where every point decodes into a valid, realistic image."
+      }
     }
   },
   {
@@ -3566,7 +3920,12 @@ const QUESTION_BANK = [
       "summary": "The non-saturating heuristic max_G log D(G(z)) prevents vanishing generator gradients during early training.",
       "whyCorrect": "Module 3 Slide Text: 'Non-saturating Generator Game: In minimax GAN: min_G log(1 - D(G(z))). Early in training, G generates bad images, so D easily rejects them (D(G(z)) -> 0). The curve for log(1 - D) is flat at 0 -> gradient vanishes! Instead, train G to maximize log(D(G(z))). This has large gradients when D(G(z)) is close to 0, providing strong learning signals early.'",
       "whyWrong": "GAN training is fundamentally non-convex; no matrix inversions are involved; log losses are stored normally.",
-      "keyConcept": "Exact Slide Heuristic (Module 3 Slide 27): 'Non-Saturating Game: Early in training, log(1 - D(G(z))) saturates (vanishing gradients). In practice, optimize max_G log(D(G(z))) for strong early gradient signals.'"
+      "keyConcept": "Exact Slide Heuristic (Module 3 Slide 27): 'Non-Saturating Game: Early in training, log(1 - D(G(z))) saturates (vanishing gradients). In practice, optimize max_G log(D(G(z))) for strong early gradient signals.'",
+      "noobBreakdown": "Minimizing log(1 - D) is flat and useless when the generator is bad. Maximizing log(D) provides steep gradients when you need them most!",
+      "terms": {
+        "Non-Saturating Loss": "Training the generator to maximize log(D(G(z))) to provide strong gradients early in training.",
+        "Gradient Vanishing": "When gradients shrink to near zero, stopping weight updates."
+      }
     }
   },
   {
@@ -3586,7 +3945,12 @@ const QUESTION_BANK = [
       "summary": "DCGAN established key architectural stability rules: strided convolutions, batch norm, and ReLU/LeakyReLU activations.",
       "whyCorrect": "Module 3 Slide Text: 'DCGAN Architectural Guidelines (Radford et al.): 1. Replace pooling layers with strided convolutions (discriminator) and fractional-strided / transposed convolutions (generator). 2. Use Batch Normalization in both generator and discriminator. 3. Remove fully connected hidden layers for deeper architectures. 4. Use ReLU activation in generator (Tanh for output). 5. Use LeakyReLU activation in discriminator for all layers.'",
       "whyWrong": "DCGAN explicitly advises against max pooling, requires Batch Normalization, and forbids deep fully connected hidden layers.",
-      "keyConcept": "Exact Slide Guidelines (Module 3 DCGAN): 'DCGAN Rules: 1) Replace pooling with strided/fractional-strided convs. 2) Batch Normalization in G and D. 3) Remove FC layers. 4) LeakyReLU in D, ReLU in G with Tanh output.'"
+      "keyConcept": "Exact Slide Guidelines (Module 3 DCGAN): 'DCGAN Rules: 1) Replace pooling with strided/fractional-strided convs. 2) Batch Normalization in G and D. 3) Remove FC layers. 4) LeakyReLU in D, ReLU in G with Tanh output.'",
+      "noobBreakdown": "Replace all pooling with strided convolutions, use Batch Normalization in both networks, remove fully connected layers, use ReLU in generator, and use LeakyReLU in discriminator!",
+      "terms": {
+        "DCGAN": "Deep Convolutional Generative Adversarial Network architecture guidelines.",
+        "Strided Convolutions": "Using convolutional step sizes (stride > 1) for spatial downsampling instead of pooling."
+      }
     }
   },
   {
@@ -3606,22 +3970,12 @@ const QUESTION_BANK = [
       "summary": "Debiased sampling uses estimated latent density Q(z) to weight rare demographic regions more frequently.",
       "whyCorrect": "MIT 6.S191 Debiasing Lab Text: 'Mitigating Bias via VAE Latent Densities: We compute the smoothed empirical density Q(z) of training data in the VAE's latent space. We then sample faces during classifier training according to probability weights W(z) proportional to 1 / sqrt(Q(z)). This ensures underrepresented groups (which occupy low-density regions in latent space) are sampled with higher frequency, debiasing the downstream facial detection model.'",
       "whyWrong": "The lab does not discard data, calculate raw pixel variances, or add noise; it performs importance sampling based on unsupervised VAE latent density estimates.",
-      "keyConcept": "Exact Notebook Formula (Debiasing Lab): 'Debiasing via Latent Re-weighting: W(z) ∝ 1 / sqrt(Q(z)). Lower density latent regions (underrepresented groups) receive higher sampling probabilities.'"
+      "keyConcept": "Exact Notebook Formula (Debiasing Lab): 'Debiasing via Latent Re-weighting: W(z) ∝ 1 / sqrt(Q(z)). Lower density latent regions (underrepresented groups) receive higher sampling probabilities.'",
+      "noobBreakdown": "The model measures how crowded each facial feature is in latent space. If a face has rare features, the model boosts its selection probability so it gets trained on more often!",
+      "terms": {
+        "Latent Density Q(z|x)": "The probability density indicating how frequently a face's latent features appear in the training dataset.",
+        "Adaptive Resampling Weight": "W(x) ~ 1 / (Q(z) + alpha), giving higher sampling probability to rare, underrepresented faces."
+      }
     }
   }
 ];
-
-const COURSE_QUESTIONS = QUESTION_BANK;
-if (typeof window !== 'undefined') {
-  window.QUESTION_BANK = QUESTION_BANK;
-  window.COURSE_QUESTIONS = QUESTION_BANK;
-}
-if (typeof global !== 'undefined') {
-  global.QUESTION_BANK = QUESTION_BANK;
-  global.COURSE_QUESTIONS = QUESTION_BANK;
-}
-
-// Export for usage in app.js or node tests
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { QUESTION_BANK, COURSE_QUESTIONS };
-}

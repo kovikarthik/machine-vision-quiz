@@ -2750,3 +2750,63 @@ body {
     font-size: 1.15rem;
   }
 }
+
+/* ==========================================================================
+   Beginner / Noob Breakdown & Term-by-Term Glossary Styles
+   ========================================================================== */
+.explain-noob {
+  background: rgba(34, 197, 94, 0.08);
+  border-left: 3px solid #22c55e;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  margin: 0.75rem 0;
+}
+
+.noob-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #16a34a;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.explain-terms {
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 3px solid #6366f1;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  margin: 0.75rem 0;
+}
+
+.terms-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #4f46e5;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.terms-glossary-list {
+  margin: 0.4rem 0 0 1.25rem;
+  padding: 0;
+  list-style-type: square;
+}
+
+.terms-glossary-list li {
+  margin-bottom: 0.45rem;
+  line-height: 1.5;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.terms-glossary-list li strong {
+  color: #4338ca;
+}
