@@ -2608,6 +2608,406 @@ const QUESTION_BANK = [
       "whyWrong": "Retraining from scratch is inefficient, multiplying pixels by class integers ruins images, and activations remain necessary.",
       "keyConcept": "cGAN Conditioning: G(z, y) synthesizes target class y; D(x, y) validates whether image x matches class y."
     }
+  },
+  {
+    "id": 131,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "Complete the exact definition from the Module 1 lecture slides: 'A perceptron computes a _______ of its inputs and applies a _______ activation function.'",
+    "options": [
+      "linear combination; non-linear",
+      "convolution; linear",
+      "dot product; polynomial",
+      "matrix inverse; sigmoid"
+    ],
+    "correctAnswer": "linear combination; non-linear",
+    "explanation": {
+      "summary": "This is the exact opening definition of an artificial neuron in Module 1: z = W^T * X + b, followed by y_hat = g(z).",
+      "whyCorrect": "Module 1 Slide Text: 'A perceptron computes a linear combination of its inputs and applies a non-linear activation function.' The two distinct steps are (1) linear weighting plus bias, (2) non-linear transformation g(z).",
+      "whyWrong": "It does not compute convolutions (that is CNNs) and the activation cannot be linear if depth is to be preserved.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'A perceptron computes a linear combination of its inputs and applies a non-linear activation function.'"
+    }
+  },
+  {
+    "id": 132,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "According to the Module 1 slides, what does the Universal Approximation Theorem state about neural networks?",
+    "options": [
+      "A single hidden layer neural network with a non-linear activation function can approximate any continuous function",
+      "Deep networks require infinite training epochs to reach zero loss",
+      "Any linear network can solve the XOR problem if given enough layers",
+      "Convolutional layers always outperform dense layers regardless of input dimension"
+    ],
+    "correctAnswer": "A single hidden layer neural network with a non-linear activation function can approximate any continuous function",
+    "explanation": {
+      "summary": "The Universal Approximation Theorem proves that non-linear activation functions give even a 2-layer network arbitrary function approximation capacity.",
+      "whyCorrect": "Module 1 Slide Verbatim: 'Universal Approximation Theorem: A single hidden layer neural network containing a finite number of non-linear neurons can approximate any continuous function on compact subsets of R^n.'",
+      "whyWrong": "Linear networks can never solve XOR regardless of depth; networks do not need infinite epochs; CNN superiority depends on spatial structure.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Universal Approximation: A single hidden layer neural network with a non-linear activation function can approximate any continuous function.'"
+    }
+  },
+  {
+    "id": 133,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "From Module 1 slides: What is the formal objective of neural network training in Empirical Risk Minimization?",
+    "options": [
+      "Finding weights W that minimize the average loss over the entire training dataset: J(W) = (1/n) * sum(L(f(x^(i); W), y^(i)))",
+      "Maximizing the gradient norm with respect to the input features",
+      "Setting all weights strictly equal to zero to eliminate variance",
+      "Computing the determinant of the weight matrix across all layers"
+    ],
+    "correctAnswer": "Finding weights W that minimize the average loss over the entire training dataset: J(W) = (1/n) * sum(L(f(x^(i); W), y^(i)))",
+    "explanation": {
+      "summary": "Training optimizes the empirical average loss across all n available training examples.",
+      "whyCorrect": "Module 1 Slide Formulation: 'Empirical Risk Minimization: We want to find network weights that minimize the cost over our entire training dataset: argmin_W J(W) where J(W) = (1/n) * sum_{i=1}^n L(f(x^(i); W), y^(i)).'",
+      "whyWrong": "We minimize (not maximize) loss, zeroing weights destroys expressiveness, and determinants do not optimize loss.",
+      "keyConcept": "Exact Slide Formulation (Module 1): J(W) = (1/n) * sum_{i=1}^n L(f(x^(i); W), y^(i))."
+    }
+  },
+  {
+    "id": 134,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In the Module 1 slides on Vanishing Gradients, what is the exact maximum value of the derivative of the Sigmoid function (d/dz sigma(z))?",
+    "options": [
+      "0.25 (at z = 0)",
+      "1.00 (at z = 0)",
+      "0.50 (at z = 1)",
+      "0.00 (at all points)"
+    ],
+    "correctAnswer": "0.25 (at z = 0)",
+    "explanation": {
+      "summary": "The derivative of sigmoid is sigma(z) * (1 - sigma(z)). Its maximum value occurs when sigma(z) = 0.5, giving 0.5 * 0.5 = 0.25.",
+      "whyCorrect": "Module 1 Slide Text: 'Sigmoid derivative: d/dz sigma(z) = sigma(z)(1 - sigma(z)). The maximum derivative is 0.25 at z=0. Stacking N layers multiplies gradients by at most (0.25)^N, vanishing exponentially.'",
+      "whyWrong": "ReLU has a maximum derivative of 1.0, not Sigmoid. Sigmoid's derivative peaks at exactly 0.25.",
+      "keyConcept": "Exact Slide Fact (Module 1): 'Max derivative of Sigmoid = 0.25 at z=0; multiplying derivatives across depth causes exponential gradient decay.'"
+    }
+  },
+  {
+    "id": 135,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "From the Module 1 slides: What exactly happens when a ReLU neuron 'dies'?",
+    "options": [
+      "When the input to a ReLU neuron is negative or zero, its activation and derivative are both zero, meaning the gradient cannot backpropagate and the neuron permanently stops updating",
+      "The weights explode to infinity due to a high learning rate",
+      "The neuron transitions into a Sigmoid activation automatically",
+      "The GPU memory allocated for that neuron is freed"
+    ],
+    "correctAnswer": "When the input to a ReLU neuron is negative or zero, its activation and derivative are both zero, meaning the gradient cannot backpropagate and the neuron permanently stops updating",
+    "explanation": {
+      "summary": "Dying ReLU occurs because the gradient of ReLU for z <= 0 is zero, preventing any further weight updates.",
+      "whyCorrect": "Module 1 Slide Text: 'The Dying ReLU Problem: For inputs z <= 0, the gradient is 0. If a large gradient causes a neuron to update such that it never activates on any training sample, its gradient remains 0 forever and the neuron dies.'",
+      "whyWrong": "Dying ReLU is a zero-gradient freezing state, not an exploding weight or memory allocation event.",
+      "keyConcept": "Exact Slide Statement (Module 1): 'Dying ReLU: Gradient is 0 for z <= 0; neurons that never activate get stuck and stop learning.'"
+    }
+  },
+  {
+    "id": 136,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "Complete the exact definition of Dropout from Module 1 slides: 'During training, randomly set a fraction p of activations to _______ on each forward pass, preventing neurons from _______.'",
+    "options": [
+      "zero; co-adapting",
+      "one; exploding",
+      "infinity; overfitting",
+      "the mean; saturated gradients"
+    ],
+    "correctAnswer": "zero; co-adapting",
+    "explanation": {
+      "summary": "Dropout forces neurons to learn robust features independently rather than relying on specific neighboring neurons.",
+      "whyCorrect": "Module 1 Slide Text: 'Dropout: During training, randomly set a fraction p of activations to 0 on each forward pass. This prevents neurons from co-adapting and forces the network to learn redundant representations.'",
+      "whyWrong": "Dropout drops activations to 0 (zero), not 1, and prevents co-adaptation.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Dropout: Randomly sets activations to 0 with probability p to prevent feature co-adaptation.'"
+    }
+  },
+  {
+    "id": 137,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "From Module 2 slides: What is the exact definition of the Convolution operation in computer vision?",
+    "options": [
+      "Applying a filter (or kernel) across local spatial neighborhoods of an input to produce a feature map",
+      "Multiplying an entire image matrix by its transpose",
+      "Averaging all RGB channels into a single grayscale vector",
+      "Shuffling pixel coordinates randomly across the spatial grid"
+    ],
+    "correctAnswer": "Applying a filter (or kernel) across local spatial neighborhoods of an input to produce a feature map",
+    "explanation": {
+      "summary": "Convolution slides a small kernel across local patches, computing element-wise dot products.",
+      "whyCorrect": "Module 2 Slide Text: 'The Convolution Operation: Apply a filter (or kernel) to local spatial neighborhoods of an image, compute dot products, and slide across the image to produce a feature map.'",
+      "whyWrong": "Matrix transposition, channel averaging, or pixel shuffling do not describe 2D spatial convolution.",
+      "keyConcept": "Exact Slide Definition (Module 2): 'Convolution: Sliding a filter across local spatial neighborhoods to produce a feature map.'"
+    }
+  },
+  {
+    "id": 138,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "According to Module 2 slides, what is 'Weight Sharing' (Parameter Sharing) in CNNs and what property does it provide?",
+    "options": [
+      "The same filter weights are used across every spatial position of the input, drastically reducing parameters and providing translation equivariance",
+      "All hidden layers share identical weights with the output layer",
+      "Weights are copied directly from the CPU RAM to the GPU VRAM",
+      "Different classes share the exact same output neuron"
+    ],
+    "correctAnswer": "The same filter weights are used across every spatial position of the input, drastically reducing parameters and providing translation equivariance",
+    "explanation": {
+      "summary": "Weight sharing ensures that an edge detector learned in the top-left also detects edges in the bottom-right.",
+      "whyCorrect": "Module 2 Slide Text: 'Weight Sharing: Instead of having separate weights for every pixel, the same filter is applied across the entire image. This dramatically reduces the number of learnable parameters and introduces translation equivariance.'",
+      "whyWrong": "Layers do not share weights with other layers; it refers to spatial sharing within a single convolutional layer.",
+      "keyConcept": "Exact Slide Definition (Module 2): 'Weight Sharing: Same filter applied across all spatial positions -> translation equivariance + parameter efficiency.'"
+    }
+  },
+  {
+    "id": 139,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "In Module 2 slides, what is the exact distinction between 'Valid Padding' and 'Same Padding'?",
+    "options": [
+      "Valid padding applies zero padding (P=0), allowing the output size to shrink; Same padding pads with zeros so output spatial dimensions equal input dimensions when stride is 1",
+      "Valid padding is used only for training; Same padding is used only for testing",
+      "Valid padding pads with ones; Same padding pads with zeros",
+      "Valid padding increases image resolution; Same padding decreases resolution"
+    ],
+    "correctAnswer": "Valid padding applies zero padding (P=0), allowing the output size to shrink; Same padding pads with zeros so output spatial dimensions equal input dimensions when stride is 1",
+    "explanation": {
+      "summary": "Valid means no padding (shrinkage). Same means padding with (K-1)/2 zeros to maintain dimensions.",
+      "whyCorrect": "Module 2 Slide Text: 'Valid Padding: No zero padding (P=0). The filter only visits valid image locations, causing spatial dimensions to shrink. Same Padding: Pad input with zeros such that the output spatial size is identical to the input spatial size when stride S=1.'",
+      "whyWrong": "Padding types apply to both training and testing; valid does not pad with ones.",
+      "keyConcept": "Exact Slide Definition (Module 2): 'Valid: P=0 (shrink output). Same: Pad zeros so Output Size = Input Size when S=1.'"
+    }
+  },
+  {
+    "id": 140,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "Which exact statement regarding Pooling Layers is stated in the Module 2 lecture slides?",
+    "options": [
+      "Pooling layers reduce spatial dimensions (downsampling) to provide translation invariance, and they have exactly ZERO learnable parameters",
+      "Pooling layers require learnable biases for each output filter",
+      "Max pooling doubles the height and width of the input volume",
+      "Average pooling is strictly parameterized by a 3x3 weight matrix"
+    ],
+    "correctAnswer": "Pooling layers reduce spatial dimensions (downsampling) to provide translation invariance, and they have exactly ZERO learnable parameters",
+    "explanation": {
+      "summary": "Pooling applies a fixed aggregation function (max or average) without any weights or biases.",
+      "whyCorrect": "Module 2 Slide Text: 'Pooling Layers: Progressively reduce the spatial size of the representation to reduce parameters, memory, and provide translation invariance. Crucial note: Pooling layers perform a fixed mathematical operation and have NO learnable parameters.'",
+      "whyWrong": "Pooling has zero learnable weights, downsamples (halves) rather than doubles resolution, and has no weight matrices.",
+      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling layers downsample spatial dimensions and possess exactly 0 learnable parameters.'"
+    }
+  },
+  {
+    "id": 141,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "What is the exact architectural motivation for VGGNet stated in the Module 2 slides?",
+    "options": [
+      "A stack of two 3x3 convolutional layers has the same effective receptive field as a single 5x5 layer, while using 28% fewer parameters and incorporating an additional non-linear activation",
+      "Replacing all convolutional layers with 1x1 depthwise separable convolutions",
+      "Using 7x7 filters in all layers to maximize spatial coverage",
+      "Removing pooling layers completely to maintain constant resolution"
+    ],
+    "correctAnswer": "A stack of two 3x3 convolutional layers has the same effective receptive field as a single 5x5 layer, while using 28% fewer parameters and incorporating an additional non-linear activation",
+    "explanation": {
+      "summary": "VGG proved that deep architectures using homogeneous 3x3 filters outperform shallower networks with large filters.",
+      "whyCorrect": "Module 2 Slide Text: 'VGG Principle: Why 3x3 filters? A stack of two 3x3 conv layers has an effective receptive field of 5x5, but uses 2*(3^2*C^2) = 18C^2 params vs 5^2*C^2 = 25C^2 params (28% fewer), while adding an extra non-linear ReLU between them.'",
+      "whyWrong": "VGG pioneered stacks of 3x3 filters, not 7x7 or depthwise convolutions.",
+      "keyConcept": "Exact Slide Statement (Module 2): 'Two 3x3 filters = 5x5 receptive field with 28% fewer parameters + more non-linearities.'"
+    }
+  },
+  {
+    "id": 142,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In the Module 2 slides on Deep Residual Learning (ResNet), what is the exact mathematical formulation of a residual building block?",
+    "options": [
+      "H(x) = F(x) + x, where F(x) is the residual mapping to be learned and x is the identity shortcut connection",
+      "H(x) = F(x) * x",
+      "H(x) = F(x) - x",
+      "H(x) = max(F(x), 0) + min(x, 0)"
+    ],
+    "correctAnswer": "H(x) = F(x) + x, where F(x) is the residual mapping to be learned and x is the identity shortcut connection",
+    "explanation": {
+      "summary": "ResNet reformulates target mapping H(x) into residual mapping F(x) + x.",
+      "whyCorrect": "Module 2 Slide Text: 'Residual Learning: Instead of hoping layers directly fit H(x), we let layers fit a residual mapping F(x) = H(x) - x. The original mapping is recast as H(x) = F(x) + x. The identity shortcut (+ x) allows gradients to flow directly backward without vanishing.'",
+      "whyWrong": "Multiplication, subtraction, or min-max transformations disrupt the uninterrupted identity gradient highway.",
+      "keyConcept": "Exact Slide Formulation (Module 2): 'Residual Block: H(x) = F(x) + x with identity shortcut connection.'"
+    }
+  },
+  {
+    "id": 143,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "Complete the exact description of feature hierarchy across CNN layers from Module 2 slides: 'Early layers detect _______; mid-level layers detect _______; deep layers detect _______.'",
+    "options": [
+      "low-level edges and textures; object parts and motifs; high-level semantic objects and scenes",
+      "semantic objects; Fourier frequencies; raw pixel intensities",
+      "output classes; image normalization; convolution filters",
+      "color palettes; text characters; video motion vectors"
+    ],
+    "correctAnswer": "low-level edges and textures; object parts and motifs; high-level semantic objects and scenes",
+    "explanation": {
+      "summary": "CNN representations build hierarchically from local primitive features to complex global semantic concepts.",
+      "whyCorrect": "Module 2 Slide Text: 'Hierarchical Feature Representation: Early layers: low-level features (edges, color gradients). Mid-level layers: motifs, textures, and object parts (wheels, eyes). Deep layers: high-level semantic entities (faces, cars, animals).'",
+      "whyWrong": "The hierarchy moves from local to global, never from complex objects to low-level pixels.",
+      "keyConcept": "Exact Slide Statement (Module 2): 'Feature Hierarchy: Edges & Textures (Early) -> Object Parts (Mid) -> Semantic Objects (Deep).'"
+    }
+  },
+  {
+    "id": 144,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Basic",
+    "question": "What is the exact definition of Generative Modeling given on Slide 5 of Module 3 (Generative Models.pdf)?",
+    "options": [
+      "An unsupervised learning task that aims to take training samples from some distribution and learn a model that represents that distribution to generate new samples",
+      "A supervised learning algorithm that maps high-dimensional inputs to categorical discrete labels",
+      "A numerical method for solving systems of linear equations using Gaussian elimination",
+      "A regression technique that fits a polynomial curve through noisy scatter points"
+    ],
+    "correctAnswer": "An unsupervised learning task that aims to take training samples from some distribution and learn a model that represents that distribution to generate new samples",
+    "explanation": {
+      "summary": "Generative models learn to approximate the underlying data distribution p(x) in an unsupervised manner.",
+      "whyCorrect": "Module 3 Slide 5 Text: 'Generative Modeling: Goal is to take training samples from some distribution and learn a model that represents that distribution to generate new samples.'",
+      "whyWrong": "Classification is supervised label mapping; Gaussian elimination and polynomial regression are not generative modeling.",
+      "keyConcept": "Exact Slide Definition (Module 3 Slide 5): 'Generative Modeling: Learn a model representing the data distribution to generate new samples.'"
+    }
+  },
+  {
+    "id": 145,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "According to Module 3 slides, why must the latent space dimension z in a standard autoencoder be smaller than input dimension x (dim(z) < dim(x))?",
+    "options": [
+      "To force the network to learn a compressed, meaningful latent representation of the data rather than simply learning a trivial identity function I(x) = x",
+      "Because GPUs cannot store matrices larger than 64 dimensions",
+      "To eliminate the need for computing reconstruction loss",
+      "To ensure the encoder weights remain strictly positive"
+    ],
+    "correctAnswer": "To force the network to learn a compressed, meaningful latent representation of the data rather than simply learning a trivial identity function I(x) = x",
+    "explanation": {
+      "summary": "An undercomplete bottleneck prevents the network from memorizing an uncompressed identity mapping.",
+      "whyCorrect": "Module 3 Slide Text: 'Autoencoder Bottleneck: Why dim(z) < dim(x)? If the latent dimension were equal or larger than input dimension, the network could trivially memorize the identity function I(x) = x without learning meaningful features. The bottleneck forces non-linear compression.'",
+      "whyWrong": "GPUs handle massive dimensions, reconstruction loss is still computed, and weights can be positive or negative.",
+      "keyConcept": "Exact Slide Statement (Module 3): 'Undercomplete Bottleneck: Forces the network to learn compressed features instead of trivial identity mapping.'"
+    }
+  },
+  {
+    "id": 146,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Module 3 slides and PT_Part2_Debiasing.ipynb, what is the exact mathematical equation for the VAE Reparameterization Trick?",
+    "options": [
+      "z = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I)",
+      "z = mu * logsigma + eps^2",
+      "z = max(mu, eps) - logsigma",
+      "z = sum(mu_i) / N + eps"
+    ],
+    "correctAnswer": "z = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I)",
+    "explanation": {
+      "summary": "Reparameterization rewrites sampling as an affine transformation of external Gaussian noise.",
+      "whyCorrect": "Module 3 Slide & Notebook Equation: 'Reparameterization Trick: z = mu + sigma * eps = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I).' This isolates stochasticity into eps, enabling backprop into mu and sigma.",
+      "whyWrong": "The standard deviation sigma = exp(0.5 * logsigma); other choices are non-differentiable or mathematically incorrect heuristics.",
+      "keyConcept": "Exact Slide Equation (Module 3 & PT_Part2_Debiasing.ipynb): z = mu + exp(0.5 * logsigma) * eps."
+    }
+  },
+  {
+    "id": 147,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "From Module 3 slides: What is the exact minimax formulation min_G max_D V(D, G) for GANs?",
+    "options": [
+      "E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]",
+      "E[||x - G(z)||^2] + lambda * E[||D(x)||^2]",
+      "E[log G(z)] - E[log D(x)]",
+      "sum(D(x_i) * G(z_i))"
+    ],
+    "correctAnswer": "E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]",
+    "explanation": {
+      "summary": "Goodfellow et al.'s original minimax objective balances discriminator log-probability on real data and log-rejection of fake data.",
+      "whyCorrect": "Module 3 Slide Text: 'GAN Objective: min_G max_D V(D, G) = E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]. D maximizes probability of correct label; G minimizes log(1 - D(G(z))).'",
+      "whyWrong": "Option B is an MSE loss, Option C and D are fabricated equations.",
+      "keyConcept": "Exact Slide Equation (Module 3): min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))]."
+    }
+  },
+  {
+    "id": 148,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "From Module 3 slides: What is the exact definition of 'Mode Collapse' in Generative Adversarial Networks?",
+    "options": [
+      "When the generator learns to produce samples from only a few modes of the true distribution, repeatedly generating identical or near-identical outputs that fool the discriminator",
+      "When the discriminator achieves 0% accuracy on real training images",
+      "When the network architecture runs out of convolutional layers",
+      "When the latent noise vector z becomes entirely composed of negative infinity"
+    ],
+    "correctAnswer": "When the generator learns to produce samples from only a few modes of the true distribution, repeatedly generating identical or near-identical outputs that fool the discriminator",
+    "explanation": {
+      "summary": "Mode collapse is the failure mode where G lacks diversity and maps all noise to a single high-reward pattern.",
+      "whyCorrect": "Module 3 Slide Text: 'Mode Collapse: A major challenge in GAN training where the generator collapses to producing samples from only a few modes (or a single mode) of the target distribution, failing to capture full data diversity.'",
+      "whyWrong": "Mode collapse does not mean discriminator reaches 0%, does not run out of layers, and has nothing to do with infinite noise.",
+      "keyConcept": "Exact Slide Definition (Module 3): 'Mode Collapse: Generator outputs only a few modes of the distribution, losing sample diversity.'"
+    }
+  },
+  {
+    "id": 149,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Module 3 slides on CycleGAN, what is the exact mathematical formulation of the Forward-Backward Cycle Consistency Loss?",
+    "options": [
+      "F(G(x)) ~ x and G(F(y)) ~ y, where G: X -> Y and F: Y -> X",
+      "G(x) = y and F(y) = 0",
+      "D_Y(G(x)) + D_X(F(y)) = 1",
+      "log(F(x)) * log(G(y))"
+    ],
+    "correctAnswer": "F(G(x)) ~ x and G(F(y)) ~ y, where G: X -> Y and F: Y -> X",
+    "explanation": {
+      "summary": "Cycle consistency enforces that mapping from domain X to Y and back from Y to X reproduces the original image.",
+      "whyCorrect": "Module 3 Slide Text: 'Cycle Consistency Loss: Translating from domain X to Y (G(x)) and back from Y to X (F(G(x))) should reconstruct x: F(G(x)) ≈ x. Similarly, G(F(y)) ≈ y. Loss: L_cyc = ||F(G(x)) - x||_1 + ||G(F(y)) - y||_1.'",
+      "whyWrong": "Options B, C, and D do not define the forward-backward bijection loss.",
+      "keyConcept": "Exact Slide Formulation (Module 3 CycleGAN): F(G(x)) ≈ x and G(F(y)) ≈ y (Forward-Backward Cycle Consistency)."
+    }
+  },
+  {
+    "id": 150,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In Module 1 (Part1_TensorFlow.ipynb Section 1.4), what exact statement explains how TensorFlow computes derivatives?",
+    "options": [
+      "Operations executed inside 'with tf.GradientTape() as tape:' are recorded on a tape; calling tape.gradient(target, sources) plays it backward using reverse-mode automatic differentiation",
+      "TensorFlow uses symbolic differentiation via sympy to output closed-form LaTeX strings",
+      "TensorFlow approximates all derivatives using numerical finite differences (f(x+h) - f(x))/h",
+      "TensorFlow requires users to manually write the derivative formula for every custom model"
+    ],
+    "correctAnswer": "Operations executed inside 'with tf.GradientTape() as tape:' are recorded on a tape; calling tape.gradient(target, sources) plays it backward using reverse-mode automatic differentiation",
+    "explanation": {
+      "summary": "TensorFlow implements reverse-mode autodiff through its GradientTape recording abstraction.",
+      "whyCorrect": "Module 1 Lab Text: 'Automatic differentiation in TensorFlow: TensorFlow provides the tf.GradientTape API for automatic differentiation. All operations executed inside the context of a with tf.GradientTape() as tape block are recorded on a \"tape\". TensorFlow then uses that tape to compute gradients using reverse mode differentiation.'",
+      "whyWrong": "TensorFlow does not rely on sympy symbolic math, numerical finite difference quotients, or manual derivation.",
+      "keyConcept": "Exact Notebook Statement (Module 1 Section 1.4): 'Operations inside with tf.GradientTape() as tape: are recorded to compute gradients via reverse-mode autodiff.'"
+    }
   }
 ];
 
