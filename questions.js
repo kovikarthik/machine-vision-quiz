@@ -2152,7 +2152,7 @@ const QUESTION_BANK = [
   {
     "id": 108,
     "category": "Lab & Notebooks",
-    "module": "Module 03",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In Module 03 (autoencoder.ipynb), what specialized layer is used in the decoder of a Convolutional Autoencoder to reverse spatial downsampling and upsample feature maps back to 28x28?",
     "options": [
@@ -2172,7 +2172,7 @@ const QUESTION_BANK = [
   {
     "id": 109,
     "category": "Lab & Notebooks",
-    "module": "Module 03",
+    "module": "Module 3",
     "difficulty": "Intermediate",
     "question": "In Module 03 (autoencoder.ipynb Section 'Image denoising'), how is a Denoising Autoencoder trained to remove synthetic noise from corrupted images?",
     "options": [
@@ -2192,7 +2192,7 @@ const QUESTION_BANK = [
   {
     "id": 110,
     "category": "Lab & Notebooks",
-    "module": "Module 03",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In Module 03 (autoencoder.ipynb Section 'Anomaly detection'), how does an autoencoder successfully detect anomalies (such as abnormal ECG signals)?",
     "options": [
@@ -2212,7 +2212,7 @@ const QUESTION_BANK = [
   {
     "id": 111,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Intermediate",
     "question": "In MIT 6.S191 Lab 2 Part 2 (PT_Part2_Debiasing.ipynb), what is identified as the root cause of algorithmic bias in standard facial detection CNN models?",
     "options": [
@@ -2232,7 +2232,7 @@ const QUESTION_BANK = [
   {
     "id": 112,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In Variational Autoencoders (VAEs) and DB-VAE, what is the critical purpose of the 'Reparameterization Trick' (z = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I))?",
     "options": [
@@ -2252,7 +2252,7 @@ const QUESTION_BANK = [
   {
     "id": 113,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In the VAE loss function, what fundamental regularization role is performed by the Kullback-Leibler (KL) Divergence loss term (L_KL)?",
     "options": [
@@ -2272,7 +2272,7 @@ const QUESTION_BANK = [
   {
     "id": 114,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In PT_Part2_Debiasing.ipynb (Section 2.4), what is the analytical formula for the latent loss L_KL(mu, sigma) of a multivariate Gaussian with diagonal covariance relative to a standard unit Gaussian?",
     "options": [
@@ -2292,7 +2292,7 @@ const QUESTION_BANK = [
   {
     "id": 115,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In the Debiasing Variational Autoencoder (DB-VAE) model, how is the total loss function mathematically formulated for a batch containing both face (y=1) and non-face (y=0) images?",
     "options": [
@@ -2312,7 +2312,7 @@ const QUESTION_BANK = [
   {
     "id": 116,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "How does the DB-VAE algorithm perform automated 'Adaptive Resampling' during training to eliminate bias WITHOUT requiring explicit human demographic annotations?",
     "options": [
@@ -2332,7 +2332,7 @@ const QUESTION_BANK = [
   {
     "id": 117,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Basic",
     "question": "In PT_Part2_Debiasing.ipynb (Section 2.6), which famous benchmark dataset was specifically utilized to evaluate facial detection accuracy across intersectional demographic groups (Dark Male, Dark Female, Light Male, Light Female)?",
     "options": [
@@ -2352,7 +2352,7 @@ const QUESTION_BANK = [
   {
     "id": 118,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Intermediate",
     "question": "What is the primary structural difference between a Standard Autoencoder and a Variational Autoencoder (VAE)?",
     "options": [
@@ -2372,7 +2372,7 @@ const QUESTION_BANK = [
   {
     "id": 119,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Basic",
     "question": "In PT_Part2_Debiasing.ipynb (Section 2.5), what dimensionality is chosen for the bottleneck latent vector z in the DB-VAE architecture?",
     "options": [
@@ -2392,7 +2392,7 @@ const QUESTION_BANK = [
   {
     "id": 120,
     "category": "Debiasing & VAEs",
-    "module": "Module 2",
+    "module": "Module 3",
     "difficulty": "Exam Level",
     "question": "In VAE reconstruction loss (PT_Part2_Debiasing.ipynb Section 2.4), which distance metric was implemented to measure fidelity between input image x and reconstructed output x_hat?",
     "options": [
@@ -2407,6 +2407,206 @@ const QUESTION_BANK = [
       "whyCorrect": "In Section 2.4 ('Understanding VAEs: loss function'): 'Reconstruction loss (L_x(x, x_hat)): measures how accurately the reconstructed outputs match the input and is given by the L^1 norm of the input image and its reconstructed output: L_x(x, x_hat) = ||x - x_hat||_1'.",
       "whyWrong": "Categorical cross-entropy is for discrete classification, Hinge loss is for SVMs, and Perplexity is for language modeling.",
       "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): VAE Reconstruction Loss L_x(x, x_hat) = ||x - x_hat||_1."
+    }
+  },
+  {
+    "id": 121,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Basic",
+    "question": "What is the fundamental difference between Discriminative Models and Generative Models in computer vision?",
+    "options": [
+      "Discriminative models learn the conditional boundary p(y|x) to classify inputs; Generative models learn the underlying data distribution p(x) or joint distribution p(x, y) to generate new realistic samples",
+      "Discriminative models are strictly unsupervised; Generative models are always supervised",
+      "Discriminative models generate synthetic images; Generative models output bounding box coordinates only",
+      "Discriminative models require no weights; Generative models cannot use neural networks"
+    ],
+    "correctAnswer": "Discriminative models learn the conditional boundary p(y|x) to classify inputs; Generative models learn the underlying data distribution p(x) or joint distribution p(x, y) to generate new realistic samples",
+    "explanation": {
+      "summary": "Discriminative models separate classes by learning decision boundaries p(y|x); generative models understand how the data itself was generated by modeling p(x).",
+      "whyCorrect": "As established in Module 3 (Generative Models.pdf Slide 5-8): Given input x and label y, discriminative models compute p(y|x) (e.g. is this image a dog or cat?). Generative models learn the data distribution p(x) (or p(x, y)), enabling the model to draw new synthetic samples x ~ p(x).",
+      "whyWrong": "Discriminative models are typically supervised, do not generate images, and both use deep neural networks extensively.",
+      "keyConcept": "Discriminative: Learns decision boundary p(y|x) | Generative: Models data distribution p(x) to synthesize new data."
+    }
+  },
+  {
+    "id": 122,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In the taxonomy of Deep Generative Models (Module 3 Generative Models.pdf), how are Variational Autoencoders (VAEs) and Generative Adversarial Networks (GANs) fundamentally classified regarding density estimation?",
+    "options": [
+      "VAEs are Explicit Density models (optimizing an approximate tractable lower bound on p(x)); GANs are Implicit Density models (sampling directly from the distribution without explicitly modeling p(x))",
+      "VAEs are Implicit models; GANs are Explicit models",
+      "Both VAEs and GANs are strictly explicit tractable density models like PixelRNN",
+      "Neither model uses latent noise vectors for sampling"
+    ],
+    "correctAnswer": "VAEs are Explicit Density models (optimizing an approximate tractable lower bound on p(x)); GANs are Implicit Density models (sampling directly from the distribution without explicitly modeling p(x))",
+    "explanation": {
+      "summary": "Generative models divide into explicit density estimation (tractable or approximate) and implicit density sampling.",
+      "whyCorrect": "In Lecture 4 (Taxonomy of Generative Models): Explicit density models define and optimize an expression for p(x); VAEs do this by maximizing the Evidence Lower Bound (ELBO) on log p(x). GANs are implicit: they never write down or evaluate p(x), but instead learn a generator G that maps noise z into the data distribution via adversarial feedback.",
+      "whyWrong": "PixelRNN/PixelCNN are explicit tractable; VAEs are approximate explicit; GANs are implicit.",
+      "keyConcept": "Generative Taxonomy: Explicit Density (Approximate: VAEs) vs Implicit Density (GANs, Diffusion)."
+    }
+  },
+  {
+    "id": 123,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "What is the mathematical formulation of the two-player minimax game objective V(D, G) for Generative Adversarial Networks (GANs)?",
+    "options": [
+      "min_G max_D V(D, G) = E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]",
+      "min_G min_D V(D, G) = E[||x - G(z)||^2] + lambda * E[||W||_2]",
+      "max_G max_D V(D, G) = sum(w_i * x_i) + b",
+      "min_G max_D V(D, G) = E[D(x) * G(z)] - E[D(G(z))]"
+    ],
+    "correctAnswer": "min_G max_D V(D, G) = E_{x ~ p_data}[log D(x)] + E_{z ~ p_z}[log(1 - D(G(z)))]",
+    "explanation": {
+      "summary": "GANs optimize a minimax zero-sum game between Discriminator D (maximizing real/fake classification accuracy) and Generator G (minimizing Discriminator success).",
+      "whyCorrect": "In Goodfellow et al. (2014) and Module 3 slides: D wants D(x)=1 (real) and D(G(z))=0 (fake), maximizing log D(x) + log(1 - D(G(z))). G wants D(G(z))=1 (fooling D), minimizing log(1 - D(G(z))).",
+      "whyWrong": "Option B is an autoencoder MSE loss; Option C is a perceptron linear equation; Option D is an incorrect heuristic.",
+      "keyConcept": "GAN Minimax Formulation: min_G max_D V(D, G) = E[log D(x)] + E[log(1 - D(G(z)))]."
+    }
+  },
+  {
+    "id": 124,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "Why do GAN implementations train the Generator to maximize log(D(G(z))) instead of minimizing log(1 - D(G(z))) (the 'Non-Saturating Game')?",
+    "options": [
+      "Early in training, when the Generator produces poor images, D easily rejects them (D(G(z)) ~ 0), causing log(1 - D(G(z))) to have near-zero vanishing gradients; maximizing log(D(G(z))) provides large, non-vanishing gradients early on",
+      "Because log(1 - D(G(z))) produces negative infinity values that crash CUDA",
+      "To prevent the Discriminator from using backpropagation",
+      "Because maximizing log(D(G(z))) mathematically eliminates the need for a latent vector z"
+    ],
+    "correctAnswer": "Early in training, when the Generator produces poor images, D easily rejects them (D(G(z)) ~ 0), causing log(1 - D(G(z))) to have near-zero vanishing gradients; maximizing log(D(G(z))) provides large, non-vanishing gradients early on",
+    "explanation": {
+      "summary": "The minimax formulation suffers from vanishing generator gradients early in training. The non-saturating objective provides strong gradients when G needs them most.",
+      "whyCorrect": "When G is weak, D(G(z)) ≈ 0. The slope of log(1 - p) at p=0 is very flat, starving G of gradient signal. By flipping the objective to maximize log D(G(z)), the derivative at p=0 is steep (1/p), providing strong learning gradients early in training.",
+      "whyWrong": "It does not crash CUDA, does not stop D's backprop, and still requires latent z.",
+      "keyConcept": "Non-Saturating GAN Trick: Replace min_G log(1 - D(G(z))) with max_G log D(G(z)) to avoid early vanishing gradients."
+    }
+  },
+  {
+    "id": 125,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "What is the notorious training pathology in GANs known as 'Mode Collapse'?",
+    "options": [
+      "The Generator produces only a very limited subset or single variety of outputs (e.g. generating only a single digit or single face) that fools the Discriminator, failing to capture the full diversity of the data",
+      "The GPU memory collapses due to batch size exceeding RAM limits",
+      "The Discriminator accuracy drops to strictly zero on all training steps",
+      "The learning rate decays to negative values during Adam optimization"
+    ],
+    "correctAnswer": "The Generator produces only a very limited subset or single variety of outputs (e.g. generating only a single digit or single face) that fools the Discriminator, failing to capture the full diversity of the data",
+    "explanation": {
+      "summary": "Mode collapse occurs when G finds a single successful 'trick' sample that tricks D, mapping all latent codes z to this single output mode instead of covering the whole distribution.",
+      "whyCorrect": "In Module 3 (Generative Models.pdf): If the training data contains 10 digits (0-9), a collapsed generator might only output the digit '8' because it reliably tricks D, completely ignoring digits 0-7 and 9. Solutions include Wasserstein GAN (WGAN), unrolled GANs, and minibatch discrimination.",
+      "whyWrong": "Mode collapse is an algorithmic representation failure, not a hardware out-of-memory crash or learning rate sign bug.",
+      "keyConcept": "Mode Collapse: Generator outputs only a single mode/style that fools D, losing all sample diversity."
+    }
+  },
+  {
+    "id": 126,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "What is the core mathematical innovation of CycleGAN (Zhu et al., 2017) that enables image-to-image translation between two visual domains (e.g., Horse to Zebra) WITHOUT paired training images?",
+    "options": [
+      "Cycle Consistency Loss: Translating an image from domain X to Y and back from Y to X must reconstruct the original image (F(G(x)) ~ x and G(F(y)) ~ y)",
+      "Supervised pixel-wise L1 loss comparing identical photos taken with different camera lenses",
+      "Using a single shared Convolutional filter across both domains",
+      "Applying 180-degree rotation to all training images"
+    ],
+    "correctAnswer": "Cycle Consistency Loss: Translating an image from domain X to Y and back from Y to X must reconstruct the original image (F(G(x)) ~ x and G(F(y)) ~ y)",
+    "explanation": {
+      "summary": "CycleGAN enforces that domain mappings are bijections: translating forward then backward must yield the original input.",
+      "whyCorrect": "In unpaired image translation, no (x, y) ground-truth pairs exist. CycleGAN trains two generators G: X -> Y and F: Y -> X with two discriminators, penalizing reconstruction loss L_cyc = E[||F(G(x)) - x||_1] + E[||G(F(y)) - y||_1]. This prevents G and F from mapping all inputs to a random unrelated image.",
+      "whyWrong": "CycleGAN does not require paired images (that is Pix2Pix), does not share a single filter, and does not rely on simple 180-degree rotations.",
+      "keyConcept": "CycleGAN Principle: Forward-Backward Consistency: F(G(x)) ≈ x (Unpaired Domain Translation)."
+    }
+  },
+  {
+    "id": 127,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "How do Denoising Diffusion Probabilistic Models (Diffusion Models / DDPM) synthesize realistic images from random noise?",
+    "options": [
+      "A forward process gradually adds Gaussian noise to an image over T steps until it becomes pure isotropic noise; a neural network (typically a U-Net) is trained to reverse this process step-by-step by predicting and subtracting noise",
+      "By calculating the discrete cosine transform and multiplying high frequencies by zero",
+      "By training two discriminators against each other without using a generator",
+      "By taking a nearest-neighbor average of all training images in pixel space"
+    ],
+    "correctAnswer": "A forward process gradually adds Gaussian noise to an image over T steps until it becomes pure isotropic noise; a neural network (typically a U-Net) is trained to reverse this process step-by-step by predicting and subtracting noise",
+    "explanation": {
+      "summary": "Diffusion models generate data by iteratively denoising a sample initialized from pure Gaussian noise.",
+      "whyCorrect": "As presented in modern deep generative modeling: Forward diffusion q(x_t | x_{t-1}) adds Gaussian noise according to a variance schedule beta_t. The reverse process p_theta(x_{t-1} | x_t) uses a neural network to estimate the noise epsilon_theta(x_t, t), iteratively subtracting noise to reconstruct sharp images.",
+      "whyWrong": "Diffusion models do not use DCT filtering, do not run dual discriminators (that is GANs), and do not perform nearest neighbor averaging.",
+      "keyConcept": "Diffusion Mechanism: Forward Process (Add Noise) -> Reverse Process (Learned Denoising via U-Net)."
+    }
+  },
+  {
+    "id": 128,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Variational Autoencoders (VAEs), what is the Evidence Lower Bound (ELBO) that the network maximizes during training?",
+    "options": [
+      "log p(x) >= E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z)), balancing reconstruction fidelity and latent divergence from the prior",
+      "ELBO = (Precision * Recall) / (Precision + Recall)",
+      "ELBO = min(Loss) * learning_rate",
+      "ELBO = det(Weights) + trace(Biases)"
+    ],
+    "correctAnswer": "log p(x) >= E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z)), balancing reconstruction fidelity and latent divergence from the prior",
+    "explanation": {
+      "summary": "Because the true marginal data log-likelihood log p(x) is intractable, VAEs maximize its variational lower bound (ELBO).",
+      "whyCorrect": "In VAE derivation: log p(x) = E_{q}[log(p(x,z)/q(z|x))] + D_KL(q(z|x) || p(z|x)) >= E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z)). Maximizing the ELBO simultaneously maximizes reconstruction likelihood and minimizes latent prior divergence.",
+      "whyWrong": "Option B is F1-score; Option C and D are fabricated heuristics.",
+      "keyConcept": "ELBO Formulation: Maximizes Reconstruction Log-Likelihood while Minimizing KL Divergence to Prior."
+    }
+  },
+  {
+    "id": 129,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "Why can't a standard (non-variational) Autoencoder be reliably used to generate new images by sampling random vectors z ~ N(0, I) and passing them into its decoder?",
+    "options": [
+      "Because standard autoencoders do not regularize the latent space, leaving large 'holes' and discontinuities where the decoder was never trained, resulting in corrupted or nonsensical reconstructions",
+      "Because standard autoencoders delete the decoder network after training is finished",
+      "Because standard autoencoders only operate on 1D audio sequences",
+      "Because neural networks can only execute matrix multiplication on training samples, not sampled vectors"
+    ],
+    "correctAnswer": "Because standard autoencoders do not regularize the latent space, leaving large 'holes' and discontinuities where the decoder was never trained, resulting in corrupted or nonsensical reconstructions",
+    "explanation": {
+      "summary": "Standard autoencoders learn deterministic point encodings with irregular, discontinuous latent spaces, making them unsuitable for generation.",
+      "whyCorrect": "In Module 3 (Autoencoders vs VAEs): A standard AE only optimizes reconstruction loss ||x - x_hat||^2. It has no incentive to organize the latent space smoothly or center it at 0. Sampling random points z lands in unmapped regions, producing garbage. VAEs enforce a smooth Gaussian latent space using KL divergence.",
+      "whyWrong": "Decoders are not deleted, autoencoders process 2D images, and matrix multiplication works for any tensor.",
+      "keyConcept": "Autoencoder Latent Space: Discontinuous and unregularized. VAE solves this by enforcing a continuous Gaussian prior."
+    }
+  },
+  {
+    "id": 130,
+    "category": "Generative Models",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "In Conditional GANs (cGANs), how does the architecture enable user control over what class or type of image is generated (e.g. generating a digit '7' on demand)?",
+    "options": [
+      "Both the Generator and Discriminator receive an additional conditioning label y (such as a one-hot vector or class embedding) alongside the noise vector z and image x",
+      "By retraining the entire model from scratch every time a different digit is requested",
+      "By multiplying the image pixels by the integer class number",
+      "By removing all activation functions from the generator"
+    ],
+    "correctAnswer": "Both the Generator and Discriminator receive an additional conditioning label y (such as a one-hot vector or class embedding) alongside the noise vector z and image x",
+    "explanation": {
+      "summary": "Conditional GANs condition both G and D on auxiliary information y, steering the generative process toward a specified target mode.",
+      "whyCorrect": "In Mirza & Osindero (2014) and Module 3 slides: G takes [z, y] to produce G(z, y). D takes [x, y] to determine if x is a real image matching condition y. This allows conditional generation of specific classes, text-to-image synthesis, or image translation.",
+      "whyWrong": "Retraining from scratch is inefficient, multiplying pixels by class integers ruins images, and activations remain necessary.",
+      "keyConcept": "cGAN Conditioning: G(z, y) synthesizes target class y; D(x, y) validates whether image x matches class y."
     }
   }
 ];

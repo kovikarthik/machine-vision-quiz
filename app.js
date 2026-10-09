@@ -385,6 +385,7 @@
       if (cat === 'BOOKMARKED' && !bookmarkedIds.has(q.id)) return false;
       if (cat === 'Module 1' && q.module !== 'Module 1') return false;
       if (cat === 'Module 2' && q.module !== 'Module 2') return false;
+      if (cat === 'Module 3' && q.module !== 'Module 3') return false;
       if (cat === 'Data Augmentation' && q.category !== 'Data Augmentation') return false;
       if (cat === 'Parameter Counting' && q.category !== 'Parameter Counting') return false;
       if (cat === 'Stride & Padding' && q.category !== 'Stride & Padding') return false;
