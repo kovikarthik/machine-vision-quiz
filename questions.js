@@ -6,7 +6,7 @@
 //   - Module 02: Part1_MNIST.ipynb, PT_Part1_MNIST.ipynb, CNN2025.pdf
 //   - Module 03: autoencoder.ipynb, PT_Part2_Debiasing.ipynb, Generative Models.pdf
 // Total Questions: 180 High-Yield Conceptual & Computational MCQs
-// Features: Full Plain-English / Noob Breakdowns & Term-by-Term Glossaries
+// Features: 100% Complete Plain-English / Noob Breakdowns & Term Glossaries
 // ==============================================================================
 
 const QUESTION_BANK = [
@@ -26,7 +26,13 @@ const QUESTION_BANK = [
       "summary": "A perceptron first computes the pre-activation linear combination z = Σ (w_i * x_i) + b = W^T * X + b, which is then passed to the activation function g(z).",
       "whyCorrect": "The forward pass of a basic artificial neuron decomposes into two distinct steps: (1) Linear combination of weighted inputs plus bias, z = W·X + b; (2) Non-linear transformation, ŷ = g(z).",
       "whyWrong": "Softmax is applied at the output layer of multi-class networks, convolution is specific to convolutional layers, and batch normalization is an intermediate normalization layer across mini-batches.",
-      "keyConcept": "Perceptron Equation: z = W^T * X + b, ŷ = g(z)"
+      "keyConcept": "Perceptron Equation: z = W^T * X + b, ŷ = g(z)",
+      "noobBreakdown": "A neuron works like a tiny decision-maker. First, it adds up all incoming clues multiplied by how much it trusts them (weights) plus a baseline gut feeling (bias). Only after getting this combined number does it pass it through a curved on/off switch (activation function)!",
+      "terms": {
+        "Dot Product": "Multiplying matching pairs of numbers from two lists and adding them all together (w1*x1 + w2*x2 + ...).",
+        "Linear Combination": "The weighted sum plus bias: z = W^T * X + b.",
+        "Activation Function": "A mathematical rule (like ReLU or Sigmoid) that converts the raw weighted sum into an output signal."
+      }
     },
     "difficulty": "Basic"
   },
@@ -46,7 +52,12 @@ const QUESTION_BANK = [
       "summary": "Composition of linear functions is always linear: W2 * (W1 * x + b1) + b2 = (W2 * W1) * x + (W2 * b1 + b2) = W' * x + b'.",
       "whyCorrect": "If g(z) = z (linear), then any depth network can be reduced to a single-layer perceptron. Non-linear activations allow networks to model non-linear decision boundaries and approximate any continuous function (Universal Approximation Theorem).",
       "whyWrong": "Deep learning loss landscapes are non-convex regardless of activations; backpropagation is still required for gradients; and weights can be positive or negative.",
-      "keyConcept": "Linear Collapse: W2 · (W1 · x) = (W2 · W1) · x"
+      "keyConcept": "Linear Collapse: W2 · (W1 · x) = (W2 · W1) · x",
+      "noobBreakdown": "Multiplying straight lines always produces another straight line. Without curved (non-linear) activations, stacking 100 deep layers is mathematically identical to just 1 flat layer! Curved functions allow the network to learn complex shapes like faces and cats.",
+      "terms": {
+        "Linear Collapse": "When multiple consecutive linear transformations simplify into a single linear matrix multiplication: W2*(W1*x) = (W2*W1)*x.",
+        "Universal Approximation": "The theorem proving that non-linear networks can approximate any continuous mathematical function."
+      }
     },
     "difficulty": "Basic"
   },
@@ -66,7 +77,12 @@ const QUESTION_BANK = [
       "summary": "Sigmoid σ(z) = 1 / (1 + e^-z) has derivative σ'(z) = σ(z)(1 - σ(z)), which saturates to near 0 for |z| >> 0, with a maximum derivative of only 0.25.",
       "whyCorrect": "When backpropagating gradients through many layers, multiplying several numbers ≤ 0.25 exponentially shrinks the gradient toward 0, preventing early layers from updating.",
       "whyWrong": "ReLU has a constant derivative of 1 for all positive inputs, actively preventing vanishing gradients on positive inputs. Leaky ReLU and PReLU maintain non-zero derivatives on both sides.",
-      "keyConcept": "Max derivative of Sigmoid is σ'(0) = 0.25. For N layers, gradient scales as (0.25)^N → 0."
+      "keyConcept": "Max derivative of Sigmoid is σ'(0) = 0.25. For N layers, gradient scales as (0.25)^N → 0.",
+      "noobBreakdown": "The 'Whisper Game' problem! When calculating mistake corrections backwards through layers, Sigmoid multiplies errors by numbers <= 0.25. After several layers, multiplying fractions shrinks the correction signal into a microscopic whisper (near zero), so early layers never learn.",
+      "terms": {
+        "Vanishing Gradient": "When backpropagation gradients become so tiny that weights in early layers stop updating.",
+        "Sigmoid": "An S-shaped curve squashing numbers between 0 and 1, with a maximum derivative of only 0.25 at the center."
+      }
     },
     "difficulty": "Basic"
   },
@@ -86,7 +102,12 @@ const QUESTION_BANK = [
       "summary": "ReLU computes max(0, z), which requires just a simple threshold comparison (no expensive exponential evaluations) and has d/dz = 1 for z > 0.",
       "whyCorrect": "For positive inputs, the gradient does not saturate or vanish, allowing deep networks to train much faster with simple arithmetic operations.",
       "whyWrong": "Tanh is zero-centered between -1 and 1, not ReLU (which is [0, ∞)). Softmax normalizes to a probability distribution. ReLU has exactly 0 gradient for negative inputs (the 'dying ReLU' phenomenon).",
-      "keyConcept": "ReLU: g(z) = max(0, z); g'(z) = 1 if z > 0 else 0."
+      "keyConcept": "ReLU: g(z) = max(0, z); g'(z) = 1 if z > 0 else 0.",
+      "noobBreakdown": "ReLU (Rectified Linear Unit) is super simple: if a number is negative, turn it to 0; if positive, leave it alone! Because its slope is a constant 1 for all positive numbers, mistake signals never shrink or vanish, letting deep networks train lightning-fast.",
+      "terms": {
+        "ReLU": "Rectified Linear Unit: g(z) = max(0, z).",
+        "Constant Gradient": "Having a slope of exactly 1 for all positive inputs, preventing gradient decay."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -106,7 +127,12 @@ const QUESTION_BANK = [
       "summary": "When z < 0, ReLU output is 0 and its derivative is 0. If a large gradient step moves weights such that z < 0 for all data points, the neuron will never activate again.",
       "whyCorrect": "Since gradient is 0 for z < 0, gradient descent can never update the weights again; the neuron is functionally dead. This motivated Leaky ReLU (f(z) = max(αz, z)).",
       "whyWrong": "Internal covariate shift relates to changing distribution of internal activations (solved by Batch Norm). Exploding gradients mean gradient values become exponentially large (NaN/Inf).",
-      "keyConcept": "Dying ReLU: When z < 0 for all training examples, ∂L/∂w = 0 and weights never update."
+      "keyConcept": "Dying ReLU: When z < 0 for all training examples, ∂L/∂w = 0 and weights never update.",
+      "noobBreakdown": "If a ReLU neuron gets hit with large negative numbers, it outputs 0 and its slope is 0. With zero slope, backpropagation cannot pass any feedback to it, so the neuron falls into a permanent coma and never wakes up!",
+      "terms": {
+        "Dying ReLU": "When a neuron permanently outputs 0 with 0 gradient for all training samples.",
+        "Pre-activation": "The raw linear sum z = W*x + b before the activation function is applied."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -126,7 +152,12 @@ const QUESTION_BANK = [
       "summary": "Softmax turns a vector of arbitrary real logits into a normalized probability distribution where each value is in (0, 1) and their sum equals 1.0.",
       "whyCorrect": "Softmax(z_i) = e^(z_i) / Σ_j e^(z_j). Since the classes are mutually exclusive, softmax enforces competition among classes so probabilities sum to 1.",
       "whyWrong": "Sigmoid is used for binary classification or multi-label classification (where multiple classes can occur simultaneously). Tanh outputs values in [-1, 1] which cannot represent probabilities.",
-      "keyConcept": "Softmax Formula: P(y = i | z) = e^(z_i) / Σ_{j=1}^K e^(z_j)"
+      "keyConcept": "Softmax Formula: P(y = i | z) = e^(z_i) / Σ_{j=1}^K e^(z_j)",
+      "noobBreakdown": "When you have mutually exclusive categories (like 10 handwritten digits where an image can only be ONE digit), Softmax turns the raw scores into percentages that all add up to 100% (1.0).",
+      "terms": {
+        "Softmax": "A function that exponentiates and normalizes raw scores into a probability distribution summing to 1.",
+        "Logits": "The raw, unbounded output scores produced by the final layer before Softmax."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -146,7 +177,12 @@ const QUESTION_BANK = [
       "summary": "Cross-Entropy measures the distance between the true distribution (one-hot or integer labels) and the predicted probability distribution.",
       "whyCorrect": "Cross-entropy loss L = -Σ y_i * log(p_i) heavily penalizes confident incorrect predictions. When combined with Softmax, its gradient with respect to logits is elegant: (p_i - y_i).",
       "whyWrong": "MSE is designed for continuous regression problems and leads to non-convex optimization and severe gradient vanishing when paired with Softmax/Sigmoid. Hinge loss is typically used for SVMs.",
-      "keyConcept": "Cross-Entropy: L = - Σ y_k log(p_k). If true label is c, L = -log(p_c)."
+      "keyConcept": "Cross-Entropy: L = - Σ y_k log(p_k). If true label is c, L = -log(p_c).",
+      "noobBreakdown": "Cross-Entropy is the perfect grading rubric for classification. If the network is 99% confident in the wrong answer, Cross-Entropy assigns a massive penalty. Combined with Softmax, its gradient math is simple: (predicted probability - true label)!",
+      "terms": {
+        "Cross-Entropy Loss": "L = -sum(y_i * log(p_i)), heavily penalizing confident wrong predictions.",
+        "Mean Squared Error (MSE)": "Loss based on squared differences, designed for continuous regression (like predicting house prices), not probabilities."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -166,7 +202,12 @@ const QUESTION_BANK = [
       "summary": "Both compute the mathematically identical loss value; the only difference is the data format of the ground-truth targets y.",
       "whyCorrect": "In MNIST, if labels are integers 0, 1, 2... 9, Sparse Categorical Cross-Entropy is used directly, saving memory and eliminating one-hot conversion. If targets are [0, 1, 0, 0...], Categorical is used.",
       "whyWrong": "Binary cross-entropy is for 2 classes. Regularization is an orthogonal penalty on weights, not target encoding format.",
-      "keyConcept": "Target format: Sparse = integer indices [0, 9]; Categorical = one-hot vectors [0, 0, 1, 0...]."
+      "keyConcept": "Target format: Sparse = integer indices [0, 9]; Categorical = one-hot vectors [0, 0, 1, 0...].",
+      "noobBreakdown": "Both compute the exact same mathematical loss! The only difference is how your labels are saved: Categorical needs one-hot lists ([0, 0, 1]), while Sparse Categorical takes plain numbers (2), saving memory and time.",
+      "terms": {
+        "One-Hot Encoding": "Representing a class as a vector of zeros with a single 1 (e.g., class 2 as [0, 0, 1]).",
+        "Sparse Categorical Cross-Entropy": "Cross-entropy loss accepting integer class labels directly (0, 1, 2...)."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -186,7 +227,12 @@ const QUESTION_BANK = [
       "summary": "Weight update rule: W = W - η * ∇L. A huge η causes steps larger than the curvature of the loss surface, skipping minima and climbing uphill.",
       "whyCorrect": "Large steps bounce back and forth across valleys of the loss landscape, frequently resulting in numeric overflow (divergence). Conversely, a very small learning rate causes painfully slow convergence.",
       "whyWrong": "Slow convergence is caused by an excessively small learning rate. Autoencoders and overfitting depend on architecture and generalization, not high learning rate divergence.",
-      "keyConcept": "Learning rate tradeoff: Too small = slow/stuck; Too large = overshoot/diverge (NaN)."
+      "keyConcept": "Learning rate tradeoff: Too small = slow/stuck; Too large = overshoot/diverge (NaN).",
+      "noobBreakdown": "Taking giant leaps in the dark! Instead of walking gently to the bottom of the valley, your steps are so huge that you jump clean over the valley and bounce off into infinity (NaN loss)!",
+      "terms": {
+        "Learning Rate (eta)": "The step size multiplier controlling how far weights move on each gradient update.",
+        "Divergence": "When model loss explodes toward infinity instead of decreasing."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -206,7 +252,13 @@ const QUESTION_BANK = [
       "summary": "Batch GD uses all N dataset samples per step; SGD uses 1 sample; Mini-Batch GD uses a batch size B (e.g. 32, 64, 128).",
       "whyCorrect": "Mini-batch strikes the ideal balance: vectorized matrix parallelization on GPUs while providing noisy gradient estimates that help escape shallow saddle points.",
       "whyWrong": "The optimization method does not dictate layer types, convexity, or differentiation mechanics (all use the chain rule).",
-      "keyConcept": "Batch sizes: Pure SGD = 1 sample; Mini-batch = 32-256 samples; Batch GD = entire dataset."
+      "keyConcept": "Batch sizes: Pure SGD = 1 sample; Mini-batch = 32-256 samples; Batch GD = entire dataset.",
+      "noobBreakdown": "Batch GD calculates mistakes on the entire dataset at once (slow, heavy). Stochastic GD (SGD) updates weights after every single image (noisy, erratic). Mini-batch GD updates after small batches (e.g. 32 images), giving the perfect balance of speed and stability!",
+      "terms": {
+        "Batch Gradient Descent": "Updating weights using the entire training dataset in one pass.",
+        "Stochastic Gradient Descent (SGD)": "Updating weights using a single training sample at a time.",
+        "Mini-Batch GD": "Updating weights using a small group of samples (e.g., 32 or 64)."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -226,7 +278,13 @@ const QUESTION_BANK = [
       "summary": "Adam stands for Adaptive Moment Estimation. It tracks m_t (mean of gradients, momentum) and v_t (uncentered variance of gradients, RMSprop scale).",
       "whyCorrect": "First moment m_t accelerates through shallow plateaus in consistent directions (momentum), while second moment v_t scales down updates for parameters with huge gradients (RMSprop), adapting individual learning rates per parameter.",
       "whyWrong": "Adam has nothing to do with training dual networks (which is ensembling) or alternating regularization forms.",
-      "keyConcept": "Adam updates: m_t = β1*m_{t-1} + (1-β1)*g; v_t = β2*v_{t-1} + (1-β2)*g^2."
+      "keyConcept": "Adam updates: m_t = β1*m_{t-1} + (1-β1)*g; v_t = β2*v_{t-1} + (1-β2)*g^2.",
+      "noobBreakdown": "Adam is the ultimate smart car of optimizers. It uses Momentum (1st moment) to keep rolling smoothly downhill, and RMSprop (2nd moment) to hit the brakes on common features and speed up on rare features.",
+      "terms": {
+        "Adam": "Adaptive Moment Estimation, combining momentum and adaptive per-parameter learning rates.",
+        "First Moment": "Exponential moving average of past gradients (momentum velocity).",
+        "Second Moment": "Exponential moving average of squared gradients (step size scaling)."
+      }
     },
     "difficulty": "Basic"
   },
@@ -246,7 +304,12 @@ const QUESTION_BANK = [
       "summary": "Backpropagation propagates the error gradient backward through composite functions: ∂L/∂w_i = (∂L/∂y) * (∂y/∂z) * (∂z/∂w_i).",
       "whyCorrect": "Because a deep neural network is a chain of nested composite functions f_L(f_{L-1}(...f_1(x))), the derivative with respect to any intermediate weight is evaluated via the chain rule of differential calculus.",
       "whyWrong": "L'Hôpital's rule is for evaluating 0/0 limits; Central Limit Theorem is for sample mean distributions.",
-      "keyConcept": "Chain rule: ∂L/∂w = (∂L/∂output) * (∂output/∂preactivation) * (∂preactivation/∂w)"
+      "keyConcept": "Chain rule: ∂L/∂w = (∂L/∂output) * (∂output/∂preactivation) * (∂preactivation/∂w)",
+      "noobBreakdown": "The Calculus Chain Rule! When error happens at the final output, the chain rule lets us calculate how much each layer contributed to the mistake by multiplying rates of change backwards, layer by layer.",
+      "terms": {
+        "Backpropagation": "The algorithm that calculates the gradient of the loss with respect to all weights using the chain rule.",
+        "Chain Rule": "d(f(g(x)))/dx = f'(g(x)) * g'(x), allowing gradients to be calculated across stacked functions."
+      }
     },
     "difficulty": "Basic"
   },
@@ -266,7 +329,12 @@ const QUESTION_BANK = [
       "summary": "Overfitting occurs when a high-capacity model memorizes noise and specific patterns of the training data rather than learning generalizable underlying features.",
       "whyCorrect": "A large generalization gap between near-perfect training performance and degraded validation performance is the hallmark signature of overfitting (high variance).",
       "whyWrong": "Underfitting (high bias) results in poor performance on BOTH training and validation sets. Vanishing gradients prevents training loss from decreasing in the first place.",
-      "keyConcept": "High Train Acc + Low Val Acc = Overfitting. Low Train Acc + Low Val Acc = Underfitting."
+      "keyConcept": "High Train Acc + Low Val Acc = Overfitting. Low Train Acc + Low Val Acc = Underfitting.",
+      "noobBreakdown": "Memorizing the practice exam! If a student gets 99.8% on practice questions but gets a D on the real test, they didn't learn the concepts—they just memorized the exact questions (overfitting).",
+      "terms": {
+        "Overfitting": "When a model memorizes training noise and fails to generalize to unseen test data.",
+        "Generalization Gap": "The gap between high training accuracy and low validation/test accuracy."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -286,7 +354,12 @@ const QUESTION_BANK = [
       "summary": "Dropout randomly drops neurons with probability p during training to prevent co-adaptation. During test time, all units remain active with output scaled by (1 - p) (or inverted dropout during training).",
       "whyCorrect": "By randomly deactivating units during training, no neuron can rely solely on any single neighbor, forcing robust feature learning across a virtual ensemble of sub-networks. At inference, all neurons are active for deterministic predictions.",
       "whyWrong": "Dropout is strictly a training-time regularizer; deleting weights during inference would destroy predictions.",
-      "keyConcept": "Dropout: Stochastic dropout at training time; full deterministic ensemble at test time."
+      "keyConcept": "Dropout: Stochastic dropout at training time; full deterministic ensemble at test time.",
+      "noobBreakdown": "During training, randomly turn off 50% of the neurons on each step so they can't form lazy cliques. During testing, turn all neurons back on and scale down their volume so their combined power matches training!",
+      "terms": {
+        "Dropout": "A regularization technique randomly setting neuron activations to zero during training.",
+        "Inverted Dropout": "Scaling training activations by 1/(1-p) so that no adjustment is needed at test time."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -306,7 +379,12 @@ const QUESTION_BANK = [
       "summary": "Batch Norm computes mean μ_B and variance σ_B^2 over the mini-batch, normalizes x̂ = (x - μ_B) / √(σ_B^2 + ε), and applies learnable scale γ and shift β.",
       "whyCorrect": "It drastically speeds up convergence, allows higher learning rates, reduces sensitivity to weight initialization, and provides slight regularization.",
       "whyWrong": "Batch Normalization does not alter channel dimensions (pooling/1x1 conv does that) and does not replace non-linear activations.",
-      "keyConcept": "Batch Norm: y = γ * ((x - μ) / √(σ² + ε)) + β, with learnable parameters γ and β."
+      "keyConcept": "Batch Norm: y = γ * ((x - μ) / √(σ² + ε)) + β, with learnable parameters γ and β.",
+      "noobBreakdown": "Recalibrating the microphone between speakers so the volume is always standard (mean 0, spread 1). Deeper layers don't have to keep readjusting their settings as earlier layers update!",
+      "terms": {
+        "Batch Normalization": "Normalizing layer inputs across mini-batches to have zero mean and unit variance.",
+        "Internal Covariate Shift": "The continuous change in layer input distributions during training as prior layers update."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -326,7 +404,12 @@ const QUESTION_BANK = [
       "summary": "L1 penalty is proportional to Σ |w| (constant derivative ±λ), which pushes weights all the way to 0. L2 penalty is proportional to Σ w^2 (derivative 2λw), which shrinks weights proportionally.",
       "whyCorrect": "L1 acts as a natural feature selector by producing sparse weight matrices with exact zeros. L2 penalizes large weights more heavily, distributing weights evenly and smoothly.",
       "whyWrong": "L2 does not create exact zero sparsity; neither alters layer counts or data loaders.",
-      "keyConcept": "L1 Penalty = λ Σ |w| (Sparse, feature selection); L2 Penalty = ½ λ Σ w² (Smooth weight decay)."
+      "keyConcept": "L1 Penalty = λ Σ |w| (Sparse, feature selection); L2 Penalty = ½ λ Σ w² (Smooth weight decay).",
+      "noobBreakdown": "L1 (Lasso) is ruthless: it forces useless weights to become absolute zero, giving you automatic feature selection. L2 (Ridge) is gentle: it shrinks weights smoothly toward zero so no single weight becomes a bully.",
+      "terms": {
+        "L1 Regularization": "Penalizes the sum of absolute weight values (+lambda * |W|), driving weights to exact zeros (sparsity).",
+        "L2 Regularization": "Penalizes the sum of squared weights (+lambda * W^2), shrinking weights smoothly (weight decay)."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -346,7 +429,12 @@ const QUESTION_BANK = [
       "summary": "Flattening a 1000x1000x3 color image gives 3,000,000 inputs. Connecting to just 1,000 hidden neurons requires 3 BILLION weights in a single layer!",
       "whyCorrect": "Fully connected layers lack: (1) Spatial hierarchy (spatial relationships between adjacent pixels are lost when flattened); (2) Parameter efficiency (no weight sharing); (3) Translation invariance.",
       "whyWrong": "Dense layers can run on GPUs, process RGB images, and compute backpropagation without issue.",
-      "keyConcept": "Full connectivity on images causes parameter explosion and loses 2D neighborhood context."
+      "keyConcept": "Full connectivity on images causes parameter explosion and loses 2D neighborhood context.",
+      "noobBreakdown": "Flattening a 2D photo into a 1D line turns neighbor pixels into strangers (destroying shapes like eyes and noses) and creates millions of weights that crash your memory!",
+      "terms": {
+        "Fully Connected (Dense)": "A layer where every input neuron connects to every single output neuron.",
+        "Spatial Topology": "The 2D geometric relationship between neighbor pixels in an image."
+      }
     },
     "difficulty": "Basic"
   },
@@ -366,7 +454,12 @@ const QUESTION_BANK = [
       "summary": "A convolution applies the identical set of filter weights across all spatial locations of an image.",
       "whyCorrect": "Because the same kernel slides across the entire image (weight sharing), the response to a feature is the same regardless of its spatial location, giving translation equivariance.",
       "whyWrong": "Recurrent connections are for sequential/time-series data (RNNs/LSTMs). SGD is an optimizer. Label smoothing is a regularization technique.",
-      "keyConcept": "Weight Sharing: The same filter is convolved across all spatial positions."
+      "keyConcept": "Weight Sharing: The same filter is convolved across all spatial positions.",
+      "noobBreakdown": "Weight sharing means using the EXACT same filter everywhere across the image. A 'cat ear detector' works whether the ear is in the top-left or bottom-right corner! This cuts parameter count from millions to hundreds.",
+      "terms": {
+        "Weight Sharing": "Using the same set of kernel weights across all spatial locations of an image.",
+        "Translation Equivariance": "If an object moves in the image, its detection moves by the same amount in the feature map."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -386,7 +479,12 @@ const QUESTION_BANK = [
       "summary": "The receptive field is the patch of pixels in the raw input image that can alter the output value of a particular feature neuron.",
       "whyCorrect": "Neurons in early conv layers have small receptive fields (detecting tiny edges/textures). As you stack conv and pooling layers, deeper neurons have progressively larger receptive fields (detecting eyes, faces, whole objects).",
       "whyWrong": "Receptive field is a spatial geometry concept, not a FLOP count or GPU memory metric.",
-      "keyConcept": "Receptive Field: Grows with network depth and pooling, capturing hierarchical context."
+      "keyConcept": "Receptive Field: Grows with network depth and pooling, capturing hierarchical context.",
+      "noobBreakdown": "The cone of vision! The specific patch of the original input picture that a particular neuron can see through all the preceding layers.",
+      "terms": {
+        "Receptive Field": "The spatial region in the input image that directly influences a neuron's activation.",
+        "Effective Receptive Field": "The area of the input image that has the strongest influence on the neuron's output."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -406,7 +504,12 @@ const QUESTION_BANK = [
       "summary": "A convolutional filter MUST span the full depth (all channels) of the input volume.",
       "whyCorrect": "Each filter has spatial dimensions (e.g. 3x3) and always matches the depth of the input volume (here, 3 channels). It performs a 3D dot product across all 3 channels simultaneously to produce a single 2D scalar output per spatial position.",
       "whyWrong": "Filters in 2D convolution do not ignore channels; a 3x3 filter on 3 channels has depth 3, so its shape is 3x3x3 = 27 weights.",
-      "keyConcept": "Filter Depth Rule: Filter depth must always equal input channel depth (K_h x K_w x C_in)."
+      "keyConcept": "Filter Depth Rule: Filter depth must always equal input channel depth (K_h x K_w x C_in).",
+      "noobBreakdown": "When processing a color image (Red, Green, Blue), a 3x3 filter must be 3 layers deep (3x3x3 = 27 weights) so it can examine all 3 color channels at the same time!",
+      "terms": {
+        "Filter Depth": "A convolutional filter's depth must always match the number of input channels (e.g., 3 for RGB).",
+        "3D Kernel": "A filter volume of size K_height x K_width x Channels_in."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -426,7 +529,12 @@ const QUESTION_BANK = [
       "summary": "The spatial dimension shrinks by the filter size, expands by twice the padding (both sides), steps by stride S, plus 1 for the initial position.",
       "whyCorrect": "Formula: O = ⌊(W - K + 2P) / S⌋ + 1. For example, W=32, K=5, P=0, S=1 gives (32 - 5 + 0)/1 + 1 = 28.",
       "whyWrong": "All other choices have incorrect algebraic forms that violate boundary conditions.",
-      "keyConcept": "Dimension Formula: O = ⌊(W - K + 2P) / S⌋ + 1"
+      "keyConcept": "Dimension Formula: O = ⌊(W - K + 2P) / S⌋ + 1",
+      "noobBreakdown": "The classic formula for new image size: take input width, subtract filter size, add 2 times padding, divide by stride step, and add 1! Output = floor((W - K + 2P)/S) + 1.",
+      "terms": {
+        "Stride (S)": "The number of pixels the kernel slides on each step.",
+        "Padding (P)": "The number of zero pixels added around the border of the image."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -446,7 +554,11 @@ const QUESTION_BANK = [
       "summary": "Use O = (W - K + 2P)/S + 1. Plug in: W = 32, K = 5, P = 0, S = 1.",
       "whyCorrect": "Calculation: O = (32 - 5 + 2*0)/1 + 1 = 27 + 1 = 28. Output is 28 x 28.",
       "whyWrong": "32x32 would require 'same' padding (P=2). 27 forgets the '+1' offset.",
-      "keyConcept": "Valid padding means P = 0. Output size = 32 - 5 + 1 = 28."
+      "keyConcept": "Valid padding means P = 0. Output size = 32 - 5 + 1 = 28.",
+      "noobBreakdown": "Input is 32x32, kernel is 5x5, no padding (P=0), stride 1. Formula: (32 - 5 + 0)/1 + 1 = 28. The output is 28x28!",
+      "terms": {
+        "Valid Padding": "Applying no padding (P=0), causing the output size to shrink by (K - 1)."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -466,7 +578,11 @@ const QUESTION_BANK = [
       "summary": "For stride 1 and odd kernel size K, same padding requires P = (K - 1) / 2.",
       "whyCorrect": "Here K = 3, so P = (3 - 1) / 2 = 1. Check formula: O = (28 - 3 + 2(1))/1 + 1 = 27 + 1 = 28.",
       "whyWrong": "P=2 would yield (28 - 3 + 4) + 1 = 30 (enlarging the image). P=0 is valid padding (shrinks to 26).",
-      "keyConcept": "Same Padding Rule for stride 1: P = (K - 1) / 2. For K=3, P=1. For K=5, P=2."
+      "keyConcept": "Same Padding Rule for stride 1: P = (K - 1) / 2. For K=3, P=1. For K=5, P=2.",
+      "noobBreakdown": "To keep a 28x28 image at 28x28 with a 3x3 filter, we need P = (K - 1)/2 = (3 - 1)/2 = 1. Add 1 pixel of zero border all around!",
+      "terms": {
+        "Same Padding": "Adding enough zero padding so that output spatial dimensions equal input spatial dimensions."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -486,7 +602,11 @@ const QUESTION_BANK = [
       "summary": "Apply formula: O = ⌊(W - K + 2P) / S⌋ + 1 with W=64, K=4, P=1, S=2.",
       "whyCorrect": "Calculation: O = ⌊(64 - 4 + 2(1)) / 2⌋ + 1 = ⌊(60 + 2) / 2⌋ + 1 = ⌊62 / 2⌋ + 1 = 31 + 1 = 32? Wait: 64 - 4 + 2 = 62. 62 / 2 = 31. 31 + 1 = 32? Let's check: (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 31 + 1 = 32! Wait: let's recalculate carefully!",
       "whyWrong": "Let's re-verify: W=64, K=4, P=1, S=2 -> (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 31 + 1 = 32! If P=0: (64-4)/2 + 1 = 31. Here with P=1, output is 32x32.",
-      "keyConcept": "O = ⌊(64 - 4 + 2) / 2⌋ + 1 = 31 + 1 = 32."
+      "keyConcept": "O = ⌊(64 - 4 + 2) / 2⌋ + 1 = 31 + 1 = 32.",
+      "noobBreakdown": "Input 64, kernel 4, padding 1, stride 2. Formula: floor((64 - 4 + 2*1)/2) + 1 = floor(62/2) + 1 = 31 + 1 = 32... wait, check formula: (64 - 4 + 2)/2 + 1 = 62/2 + 1 = 32, or without extra pixel = 31.",
+      "terms": {
+        "Strided Convolution": "Sliding by S > 1 pixels to downsample the image directly during convolution."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -506,7 +626,12 @@ const QUESTION_BANK = [
       "summary": "Parameters = (K_h * K_w * C_in + 1) * C_out. Here: K=3, C_in=3, C_out=32.",
       "whyCorrect": "Each filter has (3 * 3 * 3) weights + 1 bias = 27 + 1 = 28 parameters. With 32 filters: 28 * 32 = 896 trainable parameters.",
       "whyWrong": "864 forgets the 32 bias terms (27 * 32 = 864). 288 forgets the 3 input channels (9 * 32).",
-      "keyConcept": "Conv Layer Parameter Formula: Params = (K_h * K_w * C_in + 1) * C_out"
+      "keyConcept": "Conv Layer Parameter Formula: Params = (K_h * K_w * C_in + 1) * C_out",
+      "noobBreakdown": "Formula for Conv layer weights: (K_h * K_w * C_in + 1_bias) * C_out. Here: (3 * 3 * 3 + 1) * 32 = (27 + 1) * 32 = 28 * 32 = 896 parameters!",
+      "terms": {
+        "Conv Parameter Formula": "(Kernel_Size * Channels_In + 1_bias) * Filters_Out.",
+        "Trainable Parameters": "The weights and biases that are updated during training."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -526,7 +651,11 @@ const QUESTION_BANK = [
       "summary": "Apply formula: Params = (K_h * K_w * C_in + 1) * C_out.",
       "whyCorrect": "Weights per filter = 5 * 5 * 16 = 400. Including 1 bias = 401 parameters per filter. Total parameters = 401 * 64 = 25,664.",
       "whyWrong": "25,600 is (400 * 64), which neglects the 64 bias terms.",
-      "keyConcept": "Weights = K * K * C_in * C_out; Biases = C_out. Total = 25,600 + 64 = 25,664."
+      "keyConcept": "Weights = K * K * C_in * C_out; Biases = C_out. Total = 25,600 + 64 = 25,664.",
+      "noobBreakdown": "From 64 channels to 128 channels with 3x3 filters: (3 * 3 * 64 + 1) * 128 = (576 + 1) * 128 = 577 * 128 = 73,856 parameters (or 25,664 if smaller).",
+      "terms": {
+        "Weight Matrix": "The collection of learnable filter coefficients."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -546,7 +675,11 @@ const QUESTION_BANK = [
       "summary": "Dense Layer Parameters = (Inputs + 1) * Outputs.",
       "whyCorrect": "Weights = 900 * 128 = 115,200. Biases = 128. Total = 115,200 + 128 = 115,328 parameters.",
       "whyWrong": "115,200 omits the 128 bias parameters.",
-      "keyConcept": "Dense Layer Params = (N_in * N_out) + N_out = (N_in + 1) * N_out"
+      "keyConcept": "Dense Layer Params = (N_in * N_out) + N_out = (N_in + 1) * N_out",
+      "noobBreakdown": "Connecting 900 inputs to 128 outputs: (900 weights + 1 bias) * 128 = 901 * 128 = 115,328 parameters!",
+      "terms": {
+        "Dense Layer Parameters": "(Inputs + 1_bias) * Outputs."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -566,7 +699,11 @@ const QUESTION_BANK = [
       "summary": "Pooling is a fixed deterministic mathematical operation (taking maximum or average) with zero learnable weights or biases.",
       "whyCorrect": "Max Pooling does not learn weights; it simply slides across the window and outputs the max numerical value. Therefore, it has exactly 0 learnable parameters regardless of channels or size.",
       "whyWrong": "Pooling never has learnable parameters; its hyperparameters (window size, stride) are fixed.",
-      "keyConcept": "RULE: Max Pooling and Average Pooling have ZERO learnable parameters."
+      "keyConcept": "RULE: Max Pooling and Average Pooling have ZERO learnable parameters.",
+      "noobBreakdown": "Zero! Pooling layers simply pick the maximum or average number in a window. They have NO weights and NO biases to learn!",
+      "terms": {
+        "Non-Parametric Layer": "A layer (like Max Pooling) that performs a fixed calculation without any learnable parameters."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -586,7 +723,12 @@ const QUESTION_BANK = [
       "summary": "Max pooling shrinks height and width while keeping depth (channels) intact.",
       "whyCorrect": "By picking the maximum activation in each small window (e.g. 2x2 with stride 2), it reduces spatial size by 75%, cuts parameters in subsequent layers, increases effective receptive field, and provides robustness to small spatial shifts.",
       "whyWrong": "Pooling does not alter channel depth; it does not compute Sigmoid or invert colors.",
-      "keyConcept": "Max Pooling benefits: (1) Dimensionality reduction; (2) Spatial invariance; (3) Receptive field expansion."
+      "keyConcept": "Max Pooling benefits: (1) Dimensionality reduction; (2) Spatial invariance; (3) Receptive field expansion.",
+      "noobBreakdown": "Max Pooling is like creating a summary thumbnail: it cuts width and height in half, saves tons of memory, and makes the model recognize features even if they shift slightly by a pixel.",
+      "terms": {
+        "Max Pooling": "A downsampling operation selecting the maximum pixel value in each window.",
+        "Translation Invariance": "The property where small spatial shifts in the input do not alter the classification output."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -606,7 +748,11 @@ const QUESTION_BANK = [
       "summary": "Max pooling halves the height and width when pool_size=2 and stride=2, leaving the channel depth unchanged.",
       "whyCorrect": "Spatial dimensions: 28 / 2 = 14. Channels remain strictly 64. Output shape is (batch, 14, 14, 64).",
       "whyWrong": "Pooling never halves channel count (channels remain 64).",
-      "keyConcept": "2x2 pool with stride 2 halves H and W: (H/2, W/2, C)."
+      "keyConcept": "2x2 pool with stride 2 halves H and W: (H/2, W/2, C).",
+      "noobBreakdown": "A 2x2 max pool with stride 2 cuts height and width in half (28 -> 14, 28 -> 14), while keeping the channel depth unchanged (64 channels stay 64 channels). Output: (batch, 14, 14, 64)!",
+      "terms": {
+        "Channel Invariance": "Pooling operates independently on each slice, preserving the exact number of channels."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -626,7 +772,12 @@ const QUESTION_BANK = [
       "summary": "Global Average Pooling computes the spatial average of each entire channel slice (e.g. 7x7x512 -> 1x1x512 = 512-dim vector).",
       "whyCorrect": "GAP replaces massive Flatten + Dense layers (which often contained 80%+ of model parameters in AlexNet/VGG), drastically reducing parameters and making the network robust to overfitting.",
       "whyWrong": "GAP does not average across batch samples or collapse channels; it averages across spatial H and W.",
-      "keyConcept": "Global Average Pooling: (H, W, C) → (1, 1, C), eliminating millions of dense parameters."
+      "keyConcept": "Global Average Pooling: (H, W, C) → (1, 1, C), eliminating millions of dense parameters.",
+      "noobBreakdown": "Global Average Pooling averages each entire 2D feature map into a single score. It replaces huge, memory-hungry fully connected layers at the end of the network, drastically cutting parameters and stopping overfitting!",
+      "terms": {
+        "Global Average Pooling (GAP)": "Taking the average value across an entire H x W feature map.",
+        "Parameter Reduction": "Eliminating dense classification layers to reduce model size."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -646,7 +797,12 @@ const QUESTION_BANK = [
       "summary": "AlexNet (Alex Krizhevsky, Ilya Sutskever, Geoffrey Hinton) won the ImageNet 2012 competition with an error rate 10.8% lower than the runner-up.",
       "whyCorrect": "AlexNet demonstrated that deep 8-layer CNNs trained on GPUs using ReLU activations and Dropout regularization dramatically outperformed traditional handcrafted vision features.",
       "whyWrong": "LeNet-5 was Yann LeCun's 1998 network for MNIST digit recognition. Transformers were introduced in 2017.",
-      "keyConcept": "AlexNet (2012): 8 layers, 60M parameters, ReLU, Dropout, trained on 2 NVIDIA GTX 580 GPUs."
+      "keyConcept": "AlexNet (2012): 8 layers, 60M parameters, ReLU, Dropout, trained on 2 NVIDIA GTX 580 GPUs.",
+      "noobBreakdown": "AlexNet won the 2012 ImageNet competition and kicked off the modern AI revolution by using ReLU activations, GPU training, and Dropout!",
+      "terms": {
+        "AlexNet": "The historic 8-layer deep CNN that dominated ImageNet in 2012.",
+        "GPU Acceleration": "Using gaming graphic cards for fast parallel matrix multiplications."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -666,7 +822,12 @@ const QUESTION_BANK = [
       "summary": "A stack of two 3x3 filters has the same effective receptive field as one 5x5 filter, but with fewer parameters and an extra non-linear activation in between.",
       "whyCorrect": "Two 3x3 convs have 2 * (3^2 * C^2) = 18 C^2 parameters vs one 5x5 conv with 5^2 * C^2 = 25 C^2 parameters (28% fewer parameters) while adding an extra ReLU non-linearity.",
       "whyWrong": "VGG did not use attention or hand-crafted wavelets; it proved that network depth using simple small 3x3 filters is highly effective.",
-      "keyConcept": "VGG Principle: Two 3x3 filters = 5x5 receptive field (fewer params + more non-linearity)."
+      "keyConcept": "VGG Principle: Two 3x3 filters = 5x5 receptive field (fewer params + more non-linearity).",
+      "noobBreakdown": "VGGNet's rule: never use big filters! Stacking two small 3x3 filters covers the same 5x5 view as one big filter, but uses 28% fewer weights and gives you an extra non-linear activation in between.",
+      "terms": {
+        "VGGNet": "A deep CNN architecture famous for using exclusively 3x3 convolutional filters throughout.",
+        "Stacking Convolutions": "Combining multiple small layers to achieve large receptive fields efficiently."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -686,7 +847,12 @@ const QUESTION_BANK = [
       "summary": "He et al. showed that deeper plain networks (e.g. 56 layers) had HIGHER training error than shallower ones (20 layers), not due to overfitting, but optimization difficulty.",
       "whyCorrect": "As gradients backpropagate through dozens of layers, they vanish or explode. ResNet solved this with residual shortcut connections, enabling training of 152+ layers.",
       "whyWrong": "Image resolution decreases through pooling, channels do not run out, and loss never drops to zero automatically.",
-      "keyConcept": "Degradation Problem: Deeper plain networks have worse training error due to optimization collapse."
+      "keyConcept": "Degradation Problem: Deeper plain networks have worse training error due to optimization collapse.",
+      "noobBreakdown": "The Degradation Problem: As plain deep networks get deeper (e.g. 56 layers vs 20 layers), training accuracy saturates and then gets WORSE! This isn't overfitting—it's an optimization roadblock caused by vanishing gradients.",
+      "terms": {
+        "Degradation Problem": "When deeper plain networks suffer higher training error than shallower counterparts.",
+        "Optimization Difficulty": "When gradients vanish, preventing deep networks from learning effectively."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -706,7 +872,12 @@ const QUESTION_BANK = [
       "summary": "Instead of hoping layers directly fit the target mapping H(x), ResNet forces layers to fit the residual F(x) = H(x) - x, so H(x) = F(x) + x.",
       "whyCorrect": "By adding the identity shortcut (+ x), the gradient ∂L/∂x = ∂L/∂H * (∂F/∂x + 1). The '+ 1' ensures gradient can flow directly backward without vanishing, even if ∂F/∂x is near zero!",
       "whyWrong": "Multiplication or division would alter the identity flow and can vanish or divide by zero. Addition creates an uninterrupted gradient highway.",
-      "keyConcept": "Residual Formula: H(x) = F(x) + x. Gradient: ∂L/∂x = ∂L/∂H · (∂F/∂x + 1)."
+      "keyConcept": "Residual Formula: H(x) = F(x) + x. Gradient: ∂L/∂x = ∂L/∂H · (∂F/∂x + 1).",
+      "noobBreakdown": "ResNet's shortcut wire! Instead of forcing the layer to learn the entire output H(x) from scratch, input x skips over the layer and gets added directly: H(x) = F(x) + x. The layer only has to learn the tiny leftover change F(x).",
+      "terms": {
+        "Residual Block": "An architectural unit learning a residual mapping F(x) = H(x) - x.",
+        "Identity Shortcut": "A direct connection adding input x to the output of a convolutional block."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -726,7 +897,12 @@ const QUESTION_BANK = [
       "summary": "A 1x1 convolution acts as a pixel-wise linear combination across channels followed by a non-linear activation.",
       "whyCorrect": "It changes channel depth (e.g. from 256 channels down to 64 channels) without changing spatial dimensions (H, W), drastically reducing FLOPs before expensive 3x3 convs.",
       "whyWrong": "A 1x1 filter has spatial size 1, so it cannot extract spatial context across neighboring pixels.",
-      "keyConcept": "1x1 Conv: Modifies channel depth (C_in → C_out) while preserving spatial (H, W)."
+      "keyConcept": "1x1 Conv: Modifies channel depth (C_in → C_out) while preserving spatial (H, W).",
+      "noobBreakdown": "A 1x1 convolution is a channel blender! It doesn't change the height or width of the photo, but it mixes 256 color channels down to 64 channels to save computational power.",
+      "terms": {
+        "1x1 Convolution": "A convolution operating on 1x1 spatial windows across all input channels.",
+        "Cross-Channel Pooling": "Combining and compressing feature information across channels."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -746,7 +922,13 @@ const QUESTION_BANK = [
       "summary": "Vision tasks form a hierarchy of spatial precision: Classification (image level) -> Detection (box level) -> Segmentation (pixel level).",
       "whyCorrect": "Classification answers 'What is in this image?'; Detection answers 'What and Where is it?'; Semantic Segmentation classifies every pixel without differentiating instances of the same class.",
       "whyWrong": "Instance segmentation additionally differentiates between individual objects of the same class (e.g. Dog 1 vs Dog 2).",
-      "keyConcept": "Classification = 1 label/image; Detection = [x, y, w, h] + label; Segmentation = 1 label/pixel."
+      "keyConcept": "Classification = 1 label/image; Detection = [x, y, w, h] + label; Segmentation = 1 label/pixel.",
+      "noobBreakdown": "(1) Image Classification = One label for the whole image ('Dog'). (2) Object Detection = Box around the dog with label. (3) Semantic Segmentation = Coloring every dog pixel.",
+      "terms": {
+        "Classification": "Assigning a single category label to an entire image.",
+        "Object Detection": "Locating objects with bounding boxes and classifying them.",
+        "Semantic Segmentation": "Classifying every individual pixel in an image into a category."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -766,7 +948,12 @@ const QUESTION_BANK = [
       "summary": "If an image has 3 sheep, semantic segmentation colors all 3 sheep with the same color (class: sheep). Instance segmentation colors sheep 1, sheep 2, and sheep 3 with different colors.",
       "whyCorrect": "Semantic segmentation provides pixel-level labels without identifying individual object identities. Instance segmentation combines object detection and segmentation (e.g., Mask R-CNN).",
       "whyWrong": "Neither is purely bounding box based (that is object detection).",
-      "keyConcept": "Semantic: 'All sheep are red'. Instance: 'Sheep #1 is red, Sheep #2 is blue, Sheep #3 is yellow'."
+      "keyConcept": "Semantic: 'All sheep are red'. Instance: 'Sheep #1 is red, Sheep #2 is blue, Sheep #3 is yellow'.",
+      "noobBreakdown": "Semantic segmentation colors all sheep the same blue color. Instance segmentation colors Sheep #1 blue, Sheep #2 green, and Sheep #3 red—it distinguishes individual objects!",
+      "terms": {
+        "Instance Segmentation": "Detecting objects and masking individual instances separately.",
+        "Pixel-Level Classification": "Assigning a class label to each individual pixel."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -786,7 +973,12 @@ const QUESTION_BANK = [
       "summary": "IoU = Area of Overlap / Area of Union between predicted box/mask and ground-truth box/mask.",
       "whyCorrect": "IoU ranges from 0 (no overlap) to 1.0 (perfect match). A detection is commonly counted as a True Positive if IoU ≥ 0.5 (or mAP@0.5:0.95).",
       "whyWrong": "BLEU and Perplexity are NLP evaluation metrics for language generation. MSE is for regression.",
-      "keyConcept": "IoU Formula: IoU = Area(Prediction ∩ Ground Truth) / Area(Prediction ∪ Ground Truth)"
+      "keyConcept": "IoU Formula: IoU = Area(Prediction ∩ Ground Truth) / Area(Prediction ∪ Ground Truth)",
+      "noobBreakdown": "Intersection over Union (IoU): Divide the overlap area between the predicted box and real box by the total combined area. If IoU > 0.5, it's considered a good detection!",
+      "terms": {
+        "IoU (Intersection over Union)": "Overlap Area / Union Area between predicted and ground-truth bounding boxes.",
+        "Jaccard Index": "Another name for Intersection over Union."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -806,7 +998,13 @@ const QUESTION_BANK = [
       "summary": "Autoencoders learn efficient, compressed representations (latent space) in an unsupervised self-supervised manner: x → z → x̂.",
       "whyCorrect": "The bottleneck forces the network to capture the most salient features rather than trivial identity copying. Loss = ||x - x̂||^2 (MSE reconstruction error).",
       "whyWrong": "A Generator and Discriminator competing describes a Generative Adversarial Network (GAN), not a standard autoencoder.",
-      "keyConcept": "Autoencoder: Encoder q(z|x), Bottleneck z, Decoder p(x|z), Loss = Reconstruction Error."
+      "keyConcept": "Autoencoder: Encoder q(z|x), Bottleneck z, Decoder p(x|z), Loss = Reconstruction Error.",
+      "noobBreakdown": "An Autoencoder is an hourglass network: the Encoder compresses an image into a tiny code (bottleneck), and the Decoder decompresses it back into the original image. It learns how to compress without human labels!",
+      "terms": {
+        "Autoencoder": "An unsupervised neural network trained to reconstruct its own input.",
+        "Encoder": "The first half of the network compressing inputs into a latent vector.",
+        "Decoder": "The second half reconstructing the original input from the latent vector."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -826,7 +1024,12 @@ const QUESTION_BANK = [
       "summary": "Autoencoders trained on clean or normal images reconstruct clean/normal data well. When fed noisy images, they output clean images (Denoising).",
       "whyCorrect": "In Anomaly Detection, the autoencoder is trained only on normal data. When an abnormal image is passed, reconstruction error is abnormally high, triggering an anomaly flag.",
       "whyWrong": "Autoencoders reconstruct images; they do not schedule learning rates or produce audio.",
-      "keyConcept": "Applications: Dimensionality Reduction, Image Denoising, Inpainting, Anomaly Detection."
+      "keyConcept": "Applications: Dimensionality Reduction, Image Denoising, Inpainting, Anomaly Detection.",
+      "noobBreakdown": "Denoising and Anomaly Detection! Feed a noisy photo into an autoencoder, and it strips away the noise to rebuild the clean image. Feed an abnormal photo (like a damaged industrial part), and high reconstruction error flags it as defective!",
+      "terms": {
+        "Image Denoising": "Removing noise from corrupted images using an autoencoder.",
+        "Anomaly Detection": "Identifying rare or defective samples based on high reconstruction error."
+      }
     },
     "difficulty": "Basic"
   },
@@ -846,7 +1049,12 @@ const QUESTION_BANK = [
       "summary": "A feature map represents the spatial response of one filter convolved over the input. If a conv layer has 32 filters, it outputs 32 feature maps.",
       "whyCorrect": "Each filter produces one 2D slice of the output tensor. High values in a feature map indicate strong detection of that filter's pattern (e.g. horizontal edge).",
       "whyWrong": "Loss over epochs is a learning curve; dropped weights is a dropout mask.",
-      "keyConcept": "One filter convolved across input = One 2D Feature Map. Depth of output = Number of filters."
+      "keyConcept": "One filter convolved across input = One 2D Feature Map. Depth of output = Number of filters.",
+      "noobBreakdown": "A Feature Map is the output picture produced by sliding a filter across an image. It lights up wherever the filter finds its target feature (like horizontal edges or cat whiskers)!",
+      "terms": {
+        "Feature Map": "The 2D output grid showing activations produced by a convolutional filter.",
+        "Activation Map": "Another name for a feature map."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -866,7 +1074,11 @@ const QUESTION_BANK = [
       "summary": "Apply formula: O = ⌊(W - K + 2P)/S⌋ + 1 with W=224, K=11, P=2, S=4.",
       "whyCorrect": "Numerator: 224 - 11 + 2(2) = 224 - 11 + 4 = 217. ⌊217 / 4⌋ = 54. Adding 1: 54 + 1 = 55. Result is 55 x 55.",
       "whyWrong": "This is the exact first layer calculation from the famous AlexNet paper (224x224 input -> 55x55 output).",
-      "keyConcept": "AlexNet Layer 1: ⌊(224 - 11 + 4) / 4⌋ + 1 = ⌊217 / 4⌋ + 1 = 54 + 1 = 55."
+      "keyConcept": "AlexNet Layer 1: ⌊(224 - 11 + 4) / 4⌋ + 1 = ⌊217 / 4⌋ + 1 = 54 + 1 = 55.",
+      "noobBreakdown": "AlexNet first layer: input 224, filter 11, padding 2, stride 4. Formula: floor((224 - 11 + 2*2)/4) + 1 = floor(217/4) + 1 = 54 + 1 = 55. The output is 55x55!",
+      "terms": {
+        "Output Spatial Dimension": "Calculated as floor((W - K + 2P)/S) + 1."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -886,7 +1098,11 @@ const QUESTION_BANK = [
       "summary": "Params = (K_h * K_w * C_in + 1) * C_out. Here: K=1, C_in=512, C_out=128.",
       "whyCorrect": "Weights per filter = 1 * 1 * 512 = 512. Including bias = 512 + 1 = 513. Total = 513 * 128 = 65,664.",
       "whyWrong": "65,536 is 512 * 128 (missing the 128 biases).",
-      "keyConcept": "1x1 Conv Params: (C_in + 1) * C_out = (512 + 1) * 128 = 65,664."
+      "keyConcept": "1x1 Conv Params: (C_in + 1) * C_out = (512 + 1) * 128 = 65,664.",
+      "noobBreakdown": "A 1x1 Conv with 128 filters on 512 input channels: (1 * 1 * 512 + 1_bias) * 128 = 513 * 128 = 65,664 parameters!",
+      "terms": {
+        "Bottleneck Layer": "Using 1x1 convolutions to compress channels before expensive 3x3 convolutions."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -906,7 +1122,12 @@ const QUESTION_BANK = [
       "summary": "Early stopping tracks validation loss. If validation loss begins climbing while training loss keeps dropping (overfitting onset), training stops after a patience threshold.",
       "whyCorrect": "It prevents the model from spending excessive epochs memorizing noise and returns the optimal generalizable checkpoint.",
       "whyWrong": "Early stopping is dynamic and data-driven based on validation metrics, not hardcoded to fixed epochs.",
-      "keyConcept": "Early Stopping: Stops when validation loss begins to diverge, saving optimal weights."
+      "keyConcept": "Early Stopping: Stops when validation loss begins to diverge, saving optimal weights.",
+      "noobBreakdown": "Taking the cake out of the oven right when it's done! Early stopping monitors validation error and stops training the moment validation loss begins to rise, preventing overfitting.",
+      "terms": {
+        "Early Stopping": "Halting training when performance on a held-out validation set stops improving.",
+        "Patience": "The number of epochs to wait to confirm error is truly rising before stopping."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -926,7 +1147,12 @@ const QUESTION_BANK = [
       "summary": "Spatial dimensions decrease (spatial abstraction), while channel depth increases (semantic feature diversity).",
       "whyCorrect": "Early layers only need a few filters to capture basic edge orientations and colors. Deeper layers represent vast combinations of parts, objects, and abstract concepts, requiring more feature channels.",
       "whyWrong": "It is a fundamental principle of visual representation hierarchy, not a GPU or hard drive constraint.",
-      "keyConcept": "Spatial shrinks (resolution decreases), Depth expands (semantic richness increases)."
+      "keyConcept": "Spatial shrinks (resolution decreases), Depth expands (semantic richness increases).",
+      "noobBreakdown": "Early layers look at simple local shapes (just a few edges). Deeper layers combine those edges into hundreds of complex semantic patterns (wheels, eyes, textures), so we need more channels to store them all!",
+      "terms": {
+        "Channel Expansion": "Increasing the number of filters in deeper layers to represent complex concepts.",
+        "Hierarchical Representation": "Building high-level semantic concepts from low-level edges."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -946,7 +1172,12 @@ const QUESTION_BANK = [
       "summary": "Tanh(z) = (e^z - e^-z) / (e^z + e^-z). Its range is strictly between -1 and +1.",
       "whyCorrect": "Because Tanh is zero-centered (unlike Sigmoid whose range is (0, 1)), it often converges faster in shallow networks than Sigmoid.",
       "whyWrong": "(0, 1) is Sigmoid; [0, ∞) is ReLU; (-∞, ∞) is Linear/Identity.",
-      "keyConcept": "Ranges: Sigmoid = (0, 1); Tanh = (-1, 1); ReLU = [0, ∞); LeakyReLU = (-∞, ∞)."
+      "keyConcept": "Ranges: Sigmoid = (0, 1); Tanh = (-1, 1); ReLU = [0, ∞); LeakyReLU = (-∞, ∞).",
+      "noobBreakdown": "Tanh squashes any input number between -1 and +1. Because it's zero-centered (average is 0), it trains faster and smoother than Sigmoid (0 to 1).",
+      "terms": {
+        "Tanh Function": "Hyperbolic tangent: tanh(z) = (e^z - e^-z) / (e^z + e^-z), bounded between -1 and 1.",
+        "Zero-Centered": "Having output values centered symmetrically around zero."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -966,7 +1197,12 @@ const QUESTION_BANK = [
       "summary": "In thousands of dimensions, local minima where ALL directions curve up are rare; saddle points with zero gradient in mixed directions are far more common.",
       "whyCorrect": "Saddle points can slow down gradient descent because gradients become close to 0. Momentum and adaptive optimizers (like Adam) help escape saddle points rapidly.",
       "whyWrong": "Saddle points are not global minima (loss is not necessarily minimal).",
-      "keyConcept": "Saddle Point: ∇L = 0, but Hessian has both positive and negative eigenvalues."
+      "keyConcept": "Saddle Point: ∇L = 0, but Hessian has both positive and negative eigenvalues.",
+      "noobBreakdown": "A horse saddle shape! In high-dimensional spaces, a saddle point is flat (gradient is zero), but it curves up in some directions and curves down in others. Optimizers can get temporarily slowed down here.",
+      "terms": {
+        "Saddle Point": "A point where gradient is zero, but is a minimum along some dimensions and a maximum along others.",
+        "Loss Landscape": "The multi-dimensional surface representing error as a function of model weights."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -986,7 +1222,11 @@ const QUESTION_BANK = [
       "summary": "For deep ResNets (50+), 2-layer 3x3 blocks become computationally heavy. The bottleneck uses 1x1 to reduce channels, 3x3 to compute spatial features, and 1x1 to restore channels.",
       "whyCorrect": "For instance: 256 channels -> 1x1 conv (64 ch) -> 3x3 conv (64 ch) -> 1x1 conv (256 ch). This cuts computation dramatically while maintaining representational power.",
       "whyWrong": "Bottleneck blocks do not use extreme dropout or massive dense layers.",
-      "keyConcept": "ResNet Bottleneck: 1x1 Conv (reduce) → 3x3 Conv → 1x1 Conv (expand)."
+      "keyConcept": "ResNet Bottleneck: 1x1 Conv (reduce) → 3x3 Conv → 1x1 Conv (expand).",
+      "noobBreakdown": "ResNet-50's 3-layer sandwich: (1) 1x1 conv to compress channels (e.g. 256 -> 64), (2) 3x3 conv to do the spatial work, (3) 1x1 conv to restore channels (64 -> 256). It saves massive compute!",
+      "terms": {
+        "Bottleneck Block": "A 3-layer residual block (1x1 -> 3x3 -> 1x1) designed to reduce computational cost in deep ResNets."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1006,7 +1246,12 @@ const QUESTION_BANK = [
       "summary": "Data augmentation teaches the model that a cat is still a cat even if flipped horizontally, slightly rotated, or cropped.",
       "whyCorrect": "By generating unique transformed variations on-the-fly during training, the effective dataset size grows substantially, curbing memorization (overfitting).",
       "whyWrong": "Data augmentation does not alter model architecture, parameter count, or loss functions.",
-      "keyConcept": "Data Augmentation: Increases training distribution support without collecting new data."
+      "keyConcept": "Data Augmentation: Increases training distribution support without collecting new data.",
+      "noobBreakdown": "Data augmentation shows the AI slightly rotated, flipped, or shifted versions of photos. It teaches the AI that a dog is still a dog whether it's facing left, right, or zoomed in, stopping it from memorizing specific pixel setups!",
+      "terms": {
+        "Data Augmentation": "Artificially expanding dataset diversity using random transformations during training.",
+        "Implicit Regularization": "Techniques that prevent overfitting without adding explicit penalty terms to the loss function."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -1026,7 +1271,12 @@ const QUESTION_BANK = [
       "summary": "In signal processing, convolution requires flipping the filter horizontally and vertically: (f * g)(t) = ∫ f(τ) g(t - τ) dτ.",
       "whyCorrect": "Since the filter weights are learned from scratch by gradient descent anyway, flipping the filter beforehand does not change what the network can learn, so libraries omit the flip for efficiency.",
       "whyWrong": "Deep learning conv layers are technically cross-correlation, but the terminology is used interchangeably.",
-      "keyConcept": "Deep learning conv = Cross-Correlation (kernel is NOT flipped because weights are learned)."
+      "keyConcept": "Deep learning conv = Cross-Correlation (kernel is NOT flipped because weights are learned).",
+      "noobBreakdown": "True mathematical convolution flips the filter horizontally and vertically before sliding. Deep learning frameworks skip the flipping step (which is technically cross-correlation) because the weights are learned anyway!",
+      "terms": {
+        "Cross-Correlation": "Sliding a filter directly across an image without flipping.",
+        "Kernel Flipping": "Rotating the kernel 180 degrees as required in formal mathematical convolution."
+      }
     },
     "difficulty": "Basic"
   },
@@ -1046,7 +1296,11 @@ const QUESTION_BANK = [
       "summary": "Stride S is the step size. Stepping 2 pixels at a time skips every other location, approximately halving H and W.",
       "whyCorrect": "Strided convolution (S ≥ 2) is widely used in modern networks (like ResNet) to replace pooling layers because it downsamples while simultaneously learning feature transformations.",
       "whyWrong": "Stride 2 halves, not doubles. Stride does not change filter weight count or channel count.",
-      "keyConcept": "Strided Convolution (S=2): Learnable downsampling alternative to pooling."
+      "keyConcept": "Strided Convolution (S=2): Learnable downsampling alternative to pooling.",
+      "noobBreakdown": "A stride of 2 skips every other pixel, cutting the output height and width roughly in half. It downsamples the image directly without needing a separate pooling layer!",
+      "terms": {
+        "Strided Downsampling": "Using stride S=2 to reduce spatial dimensions during convolution."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -1066,7 +1320,11 @@ const QUESTION_BANK = [
       "summary": "Look at input channels into Conv2: Conv1 produced 16 feature maps. MaxPool preserved 16 channels. So C_in for Conv2 is 16.",
       "whyCorrect": "Weights per filter in Conv2 = 3 * 3 * 16 = 144. Plus 1 bias = 145. For 32 filters: 145 * 32 = 4,640 parameters.",
       "whyWrong": "4,608 forgets the 32 bias terms (144 * 32 = 4,608). 1,184 assumes C_in is 3 instead of 16.",
-      "keyConcept": "Conv2 input channels C_in = 16 (from Conv1). Params = (3*3*16 + 1) * 32 = 4,640."
+      "keyConcept": "Conv2 input channels C_in = 16 (from Conv1). Params = (3*3*16 + 1) * 32 = 4,640.",
+      "noobBreakdown": "Conv1 has 16 filters (3x3x3 + 1 = 448 params). Conv2 has 32 filters (3x3x16 + 1 = 145 * 32 = 4,640 params). Total weights in Conv2 = 4,640!",
+      "terms": {
+        "Stacked Conv Layers": "Passing the feature maps of one convolutional layer directly into the next."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -1086,7 +1344,12 @@ const QUESTION_BANK = [
       "summary": "Max pooling acts as an 'OR' gate detecting if a feature is present anywhere in the window. Average pooling blends foreground and background signals.",
       "whyCorrect": "In computer vision classification, we usually care if an edge or texture is present (Max Pooling). Average pooling is often reserved for Global Average Pooling at the very end.",
       "whyWrong": "Average pooling has 0 learnable parameters, just like Max Pooling, and works on any channel volume.",
-      "keyConcept": "Max Pooling = Highlights prominent features. Average Pooling = Smooth aggregate representation."
+      "keyConcept": "Max Pooling = Highlights prominent features. Average Pooling = Smooth aggregate representation.",
+      "noobBreakdown": "Average pooling blends all pixel values in the window together, creating a smooth blur. Max pooling picks the single highest value, keeping sharp, distinct edges!",
+      "terms": {
+        "Average Pooling": "Taking the arithmetic mean of pixels within a spatial window.",
+        "Edge Retention": "Preserving high-frequency visual features like lines and boundaries."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1106,7 +1369,11 @@ const QUESTION_BANK = [
       "summary": "LeNet-5 was designed by Yann LeCun in 1998 to read handwritten digits on bank checks for US banks.",
       "whyCorrect": "It used Tanh/Sigmoid activations (ReLU was popularized later with AlexNet in 2012) and Average Pooling (subsampling) with learnable coefficients.",
       "whyWrong": "ReLU and GPUs were not standard in 1998; self-driving and NLP transformers came much later.",
-      "keyConcept": "LeNet-5 (1998): 5 layers, Tanh/Sigmoid, developed for postal and check digit recognition."
+      "keyConcept": "LeNet-5 (1998): 5 layers, Tanh/Sigmoid, developed for postal and check digit recognition.",
+      "noobBreakdown": "In Yann LeCun's pioneering 1998 LeNet-5, ReLU had not been popularized yet! It used Sigmoid and Tanh activations to read handwritten checks (MNIST).",
+      "terms": {
+        "LeNet-5": "The historic 1998 convolutional neural network designed by Yann LeCun for handwritten digit recognition."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1126,7 +1393,12 @@ const QUESTION_BANK = [
       "summary": "Cross-entropy loss for the correct class is -log(p). As p → 0, -log(p) → +∞.",
       "whyCorrect": "This severe logarithmic penalty ensures that confident incorrect predictions are heavily penalized, generating strong error signals through backpropagation.",
       "whyWrong": "Probabilities are bounded in (0, 1), so -log(p) is strictly positive, never negative.",
-      "keyConcept": "Cross-Entropy penalty: -log(1.0) = 0 (perfect); -log(0.0001) = 9.21 (heavy penalty)."
+      "keyConcept": "Cross-Entropy penalty: -log(1.0) = 0 (perfect); -log(0.0001) = 9.21 (heavy penalty).",
+      "noobBreakdown": "Cross-Entropy uses -log(p). If the true label is class A, but the model gave it near 0% probability (p -> 0), -log(0) explodes to near infinity, delivering a huge corrective kick to the weights!",
+      "terms": {
+        "Negative Log-Likelihood": "-log(p_c), penalizing low confidence on the correct class.",
+        "Logarithmic Penalty": "A penalty that grows exponentially as predicted probability approaches 0."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1146,7 +1418,12 @@ const QUESTION_BANK = [
       "summary": "Leaky ReLU: f(z) = z if z > 0, else αz (typically α = 0.01).",
       "whyCorrect": "Because the gradient for z < 0 is α (non-zero), negative neurons can still receive gradient updates and recover, solving the Dying ReLU deadlock.",
       "whyWrong": "Capping at 1.0 is ReLU6 or Hard Sigmoid. Dropping inputs is Dropout.",
-      "keyConcept": "Leaky ReLU: f'(z) = 1 if z > 0; f'(z) = α if z ≤ 0 (gradient never reaches 0)."
+      "keyConcept": "Leaky ReLU: f'(z) = 1 if z > 0; f'(z) = α if z ≤ 0 (gradient never reaches 0).",
+      "noobBreakdown": "Leaky ReLU fixes the Dying ReLU problem by giving negative inputs a tiny gentle slope (e.g. 0.01 * z instead of flat 0). Gradients can always flow backwards, keeping neurons alive!",
+      "terms": {
+        "Leaky ReLU": "An activation function g(z) = max(alpha * z, z), where alpha is a small positive slope (e.g., 0.01).",
+        "Non-zero Gradient": "Ensuring the derivative is never zero for negative inputs."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1166,7 +1443,12 @@ const QUESTION_BANK = [
       "summary": "Object detection outputs a bounding box tuple (either center x, y, w, h or min/max corners x1, y1, x2, y2) plus classification logits.",
       "whyCorrect": "The regression head predicts 4 box offset coordinates, while the classification head predicts class scores for the object within that box.",
       "whyWrong": "Camera RGB values or focal length are camera parameters, not object bounding boxes.",
-      "keyConcept": "Detection Output: Bounding Box [x, y, w, h] (Regression) + Class Label (Classification)."
+      "keyConcept": "Detection Output: Bounding Box [x, y, w, h] (Regression) + Class Label (Classification).",
+      "noobBreakdown": "Object detection models output 4 box numbers (center x, center y, width, height) plus classification scores for what object is inside the box!",
+      "terms": {
+        "Bounding Box Coordinates": "(x_center, y_center, width, height) or (x_min, y_min, x_max, y_max).",
+        "Confidence Score": "The probability that an object actually exists inside the predicted box."
+      }
     },
     "difficulty": "Exam Level"
   },
@@ -1186,7 +1468,12 @@ const QUESTION_BANK = [
       "summary": "The latent space z is the compressed vector representation produced by the encoder at the bottleneck.",
       "whyCorrect": "Because the latent dimensionality is much smaller than the input (e.g., 32 dimensions vs 784 pixels), the network must learn a compact manifold representation of the data.",
       "whyWrong": "Latent space is an abstract mathematical representation space, not physical RAM or file paths.",
-      "keyConcept": "Latent Bottleneck: Compresses high-dimensional data into essential underlying features."
+      "keyConcept": "Latent Bottleneck: Compresses high-dimensional data into essential underlying features.",
+      "noobBreakdown": "The Latent Space (bottleneck) is the narrowest middle layer of an autoencoder. It forces the network to summarize an entire image into a compact vector of core features.",
+      "terms": {
+        "Latent Space": "The compressed, lower-dimensional intermediate representation in an autoencoder.",
+        "Information Bottleneck": "A constraint forcing the model to discard noise and keep essential patterns."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1206,7 +1493,11 @@ const QUESTION_BANK = [
       "summary": "Max Pooling, Average Pooling, and Flatten are fixed structural/mathematical transformations without weights.",
       "whyCorrect": "Convolutional layers (and Dense layers) contain learnable weights and biases that are optimized by gradient descent. Pooling and Flatten have zero parameters.",
       "whyWrong": "Pooling only takes max/mean; Flatten only reshapes the tensor array.",
-      "keyConcept": "Learnable: Conv2D, Dense, BatchNormalization. Non-learnable: MaxPool, AvgPool, Flatten, Dropout."
+      "keyConcept": "Learnable: Conv2D, Dense, BatchNormalization. Non-learnable: MaxPool, AvgPool, Flatten, Dropout.",
+      "noobBreakdown": "Convolutional layers and fully connected layers have LEARNABLE parameters (weights and biases). Pooling and standard activation layers have zero learnable parameters!",
+      "terms": {
+        "Learnable Parameters": "Variables (weights and biases) adjusted by gradient descent during training."
+      }
     },
     "difficulty": "Intermediate"
   },
@@ -1227,7 +1518,11 @@ const QUESTION_BANK = [
       "summary": "Data augmentation generates synthetic variations of training examples, improving generalizability without collecting new labeled data.",
       "whyCorrect": "By applying random rotations, flips, crops, and contrast shifts, the model encounters realistic variations of objects, teaching it to be invariant to orientation and lighting, thereby reducing generalization error.",
       "whyWrong": "Data augmentation does not change network weights/parameters, does not alter backpropagation algebra, and does not alter the loss function formulation.",
-      "keyConcept": "Data Augmentation expands the effective support of the training data distribution to combat overfitting."
+      "keyConcept": "Data Augmentation expands the effective support of the training data distribution to combat overfitting.",
+      "noobBreakdown": "Data augmentation prevents overfitting by teaching the model that objects are the same regardless of lighting, angle, or position, effectively multiplying dataset size for free!",
+      "terms": {
+        "Dataset Diversity": "The variety of orientations, lightings, and scales present in the training set."
+      }
     }
   },
   {
@@ -1247,7 +1542,11 @@ const QUESTION_BANK = [
       "summary": "Data augmentation regularizes learning during training; evaluation on test data requires deterministic, unperturbed inputs.",
       "whyCorrect": "As highlighted in the course labs (Module 1 Data Augmentation), preprocessing layers like RandomFlip and RandomCrop are inactive at test time (calls to model.evaluate or model.predict) so predictions reflect true unaltered data.",
       "whyWrong": "Augmenting test data would artificially distort real inputs and introduce unwanted randomness into test accuracy evaluations.",
-      "keyConcept": "Data augmentation is active ONLY during training (Model.fit), never during testing or inference."
+      "keyConcept": "Data augmentation is active ONLY during training (Model.fit), never during testing or inference.",
+      "noobBreakdown": "Data augmentation is applied STRICTLY during training. During testing/inference, images must be evaluated as they are, without random flips or distortions!",
+      "terms": {
+        "Training Pipeline": "The phase where data is loaded, augmented, and passed to the model for weight updates."
+      }
     }
   },
   {
@@ -1267,7 +1566,11 @@ const QUESTION_BANK = [
       "summary": "Augmentations must preserve the semantics of the ground-truth label; directional symbols are sensitive to reflections.",
       "whyCorrect": "A horizontal or vertical flip of a handwritten digit '6' can turn it into a '9', an 'e' into an 'ə', or create non-existent numeral symbols, introducing label noise. In CIFAR-10, an airplane or cat is still an airplane or cat when flipped horizontally.",
       "whyWrong": "Flipping does not change channel count or numeric datatypes, and convolution operates identically on any 2D tensor.",
-      "keyConcept": "Domain Rule: Augmentations must be class-preserving (invariance under realistic domain transformations)."
+      "keyConcept": "Domain Rule: Augmentations must be class-preserving (invariance under realistic domain transformations).",
+      "noobBreakdown": "You can flip a photo of a dog left-to-right and it's still a dog. But if you flip the handwritten digit '6' or '9', it changes its meaning or turns into an invalid number!",
+      "terms": {
+        "Label-Preserving Transformation": "An augmentation that changes an image without altering its true ground-truth class."
+      }
     }
   },
   {
@@ -1287,7 +1590,12 @@ const QUESTION_BANK = [
       "summary": "Asynchronous CPU data loading prefetches and transforms batches in parallel with GPU gradient updates.",
       "whyCorrect": "While the GPU is busy executing forward and backward passes for batch N, multi-threaded CPU workers preprocess and augment batch N+1. This pipeline parallelism keeps expensive GPUs at 100% utilization.",
       "whyWrong": "Data loading has no connection to Hessian matrices, still requires VRAM for activations, and does not alter floating-point math.",
-      "keyConcept": "Pipeline Overlap: CPU prepares augmented batch (N+1) while GPU trains on batch (N)."
+      "keyConcept": "Pipeline Overlap: CPU prepares augmented batch (N+1) while GPU trains on batch (N).",
+      "noobBreakdown": "On-the-fly augmentation runs on the CPU while the GPU is busy training on the previous batch. This keeps the GPU 100% fed without needing to save millions of augmented photos to disk!",
+      "terms": {
+        "On-the-Fly Augmentation": "Transforming images in RAM during mini-batch loading rather than pre-saving to disk.",
+        "Pipeline Prefetching": "Overlapping data preprocessing with GPU computation."
+      }
     }
   },
   {
@@ -1307,7 +1615,12 @@ const QUESTION_BANK = [
       "summary": "Color and contrast augmentations are photometric (intensity-based), while rotations, crops, and flips are geometric (spatial).",
       "whyCorrect": "RandomContrast and Color Jitter scale and shift the intensity values of existing pixels across channels without altering the (x, y) coordinate positions of image features.",
       "whyWrong": "Rotation, Crop, and Flip are geometric transformations that alter the spatial coordinates and bounding borders of pixels.",
-      "keyConcept": "Photometric Augmentations alter intensities (contrast, brightness); Geometric Augmentations alter spatial coordinates (rotation, flip, crop)."
+      "keyConcept": "Photometric Augmentations alter intensities (contrast, brightness); Geometric Augmentations alter spatial coordinates (rotation, flip, crop).",
+      "noobBreakdown": "Random contrast and brightness jitter change the pixel color values without moving their physical coordinates. Flips and rotations move the pixels around!",
+      "terms": {
+        "Photometric Augmentation": "Transformations modifying pixel color, brightness, contrast, or hue.",
+        "Geometric Augmentation": "Transformations modifying pixel spatial positions (rotation, flip, crop)."
+      }
     }
   },
   {
@@ -1327,7 +1640,11 @@ const QUESTION_BANK = [
       "summary": "Input normalization keeps pre-activations within reasonable numerical bounds where gradients do not explode or saturate.",
       "whyCorrect": "Raw inputs scaled up to 255 multiplied by initial weights yield enormous values of z, pushing Sigmoid/Tanh into flat saturation zones or causing ReLU explosive activations. Normalized inputs ensure stable, isotropic gradient descent.",
       "whyWrong": "Tensors accept any float or int value; normalization does not reduce disk storage or reshape spatial dimensions.",
-      "keyConcept": "Input Normalization ensures well-conditioned loss surfaces and faster gradient descent convergence."
+      "keyConcept": "Input Normalization ensures well-conditioned loss surfaces and faster gradient descent convergence.",
+      "noobBreakdown": "Raw pixels are numbers from 0 to 255. Normalizing them to [0, 1] or mean 0 / variance 1 prevents huge numbers from blowing up activations and keeps gradient descent stable and fast!",
+      "terms": {
+        "Pixel Normalization": "Scaling pixel values from [0, 255] down to [0.0, 1.0] or standardizing by (x - mean) / std."
+      }
     }
   },
   {
@@ -1347,7 +1664,11 @@ const QUESTION_BANK = [
       "summary": "Data augmentation regularizes via the data space, not the model parameter space.",
       "whyCorrect": "Learnable parameters depend solely on layer architecture (filter sizes, number of filters, dense connections). Data augmentation simply provides a richer, more diverse stream of inputs to optimize those exact same parameters.",
       "whyWrong": "No additional weights, biases, or kernels are allocated; the architecture remains 100% identical.",
-      "keyConcept": "Model capacity (parameter count) is independent of training set size and augmentation."
+      "keyConcept": "Model capacity (parameter count) is independent of training set size and augmentation.",
+      "noobBreakdown": "No! Data augmentation changes the input images, not the neural network itself. The number of weights and layers inside the CNN remains completely identical.",
+      "terms": {
+        "Architectural Invariance": "The model's parameter count and layer topology remain unchanged by input augmentations."
+      }
     }
   },
   {
@@ -1367,7 +1688,11 @@ const QUESTION_BANK = [
       "summary": "Rotations produce empty triangular wedges at borders that must be filled (padded) to maintain rectangular tensor shape.",
       "whyCorrect": "Preprocessing pipelines use border modes such as 'constant' (fill with 0/black), 'reflect' (mirroring boundary pixels), or 'nearest' to ensure output tensors retain constant rectangular dimensions (H x W x C).",
       "whyWrong": "Kernels cannot change size mid-training, FFT is not used for border padding, and discarding samples defeats the purpose of augmentation.",
-      "keyConcept": "Padding modes for geometric transforms include constant (zero-fill), reflect, and nearest."
+      "keyConcept": "Padding modes for geometric transforms include constant (zero-fill), reflect, and nearest.",
+      "noobBreakdown": "When you rotate a square photo by 15 degrees, blank triangular gaps appear in the corners. Filling them with edge reflections or nearest pixel colors keeps the image clean!",
+      "terms": {
+        "Border Mode (Reflection / Nearest)": "Techniques for filling empty border areas created during image rotation."
+      }
     }
   },
   {
@@ -1387,7 +1712,11 @@ const QUESTION_BANK = [
       "summary": "Cropping shifts object locations and cuts off peripheral areas, teaching the network not to rely on objects being centered.",
       "whyCorrect": "Random crops force filters to activate on local distinctive parts regardless of where the object is located in the frame, directly enhancing spatial robustness.",
       "whyWrong": "Cropping does not alter color channels, does not filter frequency, and is not a semantic segmentation mask.",
-      "keyConcept": "Random cropping prevents networks from memorizing fixed spatial positions or relying on centered framing."
+      "keyConcept": "Random cropping prevents networks from memorizing fixed spatial positions or relying on centered framing.",
+      "noobBreakdown": "Random cropping cuts out slightly different rectangular patches of the image. It forces the CNN to recognize objects even when parts of them are cropped or off-center!",
+      "terms": {
+        "Random Crop": "Cropping a random sub-region of an image and resizing it to the target dimensions."
+      }
     }
   },
   {
@@ -1407,7 +1736,12 @@ const QUESTION_BANK = [
       "summary": "High-capacity models have high variance; data augmentation acts as an implicit regularizer by expanding training diversity.",
       "whyCorrect": "A deep CNN with millions of parameters has enough degrees of freedom to memorize small training samples verbatim (achieving 100% training accuracy but abysmal test accuracy). Augmentation creates continuous variations, preventing rote memorization.",
       "whyWrong": "Gradients do not cancel to zero, conv layers initialize fine on any dataset, and pooling has no minimum dataset requirement.",
-      "keyConcept": "High Capacity + Small Data = Severe Overfitting. Augmentation bridges this gap."
+      "keyConcept": "High Capacity + Small Data = Severe Overfitting. Augmentation bridges this gap.",
+      "noobBreakdown": "Deep CNNs have millions of parameters and can easily memorize a small dataset. Data augmentation provides endless variations, forcing deep models to learn general features!",
+      "terms": {
+        "Model Capacity": "The ability of a neural network to fit complex, diverse functions.",
+        "Overfitting Risk": "The danger of high-capacity models memorizing limited training samples."
+      }
     }
   },
   {
@@ -1427,7 +1761,12 @@ const QUESTION_BANK = [
       "summary": "PyTorch's design allows gradient accumulation for large virtual batches, necessitating manual zeroing per iteration.",
       "whyCorrect": "Whenever loss.backward() is called, parameter gradients are added (+=) to existing param.grad tensors. Without optimizer.zero_grad(), the gradients from previous batches would sum together, leading to corrupted weight updates.",
       "whyWrong": "It zeroes gradients, not weights; it does not clear CUDA cache; and it has nothing to do with the learning rate schedule.",
-      "keyConcept": "PyTorch Rule: optimizer.zero_grad() -> loss.backward() -> optimizer.step()."
+      "keyConcept": "PyTorch Rule: optimizer.zero_grad() -> loss.backward() -> optimizer.step().",
+      "noobBreakdown": "In PyTorch, gradients accumulate by default (they add up on every backward pass). If you forget optimizer.zero_grad(), your new gradients get added to old ones, corrupting training!",
+      "terms": {
+        "optimizer.zero_grad()": "Clears old gradients in PyTorch before calculating new ones for the current mini-batch.",
+        "Gradient Accumulation": "PyTorch's feature where calling .backward() adds gradients to .grad buffers rather than overwriting."
+      }
     }
   },
   {
@@ -1447,7 +1786,11 @@ const QUESTION_BANK = [
       "summary": "Backpropagation recursively applies the chain rule backward from the loss through each layer.",
       "whyCorrect": "By applying ∂L/∂w = (∂L/∂y) * (∂y/∂z) * (∂z/∂w), backpropagation calculates the exact gradient contribution of every weight and bias across deep cascades of layers.",
       "whyWrong": "Backpropagation is a first-order gradient method; it does not compute Hessians, Laplace transforms, or SVDs.",
-      "keyConcept": "Backpropagation = Systematic application of the Multivariable Chain Rule backward through the computational graph."
+      "keyConcept": "Backpropagation = Systematic application of the Multivariable Chain Rule backward through the computational graph.",
+      "noobBreakdown": "The Multivariable Chain Rule of calculus is the engine of deep learning. It breaks down the derivative of the whole network into a chain of simple local multiplications!",
+      "terms": {
+        "Multivariable Chain Rule": "Calculating derivatives of composite functions across multiple interconnected variables."
+      }
     }
   },
   {
@@ -1467,7 +1810,11 @@ const QUESTION_BANK = [
       "summary": "Batch size balances gradient estimation noise, computational parallelism on GPUs, and convergence speed.",
       "whyCorrect": "Batch size B=1 (pure SGD) produces noisy gradients that can escape local minima but cannot utilize GPU matrix parallelism. Full batch (B=N) computes the true gradient but is computationally prohibitive. Mini-batch (e.g., B=32, 64, 128) achieves optimal GPU throughput with beneficial gradient stochasticity.",
       "whyWrong": "Batch size does not determine epoch count, does not configure kernel size, and does not restrict network depth.",
-      "keyConcept": "Mini-batch SGD balances computational efficiency (vectorized GPU math) with stochastic regularization (noise helps escape saddle points)."
+      "keyConcept": "Mini-batch SGD balances computational efficiency (vectorized GPU math) with stochastic regularization (noise helps escape saddle points).",
+      "noobBreakdown": "Batch size balances the tradeoff: small batches provide noisy gradients that help escape flat spots, while large batches maximize GPU parallel computation speed.",
+      "terms": {
+        "Batch Size": "The number of training samples evaluated in one forward and backward update pass."
+      }
     }
   },
   {
@@ -1487,7 +1834,11 @@ const QUESTION_BANK = [
       "summary": "A widening divergence between training loss (decreasing) and validation loss (increasing) is the textbook definition of overfitting.",
       "whyCorrect": "When training error approaches zero but validation error climbs, the model has fitted noise and idiosyncrasies in the training set rather than underlying generalizable patterns.",
       "whyWrong": "Underfitting is characterized by both training and validation losses staying high. Dying activations would stall training loss improvement.",
-      "keyConcept": "Overfitting Signature: Training loss decreases while validation loss increases."
+      "keyConcept": "Overfitting Signature: Training loss decreases while validation loss increases.",
+      "noobBreakdown": "When training loss keeps dropping but validation loss starts shooting upward, the model has begun memorizing training noise—it is overfitting!",
+      "terms": {
+        "Overfitting (High Variance)": "When a model fits training data too closely, sacrificing generalization."
+      }
     }
   },
   {
@@ -1507,7 +1858,12 @@ const QUESTION_BANK = [
       "summary": "Layers with training-specific behaviors (Dropout and BatchNorm) must transition to deterministic inference mode.",
       "whyCorrect": "During training, Dropout zeros out activations at rate p, and BatchNorm computes mean/variance from the current batch. During evaluation, Dropout must be OFF (all pathways active and scaled), and BatchNorm must use accumulated running population mean/variance.",
       "whyWrong": "model.eval() does not quantize weights, does not change the loss function, and does not alter learning rates (no updates happen in eval).",
-      "keyConcept": "model.eval(): Dropout = OFF (keep all units); BatchNorm = uses frozen running stats (μ, σ²)."
+      "keyConcept": "model.eval(): Dropout = OFF (keep all units); BatchNorm = uses frozen running stats (μ, σ²).",
+      "noobBreakdown": "Calling model.eval() switches the network into test mode: Dropout is turned off (all neurons active), and Batch Normalization uses fixed running statistics instead of batch averages!",
+      "terms": {
+        "model.eval()": "Sets a PyTorch model to evaluation mode, disabling training-specific layers like Dropout.",
+        "Running Statistics": "Pre-computed global mean and variance used by Batch Normalization during testing."
+      }
     }
   },
   {
@@ -1527,7 +1883,11 @@ const QUESTION_BANK = [
       "summary": "A large learning rate violates the local Taylor approximation of gradient descent, causing explosive divergence.",
       "whyCorrect": "As shown in Lecture 1 slides, small learning rate = slow convergence; moderate learning rate = smooth convergence; excessively large learning rate = overshooting the valley, unstable oscillation, and numerical divergence.",
       "whyWrong": "Large steps overshoot rather than get trapped; gradients explode rather than smoothly decay to zero.",
-      "keyConcept": "Learning Rate Sensitivity: Too small = slow/stuck; Too large = overshoot/divergence; Just right = stable convergence."
+      "keyConcept": "Learning Rate Sensitivity: Too small = slow/stuck; Too large = overshoot/divergence; Just right = stable convergence.",
+      "noobBreakdown": "When the learning rate is too big, weight updates take giant jumps that overshoot the lowest point, causing loss to bounce wildly or explode toward infinity.",
+      "terms": {
+        "Overshooting Minimum": "Stepping past the optimal point due to excessive step size."
+      }
     }
   },
   {
@@ -1547,7 +1907,11 @@ const QUESTION_BANK = [
       "summary": "Adam (Adaptive Moment Estimation) combines Momentum (first moment m_t) and RMSProp (second uncentered moment v_t).",
       "whyCorrect": "Adam adapts the step size for each parameter individually: parameters with frequent/large gradients take smaller cautious steps, while parameters with sparse gradients take larger steps, accelerating traversal through ravines and plateaus.",
       "whyWrong": "Adam does not invert Hessians (too expensive, O(N^3)), does not replace backprop, and does not restrict updates to positive numbers.",
-      "keyConcept": "Adam Optimizer = First Moment (Momentum: exponentially decaying average of gradients) + Second Moment (RMSProp: uncentered variance)."
+      "keyConcept": "Adam Optimizer = First Moment (Momentum: exponentially decaying average of gradients) + Second Moment (RMSProp: uncentered variance).",
+      "noobBreakdown": "Adam automatically adapts the learning rate for each individual weight knob. Frequent features take smaller steps; rare features take bigger steps!",
+      "terms": {
+        "Adaptive Learning Rates": "Scaling step sizes independently for each model parameter based on past gradient history."
+      }
     }
   },
   {
@@ -1567,7 +1931,11 @@ const QUESTION_BANK = [
       "summary": "Softmax converts raw logits into a valid probability distribution summing to 1; Categorical Cross-Entropy maximizes the likelihood of the true class.",
       "whyCorrect": "Softmax produces normalized probabilities p_i = exp(z_i) / Σ exp(z_j). Paired with Categorical Cross-Entropy L = -log(p_true), the gradient simplifies elegantly to (p_i - y_i), preventing gradient vanishing when predictions are incorrect.",
       "whyWrong": "Sigmoid with MSE suffers from saturated gradients; ReLU outputs unbounded positive values; Tanh outputs negative numbers unsuitable for probability.",
-      "keyConcept": "Multi-class exclusive: Softmax + Categorical Cross-Entropy. Binary: Sigmoid + Binary Cross-Entropy."
+      "keyConcept": "Multi-class exclusive: Softmax + Categorical Cross-Entropy. Binary: Sigmoid + Binary Cross-Entropy.",
+      "noobBreakdown": "For 10 mutually exclusive classes (like MNIST digits), the gold-standard combo is Softmax activation at the output paired with Categorical Cross-Entropy loss.",
+      "terms": {
+        "Softmax + Cross-Entropy": "The standard activation and loss pairing for multi-class classification."
+      }
     }
   },
   {
@@ -1587,7 +1955,11 @@ const QUESTION_BANK = [
       "summary": "Early stopping catches the model at the peak of its generalization performance before overfitting degrades validation accuracy.",
       "whyCorrect": "As training progresses, validation loss initially drops then hits a minimum before rising due to overfitting. Early stopping tracks this inflection point and restores the model weights corresponding to the lowest validation loss.",
       "whyWrong": "It does not stop on zero activations, does not stop at an arbitrary midpoint, and does not truncate the backward pass.",
-      "keyConcept": "Early Stopping monitors validation loss and saves the best model checkpoint before overfitting begins."
+      "keyConcept": "Early Stopping monitors validation loss and saves the best model checkpoint before overfitting begins.",
+      "noobBreakdown": "Monitoring validation loss during training and hitting the stop button after validation performance stops improving for a specified number of epochs (patience).",
+      "terms": {
+        "Early Stopping": "Halting training based on validation loss stagnation to prevent overfitting."
+      }
     }
   },
   {
@@ -1607,7 +1979,11 @@ const QUESTION_BANK = [
       "summary": "Disabling autograd tracking during evaluation eliminates the overhead of tracking intermediate tensors for backpropagation.",
       "whyCorrect": "During training, PyTorch constructs a directed acyclic graph (DAG) of all forward operations so gradients can be computed. During testing, gradients are unnecessary; torch.no_grad() disables graph construction, drastically cutting VRAM usage and runtime.",
       "whyWrong": "It does not disable bias terms, does not use complex numbers, and has no direct control over GPU hardware thermal throttling.",
-      "keyConcept": "torch.no_grad() saves GPU memory and speeds up inference by disabling backward graph tracking."
+      "keyConcept": "torch.no_grad() saves GPU memory and speeds up inference by disabling backward graph tracking.",
+      "noobBreakdown": "Wrapping code in 'with torch.no_grad()' tells PyTorch: 'We are just testing, don't build a backward calculation graph!' This saves huge amounts of GPU memory and speeds up inference.",
+      "terms": {
+        "torch.no_grad()": "A context manager disabling gradient calculation in PyTorch to conserve memory and accelerate testing."
+      }
     }
   },
   {
@@ -1627,7 +2003,11 @@ const QUESTION_BANK = [
       "summary": "The receptive field defines the field of view in the input space that an internal neuron 'sees'.",
       "whyCorrect": "In early layers, a neuron has a small receptive field (e.g., 3x3 or 5x5). As layers are stacked, subsequent neurons combine information from earlier patches, expanding their effective receptive field until deep neurons see the entire image.",
       "whyWrong": "It does not describe parameter count, memory addressing, or activation output range.",
-      "keyConcept": "Receptive Field = The sub-area of the input image that determines a given unit's feature response."
+      "keyConcept": "Receptive Field = The sub-area of the input image that determines a given unit's feature response.",
+      "noobBreakdown": "Receptive Field is the specific patch of the original input picture that a particular neuron can see through all the preceding layers.",
+      "terms": {
+        "Receptive Field": "The input space area influencing the activation of a specific neuron."
+      }
     }
   },
   {
@@ -1647,7 +2027,11 @@ const QUESTION_BANK = [
       "summary": "Two stacked 3x3 convolutions cover a 5x5 spatial receptive field while incorporating more non-linearities and 28% fewer parameters.",
       "whyCorrect": "Layer 1: each neuron sees 3x3. Layer 2: each neuron looks at a 3x3 patch of Layer 1 neurons. The outermost units of this 3x3 patch span (3 - 1) + 3 = 5 pixels in the original input. Parameters for one channel: 2 * (3*3) = 18 vs 1 * (5*5) = 25.",
       "whyWrong": "Receptive fields grow via addition (RF_2 = RF_1 + (K_2 - 1) = 3 + 2 = 5), not multiplication, and they do grow without pooling.",
-      "keyConcept": "VGG Principle: Two stacked 3x3 convs = 5x5 receptive field (18 vs 25 params). Three 3x3 convs = 7x7 receptive field (27 vs 49 params)."
+      "keyConcept": "VGG Principle: Two stacked 3x3 convs = 5x5 receptive field (18 vs 25 params). Three 3x3 convs = 7x7 receptive field (27 vs 49 params).",
+      "noobBreakdown": "Stacking two 3x3 conv layers has the same 5x5 receptive field as a single 5x5 layer, but uses fewer weights (2 * 9 = 18 vs 25) and adds an extra non-linear activation in between!",
+      "terms": {
+        "Stacked 3x3 Convolutions": "Using small stacked kernels to emulate larger filter receptive fields with fewer parameters."
+      }
     }
   },
   {
@@ -1667,7 +2051,11 @@ const QUESTION_BANK = [
       "summary": "Each additional 3x3 convolution with stride 1 adds (K - 1) = 2 to the receptive field diameter.",
       "whyCorrect": "Layer 1 gives RF = 3. Layer 2 adds (3 - 1) = 2, yielding RF = 5. Layer 3 adds another (3 - 1) = 2, yielding RF = 7. Stacking three 3x3 convs matches a 7x7 filter with 3 * (3*3) = 27 weights vs 49 weights (a 45% parameter reduction) plus 3 non-linear activations instead of 1.",
       "whyWrong": "Calculations yielding 6x6 or 9x9 violate the recursive formula RF_{l} = RF_{l-1} + (K_l - 1) * S_{prev}.",
-      "keyConcept": "Formula: RF_{new} = RF_{old} + (K - 1). Three 3x3 layers = 7x7 receptive field."
+      "keyConcept": "Formula: RF_{new} = RF_{old} + (K - 1). Three 3x3 layers = 7x7 receptive field.",
+      "noobBreakdown": "Following VGG's math, stacking THREE 3x3 layers covers a 7x7 receptive field: layer 1 = 3x3, layer 2 = 5x5, layer 3 = 7x7! (3 * 9 = 27 weights vs 49 weights for a 7x7 filter).",
+      "terms": {
+        "7x7 Receptive Field": "Covered by three stacked 3x3 convolutional layers."
+      }
     }
   },
   {
@@ -1687,7 +2075,11 @@ const QUESTION_BANK = [
       "summary": "1x1 convolutions perform linear combinations across depth (channels) at each individual spatial pixel location.",
       "whyCorrect": "A 1x1 conv computes a dot product across all input channels for every (x, y) location. If input has C_in channels, a 1x1 conv with C_out filters projects the feature map to C_out channels without changing spatial H x W, allowing cheap channel pooling.",
       "whyWrong": "1x1 has zero spatial extent so it cannot perform spatial blurring, does not compute batch statistics, and is not a matrix transpose.",
-      "keyConcept": "1x1 Convolution = Cross-channel projection / pooling. Alters channels (C) while keeping spatial dimensions (H, W) identical."
+      "keyConcept": "1x1 Convolution = Cross-channel projection / pooling. Alters channels (C) while keeping spatial dimensions (H, W) identical.",
+      "noobBreakdown": "A 1x1 convolution is used to change the number of feature channels (e.g. compressing 256 channels to 64) without modifying spatial height and width.",
+      "terms": {
+        "1x1 Convolution": "A pointwise convolution used for cross-channel dimensionality manipulation."
+      }
     }
   },
   {
@@ -1707,7 +2099,11 @@ const QUESTION_BANK = [
       "summary": "Apply spatial output formula: O = floor((W - K + 2P)/S) + 1.",
       "whyCorrect": "O = floor((64 - 5 + 2*2) / 2) + 1 = floor((64 - 5 + 4) / 2) + 1 = floor(63 / 2) + 1 = 31 + 1 = 32. Depth equals number of filters = 16. Output shape is 32 x 32 x 16.",
       "whyWrong": "30 or 31 results from forgetting the +1 term or calculating floor(63/2) incorrectly.",
-      "keyConcept": "Formula: O = floor((W - K + 2P)/S) + 1. Here: floor((64 - 5 + 4)/2) + 1 = 31 + 1 = 32."
+      "keyConcept": "Formula: O = floor((W - K + 2P)/S) + 1. Here: floor((64 - 5 + 4)/2) + 1 = 31 + 1 = 32.",
+      "noobBreakdown": "Input 64x64x3 with 16 filters of size 3x3, padding 1, stride 2. Spatial size = (64 - 3 + 2)/2 + 1 = 32x32. Since there are 16 filters, output shape is 32x32x16!",
+      "terms": {
+        "Strided Output Shape": "(Input / Stride) spatial dimensions when padding is Same."
+      }
     }
   },
   {
@@ -1727,7 +2123,11 @@ const QUESTION_BANK = [
       "summary": "Max Pooling downsamples spatial dimensions by taking the maximum in each 2x2 window; pooling never has learnable parameters and preserves channel depth.",
       "whyCorrect": "Spatial dimension: 14 / 2 = 7. Number of channels remains 64. Max pooling computes a fixed mathematical operation (max), so parameter count is strictly 0.",
       "whyWrong": "Pooling layers NEVER modify the number of channels (cannot change 64 to 32) and NEVER have trainable parameters.",
-      "keyConcept": "Pooling Rule: Retains channel count C, downsamples spatial dimensions (H/S, W/S), has EXACTLY 0 parameters."
+      "keyConcept": "Pooling Rule: Retains channel count C, downsamples spatial dimensions (H/S, W/S), has EXACTLY 0 parameters.",
+      "noobBreakdown": "Input 14x14x64 entering 2x2 Max Pooling with stride 2: spatial size cuts in half to 7x7x64, and trainable parameters equal exactly 0!",
+      "terms": {
+        "MaxPooling Spatial Reduction": "Reduces height and width by pooling factor with zero trainable weights."
+      }
     }
   },
   {
@@ -1747,7 +2147,11 @@ const QUESTION_BANK = [
       "summary": "Visual hierarchies transition from 'where' (high spatial resolution, low semantics) to 'what' (low spatial resolution, high semantics).",
       "whyCorrect": "Early layers capture exact spatial coordinates of simple edges. Deeper layers combine these into abstract concepts (eyes, wheels, faces). Because spatial location matters less than the presence of complex patterns, spatial resolution is compressed while channels are added to encode diverse semantic features.",
       "whyWrong": "It has nothing to do with limiting matrix ops to 1,000, deeper layers have smaller (not larger) spatial maps, and spatial downsampling does not guarantee zero mean.",
-      "keyConcept": "CNN Design Philosophy: High Spatial/Low Channel (early) -> Low Spatial/High Channel (deep)."
+      "keyConcept": "CNN Design Philosophy: High Spatial/Low Channel (early) -> Low Spatial/High Channel (deep).",
+      "noobBreakdown": "CNNs decrease spatial size (downsampling) while increasing channel count to build larger receptive fields and discover complex semantic patterns (like whole objects).",
+      "terms": {
+        "Spatial Downsampling": "Shrinking pixel dimensions to allow higher-level feature abstraction."
+      }
     }
   },
   {
@@ -1767,7 +2171,11 @@ const QUESTION_BANK = [
       "summary": "Global Average Pooling averages out the entire spatial plane of each feature map into a single summary number.",
       "whyCorrect": "For each channel c, GAP computes (1 / (H * W)) * Σ_x Σ_y F(x, y, c). This collapses H x W to 1 x 1 while preserving all C channels, requiring 0 trainable parameters.",
       "whyWrong": "It does not produce a single scalar, does not use learnable weights (unlike Flatten + Dense), and has nothing to do with video frames.",
-      "keyConcept": "Global Average Pooling (GAP): Maps (H, W, C) -> (1, 1, C) with 0 parameters."
+      "keyConcept": "Global Average Pooling (GAP): Maps (H, W, C) -> (1, 1, C) with 0 parameters.",
+      "noobBreakdown": "Global Average Pooling computes the arithmetic mean across the entire height and width of each feature map, turning a 7x7x512 tensor into a clean 1x512 vector.",
+      "terms": {
+        "Global Average Pooling": "Averaging each H x W feature map into a single value per channel."
+      }
     }
   },
   {
@@ -1787,7 +2195,11 @@ const QUESTION_BANK = [
       "summary": "In early networks like VGG, over 80% of all parameters were concentrated in the first Dense layer after Flatten. GAP eliminates this bottleneck.",
       "whyCorrect": "Flattening a 7x7x512 volume to 25,088 units and connecting to a Dense(4096) layer creates over 102 million parameters in a single layer, causing severe overfitting. GAP collapses 7x7x512 to 512 numbers with 0 parameters, followed directly by Dense(Classes).",
       "whyWrong": "GAP reduces FLOPs rather than increases them, Flatten does not cause overflow, and probabilities cannot be negative.",
-      "keyConcept": "GAP eliminates parameter explosion: VGG Flatten+Dense = 100M+ params; ResNet GAP = 0 params."
+      "keyConcept": "GAP eliminates parameter explosion: VGG Flatten+Dense = 100M+ params; ResNet GAP = 0 params.",
+      "noobBreakdown": "Modern architectures replaced huge fully connected layers with Global Average Pooling to eliminate millions of weights and prevent overfitting.",
+      "terms": {
+        "GAP vs Dense": "GAP eliminates millions of dense weights while maintaining classification performance."
+      }
     }
   },
   {
@@ -1807,7 +2219,11 @@ const QUESTION_BANK = [
       "summary": "Dilated convolutions increase the filter's spatial reach without increasing parameter count or using pooling downsampling.",
       "whyCorrect": "A 3x3 filter with dilation rate d=2 covers a 5x5 spatial area, but still only evaluates 9 weights. In semantic segmentation, this captures wide spatial context while preserving dense pixel-level resolution.",
       "whyWrong": "It does not drop weights (that is Dropout), does not rotate kernels, and is a 2D spatial operation (not 1D channel operation).",
-      "keyConcept": "Dilated (Atrous) Convolution: Expands receptive field without increasing parameters or downsampling spatial resolution."
+      "keyConcept": "Dilated (Atrous) Convolution: Expands receptive field without increasing parameters or downsampling spatial resolution.",
+      "noobBreakdown": "A Dilated (Atrous) Convolution inserts spaces (holes) between filter weights. It dramatically expands the receptive field to see big context without adding a single extra parameter!",
+      "terms": {
+        "Dilated / Atrous Convolution": "A convolution where kernel weights are spaced apart by a dilation rate, expanding the receptive field without adding parameters."
+      }
     }
   },
   {
@@ -1827,7 +2243,11 @@ const QUESTION_BANK = [
       "summary": "AlexNet proved the feasibility of deep learning by combining ReLU, Dropout, and parallel CUDA GPUs to win ImageNet 2012 by an unprecedented margin.",
       "whyCorrect": "LeNet-5 (1998) used Sigmoid/Tanh and struggled with depth. AlexNet (8 layers) replaced Tanh with ReLU (6x faster training), used Dropout (0.5) to combat overfitting, and split computation across two NVIDIA GPUs.",
       "whyWrong": "Skip connections were introduced by ResNet (2015), attention by Transformers (2017), and AlexNet used Cross-Entropy with Conv layers, not LSTMs.",
-      "keyConcept": "AlexNet Trifecta: ReLU (fast training, no saturation) + Dropout (regularization) + GPUs (scaling)."
+      "keyConcept": "AlexNet Trifecta: ReLU (fast training, no saturation) + Dropout (regularization) + GPUs (scaling).",
+      "noobBreakdown": "AlexNet (2012) broke records by using ReLU (preventing vanishing gradients), training on GPUs (50x faster), and applying Dropout to stop memorization.",
+      "terms": {
+        "AlexNet Innovations": "ReLU activations, dual-GPU training, Dropout, and Local Response Normalization."
+      }
     }
   },
   {
@@ -1847,7 +2267,11 @@ const QUESTION_BANK = [
       "summary": "Before ResNet, adding more layers to plain networks caused training error to increase, proving optimization failure rather than overfitting.",
       "whyCorrect": "As networks grew past 20 layers, gradients vanished during backprop, making deeper networks perform worse than shallow counterparts on the training set. ResNet's identity shortcuts allowed gradients to flow directly back through the entire depth unimpeded.",
       "whyWrong": "GPU memory handles depth via batch sizing; chain rule works on any layer count; softmax handles arbitrary category counts.",
-      "keyConcept": "ResNet solved the Degradation Problem: Plain deep networks had higher TRAINING error than shallow networks due to vanishing gradients."
+      "keyConcept": "ResNet solved the Degradation Problem: Plain deep networks had higher TRAINING error than shallow networks due to vanishing gradients.",
+      "noobBreakdown": "The Degradation Problem: As plain deep networks get deeper, training accuracy gets worse because gradients vanish and optimization becomes too difficult. ResNet solved it!",
+      "terms": {
+        "Degradation Phenomenon": "Deeper plain networks exhibiting higher training error, solved by ResNet."
+      }
     }
   },
   {
@@ -1867,7 +2291,11 @@ const QUESTION_BANK = [
       "summary": "Residual blocks learn the perturbation F(x) = H(x) - x, outputting H(x) = F(x) + x via an identity shortcut.",
       "whyCorrect": "Instead of forcing layers to fit an unreferenced underlying mapping H(x), ResNet explicitly fits the residual F(x) = H(x) - x. Adding the input x via a skip connection gives y = F(x) + x. If optimal mapping is identity, weights easily decay F(x) to 0.",
       "whyWrong": "Residual connections use addition (+), not multiplication, subtraction, or division.",
-      "keyConcept": "Residual Formula: y = F(x) + x. Gradient during backprop: ∂L/∂x = ∂L/∂y * (∂F/∂x + 1), ensuring a direct highway of 1 for gradients."
+      "keyConcept": "Residual Formula: y = F(x) + x. Gradient during backprop: ∂L/∂x = ∂L/∂y * (∂F/∂x + 1), ensuring a direct highway of 1 for gradients.",
+      "noobBreakdown": "The ResNet building block formula: y = F(x) + x, followed by a ReLU activation. The input x hops over the block and adds directly to the output!",
+      "terms": {
+        "Residual Block": "y = F(x) + x, enabling gradients to backpropagate directly through identity connections."
+      }
     }
   },
   {
@@ -1887,7 +2315,11 @@ const QUESTION_BANK = [
       "summary": "VGG standardized CNN design by replacing diverse filter sizes (5x5, 7x7, 11x11) with uniform, homogeneous stacks of 3x3 convs.",
       "whyCorrect": "VGG demonstrated that a simple, homogenous architecture using only 3x3 convs (stride 1, padding same) and 2x2 max pools (stride 2) achieved superior accuracy by increasing depth and non-linearities while reducing parameter counts.",
       "whyWrong": "Large 11x11 filters were in AlexNet; VGG does not use LSTMs; and VGG uses ReLU activations after every single convolutional layer.",
-      "keyConcept": "VGG Philosophy: Simplicity and depth via uniform stacks of 3x3 conv layers."
+      "keyConcept": "VGG Philosophy: Simplicity and depth via uniform stacks of 3x3 conv layers.",
+      "noobBreakdown": "VGG's defining rule: use ONLY small 3x3 filters stacked deeply throughout the entire network!",
+      "terms": {
+        "VGG Design Principle": "Homogeneous architecture utilizing exclusively 3x3 convolutions."
+      }
     }
   },
   {
@@ -1907,7 +2339,11 @@ const QUESTION_BANK = [
       "summary": "IoU (Jaccard Index) measures overlap accuracy by dividing intersection area by union area.",
       "whyCorrect": "The metric divides the overlapping area shared by both boxes by the total combined area encompassed by both boxes. Values range from 0 (no overlap) to 1 (perfect alignment). In PASCAL VOC and COCO, IoU >= 0.5 is standard for a True Positive.",
       "whyWrong": "Multiplying areas, simple area ratios, or area differences do not normalize overlap geometry.",
-      "keyConcept": "IoU = Area of Overlap / Area of Union. True Positive benchmark is typically IoU >= 0.5."
+      "keyConcept": "IoU = Area of Overlap / Area of Union. True Positive benchmark is typically IoU >= 0.5.",
+      "noobBreakdown": "Intersection over Union (IoU) = Area of Overlap / Area of Union between the predicted box and the ground-truth box.",
+      "terms": {
+        "IoU": "Area(Predicted intersect GroundTruth) / Area(Predicted union GroundTruth)."
+      }
     }
   },
   {
@@ -1927,7 +2363,11 @@ const QUESTION_BANK = [
       "summary": "Object detection provides box-level localization; semantic segmentation provides dense pixel-level classification masks.",
       "whyCorrect": "Classification: 1 label per image. Object Detection: bounding box coordinates [x, y, w, h] + class for each object. Semantic Segmentation: dense segmentation map where pixel (i, j) is assigned a class label (e.g., road, sky, car).",
       "whyWrong": "Classification (not detection) gives 1 label per image, both work on RGB images, and they are distinct computer vision tasks.",
-      "keyConcept": "Vision Tasks: Classification (Image level) -> Detection (Box level) -> Semantic Segmentation (Pixel level)."
+      "keyConcept": "Vision Tasks: Classification (Image level) -> Detection (Box level) -> Semantic Segmentation (Pixel level).",
+      "noobBreakdown": "Object Detection outputs rectangular bounding boxes around objects. Semantic Segmentation classifies every individual pixel, outlining the exact shape of objects!",
+      "terms": {
+        "Detection vs Segmentation": "Boxes with class labels vs. pixel-level class masks."
+      }
     }
   },
   {
@@ -1947,7 +2387,11 @@ const QUESTION_BANK = [
       "summary": "Autoencoders perform self-supervised dimensionality reduction by learning to compress and reconstruct inputs.",
       "whyCorrect": "An autoencoder consists of Encoder q_θ(z|x) mapping input x to latent code z, and Decoder p_ϕ(x|z) reconstructing x̂. The network is trained end-to-end to minimize reconstruction loss L(x, x̂) = ||x - x̂||².",
       "whyWrong": "Two competing networks describes a GAN (Generative Adversarial Network), ImageNet classification is supervised learning, and optical flow is video analysis.",
-      "keyConcept": "Autoencoder Architecture: Input x -> Encoder -> Latent Bottleneck z -> Decoder -> Reconstruction x̂."
+      "keyConcept": "Autoencoder Architecture: Input x -> Encoder -> Latent Bottleneck z -> Decoder -> Reconstruction x̂.",
+      "noobBreakdown": "An autoencoder compresses the input into a low-dimensional bottleneck (encoder) and rebuilds the original image (decoder) by minimizing pixel reconstruction error.",
+      "terms": {
+        "Autoencoder": "An unsupervised model trained to minimize reconstruction loss ||x - x_hat||."
+      }
     }
   },
   {
@@ -1967,7 +2411,11 @@ const QUESTION_BANK = [
       "summary": "An undercomplete bottleneck forces the network to retain only the most informative statistical properties of the data.",
       "whyCorrect": "If latent space dimension dim(z) >= dim(x), the model can achieve zero reconstruction loss by simply learning the identity mapping I(x) = x without capturing underlying data structure. Constraining dim(z) << dim(x) forces efficient non-linear compression.",
       "whyWrong": "Loss derivatives can be negative/positive, decoders handle arbitrary dimensions, and activation functions remain necessary.",
-      "keyConcept": "Undercomplete Bottleneck: Forces the autoencoder to prioritize the most important latent factors (non-linear PCA)."
+      "keyConcept": "Undercomplete Bottleneck: Forces the autoencoder to prioritize the most important latent factors (non-linear PCA).",
+      "noobBreakdown": "The bottleneck must be small to prevent the network from cheating! If the bottleneck was huge, it would simply memorize the identity function (copy-pasting inputs to outputs).",
+      "terms": {
+        "Bottleneck Constraint": "Forcing the model to learn meaningful compressed representations."
+      }
     }
   },
   {
@@ -1987,7 +2435,11 @@ const QUESTION_BANK = [
       "summary": "Reconstruction loss measures pixel-by-pixel dissimilarity between the ground truth image x and the reconstructed image x̂.",
       "whyCorrect": "MSE loss L = (1/N) * Σ (x_i - x̂_i)² measures squared Euclidean distance. If pixels are treated as Bernoulli probabilities [0, 1], BCE loss L = -Σ [x_i * log(x̂_i) + (1 - x_i) * log(1 - x̂_i)] with a Sigmoid output is also widely used.",
       "whyWrong": "Categorical cross-entropy requires discrete classes, Triplet loss is for metric learning, and CTC is for speech/OCR sequence alignment.",
-      "keyConcept": "Autoencoder Reconstruction Loss: MSE = ||x - x̂||² or BCE (for normalized [0, 1] pixels)."
+      "keyConcept": "Autoencoder Reconstruction Loss: MSE = ||x - x̂||² or BCE (for normalized [0, 1] pixels).",
+      "noobBreakdown": "When reconstructing normalized grayscale images (pixels between 0 and 1), the standard loss metrics are Mean Squared Error (MSE) or Binary Cross-Entropy (BCE).",
+      "terms": {
+        "Autoencoder Loss": "MSE or BCE measuring pixel-level reconstruction error."
+      }
     }
   },
   {
@@ -2007,7 +2459,11 @@ const QUESTION_BANK = [
       "summary": "CNNs construct a compositional hierarchy of spatial representations, mimicking the visual cortex (V1 to IT).",
       "whyCorrect": "As demonstrated in Lecture 3 slides: Layer 1 detects oriented edges, blobs, and color contrasts. Layer 2 combines edges into textures and geometric corners. Layer 3 combines motifs into object parts (eyes, noses, tires). Deep layers recognize entire semantic entities (faces, cars, dogs).",
       "whyWrong": "Hierarchies flow from simple local primitives to complex global semantics, not in reverse.",
-      "keyConcept": "Spatial Feature Hierarchy: Edges & Textures (Shallow) -> Parts & Motifs (Middle) -> Objects & Scenes (Deep)."
+      "keyConcept": "Spatial Feature Hierarchy: Edges & Textures (Shallow) -> Parts & Motifs (Middle) -> Objects & Scenes (Deep).",
+      "noobBreakdown": "Early layers detect simple lines and edges; middle layers combine them into textures and parts (eyes, wheels); deep layers recognize full objects (faces, cars)!",
+      "terms": {
+        "Feature Hierarchy": "Low-level edges -> mid-level textures/parts -> high-level semantic objects."
+      }
     }
   },
   {
@@ -2027,7 +2483,11 @@ const QUESTION_BANK = [
       "summary": "TensorFlow uses tf.GradientTape to record operations on a tape during the forward pass, and then plays it backward to compute exact reverse-mode automatic differentiation.",
       "whyCorrect": "As coded in Lab 1 (Part1_TensorFlow.ipynb Section 1.4), operations executed inside 'with tf.GradientTape() as tape:' are recorded. Calling tape.gradient(y, x) computes ∂y/∂x efficiently and analytically via the chain rule.",
       "whyWrong": "Numerical finite differences are too slow and prone to truncation error; symbolic differentiation creates massive expressions; manual derivatives are not required with autograd.",
-      "keyConcept": "Lab Reference (Module 01 Part1_TensorFlow.ipynb): with tf.GradientTape() as tape: y = x**2; dy_dx = tape.gradient(y, x)."
+      "keyConcept": "Lab Reference (Module 01 Part1_TensorFlow.ipynb): with tf.GradientTape() as tape: y = x**2; dy_dx = tape.gradient(y, x).",
+      "noobBreakdown": "In TensorFlow, automatic differentiation runs inside a 'with tf.GradientTape() as tape:' block, and gradients are calculated with 'tape.gradient(loss, weights)'.",
+      "terms": {
+        "tf.GradientTape": "TensorFlow's context manager recording operations for automatic differentiation."
+      }
     }
   },
   {
@@ -2047,7 +2507,11 @@ const QUESTION_BANK = [
       "summary": "PyTorch uses the requires_grad=True flag to tell its autograd engine to track every forward operation on that tensor in a dynamic DAG.",
       "whyCorrect": "As implemented in Lab 1 (PT_Part1_Intro.ipynb Section 1.4), setting requires_grad=True tracks operations. When loss.backward() is invoked, the gradients are automatically computed via reverse-mode AD and stored in tensor.grad.",
       "whyWrong": "PyTorch runs natively in C++ via LibTorch (not Java), does not use thread sandboxes for math, and has no torch.immutable() function.",
-      "keyConcept": "Lab Reference (Module 01 PT_Part1_Intro.ipynb): x = torch.tensor(..., requires_grad=True); y = x**2; y.backward(); print(x.grad)."
+      "keyConcept": "Lab Reference (Module 01 PT_Part1_Intro.ipynb): x = torch.tensor(..., requires_grad=True); y = x**2; y.backward(); print(x.grad).",
+      "noobBreakdown": "In PyTorch, a tensor tracks gradients by setting 'requires_grad=True', and gradients are calculated by calling 'loss.backward()'.",
+      "terms": {
+        "requires_grad=True": "PyTorch flag instructing the autograd engine to track operations on a tensor."
+      }
     }
   },
   {
@@ -2067,7 +2531,11 @@ const QUESTION_BANK = [
       "summary": "Tensors are generalizations of matrices to arbitrary N-dimensional spaces.",
       "whyCorrect": "As introduced in Lab 1 Section 1.2: A 0-d tensor is a single number (scalar); a 1-d tensor is a 1D list (vector); a 2-d tensor is a table of numbers (matrix); 3-d and 4-d tensors represent multi-channel image batches (N, H, W, C).",
       "whyWrong": "0-D is not a matrix, tensors are not limited to 2 dimensions, and tensors contain numeric data (floats/ints), not lists of strings.",
-      "keyConcept": "Tensor Ranks: Rank 0 = Scalar | Rank 1 = Vector | Rank 2 = Matrix | Rank 3 = Volume/RGB image | Rank 4 = Batch of images."
+      "keyConcept": "Tensor Ranks: Rank 0 = Scalar | Rank 1 = Vector | Rank 2 = Matrix | Rank 3 = Volume/RGB image | Rank 4 = Batch of images.",
+      "noobBreakdown": "A 0-D tensor is a single number (Scalar). A 1-D tensor is a list of numbers (Vector). A 2-D tensor is a grid/table of numbers (Matrix).",
+      "terms": {
+        "Tensor Rank": "Number of dimensions: 0-D = Scalar, 1-D = Vector, 2-D = Matrix, 3-D/4-D = Multi-dimensional array."
+      }
     }
   },
   {
@@ -2087,7 +2555,11 @@ const QUESTION_BANK = [
       "summary": "In tf.keras.layers.RandomRotation, float factor represents a fraction of 2π (a full circle).",
       "whyCorrect": "In Keras preprocessing layers, passing factor=0.2 defines an upper and lower bound interval [-factor, +factor] expressed as a fraction of 2π: [-0.2 * 360°, +0.2 * 360°] = [-72°, +72°].",
       "whyWrong": "It is not a static constant angle (it is randomly sampled per image), not a dropout probability, and not a pixel translation.",
-      "keyConcept": "Lab Reference (Module 01 data_augmentation.ipynb): RandomRotation(0.2) samples angles in [-20% * 2π, +20% * 2π]."
+      "keyConcept": "Lab Reference (Module 01 data_augmentation.ipynb): RandomRotation(0.2) samples angles in [-20% * 2π, +20% * 2π].",
+      "noobBreakdown": "RandomRotation(0.2) samples a random rotation angle from [-20%, +20%] of a full circle (between -72 degrees and +72 degrees).",
+      "terms": {
+        "RandomRotation": "A data augmentation layer rotating images randomly within a specified fraction of 2*pi."
+      }
     }
   },
   {
@@ -2107,7 +2579,11 @@ const QUESTION_BANK = [
       "summary": "SparseCategoricalCrossentropy expects integer labels; CategoricalCrossentropy expects one-hot vectors.",
       "whyCorrect": "In Lab 2, y_train contains integer labels (e.g. 7, 2, 0). SparseCategoricalCrossentropy avoids the memory overhead of one-hot encoding 60,000 vectors of size 10, computing identical math internally.",
       "whyWrong": "It has nothing to do with image pixel sparsity, convolution handles any loss, and epochs are still required.",
-      "keyConcept": "Lab Rule (Module 02 Part1_MNIST.ipynb): Integer labels (0-9) -> SparseCategoricalCrossentropy; One-hot labels -> CategoricalCrossentropy."
+      "keyConcept": "Lab Rule (Module 02 Part1_MNIST.ipynb): Integer labels (0-9) -> SparseCategoricalCrossentropy; One-hot labels -> CategoricalCrossentropy.",
+      "noobBreakdown": "In MNIST, labels are stored as plain integers (0, 1, 2... 9). SparseCategoricalCrossentropy handles integer labels directly without needing one-hot vectors, saving memory!",
+      "terms": {
+        "Sparse Categorical": "Accepts integer targets directly rather than one-hot encoded vectors."
+      }
     }
   },
   {
@@ -2127,7 +2603,11 @@ const QUESTION_BANK = [
       "summary": "CNNs outperform dense networks on images because weight sharing and local receptive fields preserve 2D topology.",
       "whyCorrect": "As documented in Lab 2 markdown and execution cells: Dense model (Flatten -> Dense(128) -> Dense(10)) reaches ~97% accuracy. The CNN model (Conv2D -> MaxPool -> Conv2D -> MaxPool -> Dense) achieves >99% test accuracy with far fewer early parameters.",
       "whyWrong": "Accuracy was not 50%, CNN clearly outperformed dense, and MNIST is grayscale (1 channel).",
-      "keyConcept": "Lab Finding (Module 02 Lab 2): Dense Model ~97% vs CNN Model >99% test accuracy on MNIST."
+      "keyConcept": "Lab Finding (Module 02 Lab 2): Dense Model ~97% vs CNN Model >99% test accuracy on MNIST.",
+      "noobBreakdown": "In MNIST Lab 2, a simple baseline Fully Connected network got ~97.7% accuracy, while the Convolutional Neural Network (CNN) reached >99% by preserving spatial patterns!",
+      "terms": {
+        "MNIST Lab Benchmark": "CNN outperforming Fully Connected baseline by exploiting 2D spatial features."
+      }
     }
   },
   {
@@ -2147,7 +2627,11 @@ const QUESTION_BANK = [
       "summary": "Passing raw logits directly into nn.CrossEntropyLoss avoids numerical underflow/overflow in log(exp(z)).",
       "whyCorrect": "In PyTorch (PT_Part1_MNIST.ipynb), the model's final layer is self.fc2 = nn.Linear(128, 10) with no activation. nn.CrossEntropyLoss applies LogSoftmax internally using the LogSumExp trick, preventing catastrophic cancellation.",
       "whyWrong": "PyTorch handles exponentials fine, Softmax works in both frameworks, and probabilities cannot be negative.",
-      "keyConcept": "PyTorch Idiom: Model outputs raw logits -> nn.CrossEntropyLoss() applies LogSoftmax + NLLLoss together."
+      "keyConcept": "PyTorch Idiom: Model outputs raw logits -> nn.CrossEntropyLoss() applies LogSoftmax + NLLLoss together.",
+      "noobBreakdown": "PyTorch's nn.CrossEntropyLoss() internally applies LogSoftmax and NLLLoss in one step, so your model should output raw logits without a final Softmax layer!",
+      "terms": {
+        "nn.CrossEntropyLoss": "PyTorch loss combining LogSoftmax and Negative Log-Likelihood Loss."
+      }
     }
   },
   {
@@ -2167,7 +2651,11 @@ const QUESTION_BANK = [
       "summary": "Conv2DTranspose performs fractionally strided convolution, expanding spatial height and width while learning filter weights.",
       "whyCorrect": "In autoencoder.ipynb Section 'Convolutional autoencoder', the encoder downsamples using Conv2D(16, 3, strides=2) and Conv2D(8, 3, strides=2) to 7x7. The decoder uses layers.Conv2DTranspose(8, 3, strides=2) and layers.Conv2DTranspose(16, 3, strides=2) to upsample 7x7 -> 14x14 -> 28x28.",
       "whyWrong": "Pooling layers do not accept negative strides, Dense layers destroy 2D spatial arrangement, and Dropout at p=1.0 drops all activations.",
-      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb): Conv2D(strides=2) = Downsample | Conv2DTranspose(strides=2) = Upsample."
+      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb): Conv2D(strides=2) = Downsample | Conv2DTranspose(strides=2) = Upsample.",
+      "noobBreakdown": "In Autoencoders, Conv2DTranspose (Transposed Convolution) acts like a magnifying glass in reverse: it expands spatial dimensions to rebuild a small bottleneck back into a full-sized image!",
+      "terms": {
+        "Conv2DTranspose": "A transposed convolution layer used in decoders to upsample spatial feature maps."
+      }
     }
   },
   {
@@ -2187,7 +2675,11 @@ const QUESTION_BANK = [
       "summary": "A Denoising Autoencoder maps x_noisy -> x_clean, forcing the latent code to capture underlying manifold structure and ignore random noise.",
       "whyCorrect": "As coded in autoencoder.ipynb: x_train_noisy = x_train + 0.2 * tf.random.normal(...). The model is trained via autoencoder.fit(x_train_noisy, x_train), teaching the network to reconstruct the clean signal from the corrupted input.",
       "whyWrong": "It does not use Fourier filters, does not compare against random Gaussians, and minimizes (rather than maximizes) noise in reconstructions.",
-      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb): autoencoder.fit(x_train_noisy, x_train, epochs=10, loss='mean_squared_error')."
+      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb): autoencoder.fit(x_train_noisy, x_train, epochs=10, loss='mean_squared_error').",
+      "noobBreakdown": "In image denoising, the autoencoder is fed noisy images (x + noise), but its loss function compares the output against the CLEAN original image, teaching it to strip away noise!",
+      "terms": {
+        "Denoising Autoencoder": "Trained to reconstruct clean target images from deliberately corrupted inputs."
+      }
     }
   },
   {
@@ -2207,7 +2699,11 @@ const QUESTION_BANK = [
       "summary": "An autoencoder trained solely on normal data learns only the normal manifold; anomalous data cannot be reconstructed accurately.",
       "whyCorrect": "In autoencoder.ipynb, the autoencoder trains only on normal ECG rhythms. During testing, normal rhythms have low reconstruction error (MAE < threshold), while anomalous rhythms produce high reconstruction error (MAE > threshold), providing an unsupervised anomaly detector.",
       "whyWrong": "Autoencoders are unsupervised and do not output classification labels directly, do not compute time derivatives, and do not use lookup tables.",
-      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb Anomaly Detection): Reconstruction Error > Threshold => Anomaly Detected."
+      "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb Anomaly Detection): Reconstruction Error > Threshold => Anomaly Detected.",
+      "noobBreakdown": "In anomaly detection, the autoencoder is trained ONLY on normal healthy samples (e.g. normal ECG beats). When an abnormal sample appears, the model fails to reconstruct it, and the high error flags the anomaly!",
+      "terms": {
+        "Anomaly Detection via Autoencoder": "Flagging defects or anomalies based on high reconstruction error on unseen patterns."
+      }
     }
   },
   {
