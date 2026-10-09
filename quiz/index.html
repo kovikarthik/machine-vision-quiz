@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CECS 553 Machine Vision - Quiz 1 Mastery Engine & Exam Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4"></path>
+          <path d="M12 8h.01"></path>
+        </svg>
+        <span class="course-code">CECS 553</span>
+      </div>
+      <div class="header-titles">
+        <h1 class="app-title">Machine Vision Quiz 1 Mastery</h1>
+        <p class="app-subtitle">Prof. Shabnam Sodagari &bull; In-Person Scantron Prep (Modules 1, 2 & Bonus)</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <nav class="nav-modes">
+        <button id="navStudyBtn" class="nav-btn active" data-mode="study" title="Study Mode: Questions, answers & deep explanations">
+          <span class="icon">📖</span>
+          <span>Study & Review</span>
+        </button>
+        <button id="navPracticeBtn" class="nav-btn" data-mode="practice" title="Practice Quiz: Random jumbled questions & options">
+          <span class="icon">⚡</span>
+          <span>Practice Quiz</span>
+        </button>
+        <button id="navFlashcardBtn" class="nav-btn" data-mode="flashcards" title="Active Recall 3D Flashcards">
+          <span class="icon">🗂️</span>
+          <span>Flashcards</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="calcToggleBtn" class="icon-btn" title="CNN Dimension & Full Pipeline Calculator (C)">
+          <span class="icon">🧮</span>
+          <span class="btn-tooltip">Calculator (C)</span>
+        </button>
+        <button id="visualizerToggleBtn" class="icon-btn" title="Interactive 2D Convolution & Pooling Visualizer (V)">
+          <span class="icon">👁️</span>
+          <span class="btn-tooltip">Visualizer (V)</span>
+        </button>
+        <button id="cheatSheetBtn" class="icon-btn" title="Formula & Concept Cheat Sheet (H)">
+          <span class="icon">📑</span>
+          <span class="btn-tooltip">Cheat Sheet (H)</span>
+        </button>
+        <button id="ttsToggleBtn" class="icon-btn" title="Read Aloud Narration (T)">
+          <span id="ttsIcon" class="icon">🗣️</span>
+          <span class="btn-tooltip">Read Aloud (T)</span>
+        </button>
+        <button id="soundToggleBtn" class="icon-btn" title="Sound Effects (M)">
+          <span id="soundIcon" class="icon">🔊</span>
+          <span class="btn-tooltip">Sound FX (M)</span>
+        </button>
+        <button id="shortcutsBtn" class="icon-btn" title="Keyboard Shortcuts Guide (K)">
+          <span class="icon">⌨️</span>
+          <span class="btn-tooltip">Shortcuts (K)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="app-container">
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: STUDY & REVIEW MODE (Always shows answers & deep explanations)    -->
+    <!-- ========================================================================= -->
+    <section id="studyModeView" class="view-panel active">
+      <div class="panel-header">
+        <div class="panel-intro">
+          <h2>Study & Concept Review Mode</h2>
+          <p>Every question is paired with its verified correct answer, distractor analysis, and theoretical context.</p>
+        </div>
+        <div class="study-stats">
+          <span class="stat-pill"><strong id="totalQuestionsCount">110</strong> Question Bank</span>
+          <span class="stat-pill"><strong id="bookmarkedCount">0</strong> Saved</span>
+          <span class="stat-pill"><strong id="masteredCount">0</strong> Mastered</span>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="studySearchInput" placeholder="Search concepts (e.g., ReLU, Stride, ResNet, Softmax, Parameters, Augmentation, GradientTape)...">
+          <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">&times;</button>
+        </div>
+
+        <!-- Topic Categories -->
+        <div class="category-filters" id="categoryFilters">
+          <button class="filter-chip active" data-category="ALL">All (110)</button>
+          <button class="filter-chip" data-category="Module 1">Module 1: Foundations</button>
+          <button class="filter-chip" data-category="Module 2">Module 2: CNNs</button>
+          <button class="filter-chip" data-category="Lab & Notebooks">🧪 Lab Notebooks (Modules 1, 2 & 3)</button>
+          <button class="filter-chip" data-category="Data Augmentation">Data Augmentation</button>
+          <button class="filter-chip" data-category="Parameter Counting">Math & Parameters</button>
+          <button class="filter-chip" data-category="Stride & Padding">Stride & Padding</button>
+          <button class="filter-chip" data-category="CNN Architectures">Classic Models</button>
+          <button class="filter-chip" data-category="Generative Models">Generative / Autoencoders</button>
+          <button class="filter-chip" data-category="BOOKMARKED">⭐ Saved Only</button>
+        </div>
+
+        <!-- Secondary Filter: Difficulty & Test Yourself -->
+        <div class="toolbar-sub-row">
+          <div class="difficulty-filters" id="difficultyFilters">
+            <span class="sub-label">Difficulty:</span>
+            <button class="diff-chip active" data-diff="ALL">All</button>
+            <button class="diff-chip" data-diff="Basic">Basic Concepts</button>
+            <button class="diff-chip" data-diff="Intermediate">Intermediate</button>
+            <button class="diff-chip" data-diff="Exam Level">Exam Level / Math</button>
+          </div>
+
+          <div class="toolbar-toggles">
+            <label class="toggle-switch-label" title="Hide answer until clicked to test your memory">
+              <input type="checkbox" id="testYourselfToggle">
+              <span class="toggle-slider"></span>
+              <span>Test Yourself (Hide Answers)</span>
+            </label>
+            <button id="toggleAllExplanationsBtn" class="action-btn secondary small">
+              <span>Expand All Explanations</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question List Cards Container -->
+      <div id="studyCardsContainer" class="cards-container">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: PRACTICE QUIZ MODE (Jumbled questions & options every time)       -->
+    <!-- ========================================================================= -->
+    <section id="practiceModeView" class="view-panel">
+      
+      <!-- Practice Setup Sub-view -->
+      <div id="practiceSetupCard" class="setup-card">
+        <div class="setup-header">
+          <div class="setup-badge">⚡ Real-Time Exam Simulator</div>
+          <h2>Configure Your Practice Quiz</h2>
+          <p>Every session completely <strong>jumbles the questions and randomly shuffles all 4 answer choices (A, B, C, D)</strong> so you never memorize option positions.</p>
+        </div>
+
+        <div class="setup-grid">
+          <!-- Question Count Selector -->
+          <div class="setup-option-group">
+            <label class="group-label">Question Count</label>
+            <div class="options-selector" id="quizCountSelector">
+              <button class="selector-btn" data-count="10">
+                <span class="num">10</span>
+                <span class="desc">Quick Sprint (5 min)</span>
+              </button>
+              <button class="selector-btn" data-count="15">
+                <span class="num">15</span>
+                <span class="desc">Half Quiz (15 min)</span>
+              </button>
+              <button class="selector-btn active" data-count="30">
+                <span class="num">30</span>
+                <span class="desc">Realistic Exam (30 pts)</span>
+              </button>
+              <button class="selector-btn" data-count="60">
+                <span class="num">60</span>
+                <span class="desc">Comprehensive</span>
+              </button>
+              <button class="selector-btn" data-count="100">
+                <span class="num">100</span>
+                <span class="desc">Full Question Bank</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Scope / Module Selector -->
+          <div class="setup-option-group">
+            <label class="group-label">Quiz Scope</label>
+            <div class="options-selector" id="quizScopeSelector">
+              <button class="selector-btn active" data-scope="ALL">
+                <span class="num">Full Syllabus</span>
+                <span class="desc">Modules 1, 2, Augmentation & Vision</span>
+              </button>
+              <button class="selector-btn" data-scope="Module 1">
+                <span class="num">Module 1 Only</span>
+                <span class="desc">Perceptrons, Losses, Augmentation</span>
+              </button>
+              <button class="selector-btn" data-scope="Module 2">
+                <span class="num">Module 2 Only</span>
+                <span class="desc">CNNs, Kernels, Math, Pooling</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Feedback & Exam Style -->
+          <div class="setup-option-group">
+            <label class="group-label">Exam Mode Style</label>
+            <div class="options-selector" id="quizStyleSelector">
+              <button class="selector-btn active" data-feedback="instant">
+                <span class="num">Instant Feedback</span>
+                <span class="desc">Reveal answer & explanation immediately</span>
+              </button>
+              <button class="selector-btn" data-feedback="exam">
+                <span class="num">Strict Scantron Mode</span>
+                <span class="desc">Timed, no answers revealed until submit</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Timer Mode -->
+          <div class="setup-option-group">
+            <label class="group-label">Timer Mode</label>
+            <div class="options-selector" id="quizTimerSelector">
+              <button class="selector-btn active" data-timer="0">
+                <span class="num">Untimed</span>
+                <span class="desc">Relaxed practice</span>
+              </button>
+              <button class="selector-btn" data-timer="900">
+                <span class="num">15 Minutes</span>
+                <span class="desc">Fast pacing</span>
+              </button>
+              <button class="selector-btn" data-timer="1800">
+                <span class="num">30 Minutes</span>
+                <span class="desc">Official class exam time</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-action">
+          <button id="startQuizBtn" class="action-btn primary large">
+            <span class="btn-sparkle">✨</span>
+            <span>Launch Randomized Practice Quiz</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Quiz Interface Sub-view -->
+      <div id="activeQuizContainer" class="active-quiz-container" style="display: none;">
+        <!-- Top Sticky Progress Bar -->
+        <div class="quiz-status-bar">
+          <div class="status-left">
+            <span class="question-tracker">Question <strong id="currentQuestionNum">1</strong> of <strong id="totalQuizQuestions">30</strong></span>
+            <div class="progress-bar-container">
+              <div id="quizProgressBar" class="progress-bar-fill" style="width: 3.33%;"></div>
+            </div>
+          </div>
+
+          <div class="status-center">
+            <div id="timerDisplay" class="timer-badge" style="display: none;">
+              <span class="timer-icon">⏱️</span>
+              <span id="timerClock">30:00</span>
+            </div>
+          </div>
+
+          <div class="status-right">
+            <button id="scantronToggleBtn" class="scantron-pill-btn" title="View Scantron Sheet (S)">
+              <span>📋 Scantron Sheet</span>
+              <span id="answeredPillCount" class="count-pill">0/30</span>
+            </button>
+            <button id="abandonQuizBtn" class="text-btn danger">Exit Quiz</button>
+          </div>
+        </div>
+
+        <div class="quiz-main-layout">
+          <!-- Main Question Box -->
+          <div class="question-pane">
+            <div class="question-card-active">
+              <div class="card-meta-bar">
+                <div class="badge-group">
+                  <span id="activeQuestionModule" class="module-tag">Module 2</span>
+                  <span id="activeQuestionCategory" class="category-tag">CNN Architectures</span>
+                  <span id="activeQuestionDifficulty" class="diff-tag">Exam Level</span>
+                </div>
+                <div class="active-card-actions">
+                  <button id="activeListenBtn" class="icon-action-btn" title="Listen to question">
+                    <span>🔊</span>
+                  </button>
+                  <button id="activeBookmarkBtn" class="bookmark-icon-btn" title="Save this question">
+                    <span class="star-icon">☆</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="question-body">
+                <h3 id="activeQuestionText" class="active-question-prompt">Loading question...</h3>
+              </div>
+
+              <!-- Jumbled Options Container -->
+              <div id="activeOptionsContainer" class="options-grid">
+                <!-- Dynamically generated 4 jumbled options -->
+              </div>
+
+              <!-- Explanation Card (Shown in Instant Mode, or after answer) -->
+              <div id="activeExplanationBox" class="active-explanation-card" style="display: none;">
+                <div class="explanation-badge">
+                  <span class="badge-icon">💡</span>
+                  <span>Deep Concept Explanation</span>
+                </div>
+                <div class="explanation-content">
+                  <p id="activeExplainSummary" class="explain-summary"></p>
+                  <div class="explain-section">
+                    <strong>Why this is correct:</strong>
+                    <p id="activeExplainWhyCorrect"></p>
+                  </div>
+                  <div class="explain-section">
+                    <strong>Distractor Analysis:</strong>
+                    <p id="activeExplainWhyWrong"></p>
+                  </div>
+                  <div class="explain-key" id="activeExplainKeyWrapper">
+                    <span class="key-tag">Key Formula / Slide Rule</span>
+                    <p id="activeExplainKey"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question Navigation Controls -->
+              <div class="question-nav-controls">
+                <button id="prevQuestionBtn" class="nav-control-btn secondary" disabled>
+                  <span>&larr; Previous</span>
+                </button>
+                <div class="nav-middle-actions">
+                  <button id="flagQuestionBtn" class="nav-control-btn outline">
+                    <span>🚩 Flag for Review (F)</span>
+                  </button>
+                </div>
+                <button id="nextQuestionBtn" class="nav-control-btn primary">
+                  <span>Next &rarr;</span>
+                </button>
+                <button id="submitExamBtn" class="nav-control-btn finish-btn" style="display: none;">
+                  <span>Submit Exam 🏁</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Scantron Simulator Sidebar Drawer -->
+          <aside id="scantronDrawer" class="scantron-drawer">
+            <div class="scantron-header">
+              <div class="scantron-title-row">
+                <h3>Scantron Bubble Sheet</h3>
+                <span class="bubble-legend">Form No. 882-E</span>
+              </div>
+              <p class="scantron-sub">Interactive simulator of the actual classroom paper exam.</p>
+            </div>
+
+            <div class="scantron-bubbles-grid" id="scantronGrid">
+              <!-- Dynamically rendered Scantron rows -->
+            </div>
+
+            <div class="scantron-footer">
+              <div class="scantron-legend">
+                <span class="legend-item"><span class="dot filled"></span> Answered</span>
+                <span class="legend-item"><span class="dot flagged"></span> Flagged</span>
+                <span class="legend-item"><span class="dot blank"></span> Blank</span>
+              </div>
+              <button id="finishFromScantronBtn" class="action-btn primary small full-width">Submit Entire Scantron</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Practice Results Sub-view -->
+      <div id="quizResultsCard" class="results-card" style="display: none;">
+        <div class="results-header">
+          <div class="confetti-canvas-container" id="confettiContainer"></div>
+          <div class="score-radial-wrapper">
+            <div class="score-circle">
+              <span id="resultsScorePercent" class="score-percent">90%</span>
+              <span id="resultsGradeLetter" class="grade-letter">Grade: A</span>
+            </div>
+          </div>
+          <h2 id="resultsHeadline">Outstanding Mastery!</h2>
+          <p id="resultsSummaryText">You scored 27 out of 30 on this Scantron simulation.</p>
+        </div>
+
+        <div class="results-metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Points Earned</span>
+            <span id="metricPoints" class="metric-value">27 / 30</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Accuracy</span>
+            <span id="metricAccuracy" class="metric-value">90.0%</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Time Taken</span>
+            <span id="metricTime" class="metric-value">14m 22s</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Status</span>
+            <span id="metricExamStatus" class="metric-value success">Exam Ready</span>
+          </div>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="category-breakdown-section">
+          <h3>Topic Mastery Breakdown</h3>
+          <div id="categoryBreakdownBars" class="breakdown-bars-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Result Action Buttons -->
+        <div class="results-actions">
+          <button id="retakeAllBtn" class="action-btn primary large">
+            <span>🔄 Retake New Randomized Quiz</span>
+          </button>
+          <button id="retakeMissedBtn" class="action-btn warning large" style="display: none;">
+            <span>🎯 Practice Missed Questions Only (<span id="missedCountNum">0</span>)</span>
+          </button>
+          <button id="reviewExamAnswersBtn" class="action-btn secondary large">
+            <span>🔍 Detailed Review with Explanations</span>
+          </button>
+          <button id="printReportBtn" class="action-btn secondary large">
+            <span>🖨️ Print / Save Report</span>
+          </button>
+        </div>
+
+        <!-- Detailed Review List -->
+        <div id="resultsDetailedReviewContainer" class="results-detailed-review" style="display: none;">
+          <h3>Complete Answer Breakdown & Explanations</h3>
+          <div id="reviewCardsContainer" class="review-cards-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: ACTIVE RECALL 3D FLASHCARDS MODE                                  -->
+    <!-- ========================================================================= -->
+    <section id="flashcardModeView" class="view-panel">
+      <div class="panel-header">
+        <div class="panel-intro">
+          <h2>Active Recall 3D Flashcards</h2>
+          <p>Test conceptual recall before answering multiple choice questions. Flip each card to test your memory!</p>
+        </div>
+        <div class="flashcard-controls-top">
+          <button id="shuffleDeckBtn" class="action-btn secondary small">
+            <span>🔀 Shuffle Deck</span>
+          </button>
+          <span class="stat-pill"><strong id="flashcardProgress">1 / 100</strong> Cards</span>
+        </div>
+      </div>
+
+      <div class="flashcard-arena">
+        <div class="flashcard-container" id="activeFlashcard">
+          <div class="flashcard-inner" id="flashcardInner">
+            <!-- Front Face -->
+            <div class="flashcard-face flashcard-front">
+              <div class="flashcard-meta">
+                <span id="fcFrontCategory" class="category-tag">CNN Fundamentals</span>
+                <span id="fcFrontDifficulty" class="diff-tag">Exam Level</span>
+              </div>
+              <div class="flashcard-prompt-area">
+                <h3 id="fcFrontText" class="flashcard-question-text">Loading question...</h3>
+              </div>
+              <div class="flashcard-hint-row">
+                <span class="hint-text">💡 Tap card or press <strong>Space</strong> to reveal verified answer</span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="flashcard-face flashcard-back">
+              <div class="flashcard-meta">
+                <span class="check-badge">✓ Verified Answer</span>
+                <span id="fcBackCategory" class="category-tag">CNN Fundamentals</span>
+              </div>
+              <div class="flashcard-answer-area">
+                <h4 id="fcBackAnswer" class="flashcard-answer-text">Answer text...</h4>
+                <div class="fc-explanation-box">
+                  <p id="fcBackSummary" class="fc-summary-text"></p>
+                  <div class="fc-key-formula" id="fcKeyWrapper">
+                    <span class="key-tag">Key Formula / Theorem</span>
+                    <p id="fcBackKey"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="flashcard-hint-row">
+                <span class="hint-text">Tap card or press <strong>Space</strong> to flip back</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Navigation and Mastery Actions -->
+        <div class="flashcard-actions-bar">
+          <button id="fcPrevBtn" class="nav-control-btn secondary" title="Previous Card (←)">
+            <span>&larr; Prev</span>
+          </button>
+          
+          <div class="mastery-feedback-btns">
+            <button id="fcNeedReviewBtn" class="mastery-btn review" title="Still learning this concept">
+              <span>🤔 Need Review</span>
+            </button>
+            <button id="fcFlipActionBtn" class="action-btn primary" title="Flip Card (Space)">
+              <span>🔄 Flip Card</span>
+            </button>
+            <button id="fcMasteredBtn" class="mastery-btn mastered" title="I have mastered this concept">
+              <span>✨ Mastered!</span>
+            </button>
+          </div>
+
+          <button id="fcNextBtn" class="nav-control-btn secondary" title="Next Card (→)">
+            <span>Next &rarr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: CNN DIMENSION & PARAMETER CALCULATOR (WITH FULL PIPELINE!)      -->
+  <!-- ========================================================================= -->
+  <div id="calcModal" class="modal-overlay" style="display: none;">
+    <div class="modal-window large">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">🧮</span>
+          <h3>CNN Dimension & Parameter Calculator</h3>
+        </div>
+        <button id="closeCalcBtn" class="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="calc-tab-btn active" data-tab="spatialDimTab">Spatial Output (W, K, P, S)</button>
+        <button class="calc-tab-btn" data-tab="convParamsTab">Conv Layer Parameters</button>
+        <button class="calc-tab-btn" data-tab="denseParamsTab">Dense Layer Parameters</button>
+        <button class="calc-tab-btn" data-tab="fullPipelineTab">Full Multi-Layer Pipeline (MNIST Lab)</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tab 1: Spatial Dimension -->
+        <div id="spatialDimTab" class="calc-tab-content active">
+          <p class="calc-desc">Calculate output height/width: <code>O = ⌊(W - K + 2P) / S⌋ + 1</code></p>
+          <div class="calc-form-grid">
+            <div class="calc-field">
+              <label>Input Size (W):</label>
+              <input type="number" id="calcInputW" value="32" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Kernel Size (K):</label>
+              <input type="number" id="calcKernelK" value="5" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Padding (P):</label>
+              <input type="number" id="calcPaddingP" value="0" min="0">
+            </div>
+            <div class="calc-field">
+              <label>Stride (S):</label>
+              <input type="number" id="calcStrideS" value="1" min="1">
+            </div>
+          </div>
+          <div class="calc-result-box">
+            <span class="calc-result-label">Output Spatial Dimension:</span>
+            <span id="calcSpatialResult" class="calc-result-val">28 &times; 28</span>
+            <div class="calc-steps" id="calcSpatialSteps">⌊(32 - 5 + 2&times;0) / 1⌋ + 1 = ⌊27 / 1⌋ + 1 = 28</div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Conv Parameters -->
+        <div id="convParamsTab" class="calc-tab-content">
+          <p class="calc-desc">Calculate trainable parameters: <code>Params = (K_w &times; K_h &times; C_in + 1) &times; C_out</code></p>
+          <div class="calc-form-grid">
+            <div class="calc-field">
+              <label>Kernel Width (K_w):</label>
+              <input type="number" id="calcKernelW" value="3" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Kernel Height (K_h):</label>
+              <input type="number" id="calcKernelH" value="3" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Input Channels (C_in):</label>
+              <input type="number" id="calcInChannels" value="3" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Output Filters (C_out):</label>
+              <input type="number" id="calcOutFilters" value="32" min="1">
+            </div>
+          </div>
+          <div class="calc-checkbox-field">
+            <label><input type="checkbox" id="calcIncludeBias" checked> Include Biases (+1 per filter)</label>
+          </div>
+          <div class="calc-result-box">
+            <span class="calc-result-label">Total Trainable Parameters:</span>
+            <span id="calcConvResult" class="calc-result-val">896</span>
+            <div class="calc-steps" id="calcConvSteps">Weights: (3&times;3&times;3) &times; 32 = 864 | Biases: 32 | Total: 896</div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Dense Parameters -->
+        <div id="denseParamsTab" class="calc-tab-content">
+          <p class="calc-desc">Calculate fully connected layer parameters: <code>Params = (N_in + 1) &times; N_out</code></p>
+          <div class="calc-form-grid">
+            <div class="calc-field">
+              <label>Input Neurons (N_in):</label>
+              <input type="number" id="calcDenseIn" value="900" min="1">
+            </div>
+            <div class="calc-field">
+              <label>Output Neurons (N_out):</label>
+              <input type="number" id="calcDenseOut" value="128" min="1">
+            </div>
+          </div>
+          <div class="calc-result-box">
+            <span class="calc-result-label">Total Dense Parameters:</span>
+            <span id="calcDenseResult" class="calc-result-val">115,328</span>
+            <div class="calc-steps" id="calcDenseSteps">Weights: 900 &times; 128 = 115,200 | Biases: 128 | Total: 115,328</div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Full Multi-Layer Pipeline -->
+        <div id="fullPipelineTab" class="calc-tab-content">
+          <div class="pipeline-header">
+            <h4>Module 2 MNIST Architecture Parameter Breakdown</h4>
+            <p>Direct verification from Laboratory 2: Computer Vision code cells.</p>
+          </div>
+          <div class="pipeline-table-wrapper">
+            <table class="pipeline-table">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Layer Type & Specs</th>
+                  <th>Output Shape</th>
+                  <th>Param Formula</th>
+                  <th>Parameters</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Input</td>
+                  <td>Grayscale Digit Image</td>
+                  <td>28 &times; 28 &times; 1</td>
+                  <td>-</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>1. Conv2D</td>
+                  <td>24 filters, 3&times;3, valid, ReLU</td>
+                  <td>26 &times; 26 &times; 24</td>
+                  <td>(3&times;3&times;1 + 1) &times; 24</td>
+                  <td><strong class="highlight-num">240</strong></td>
+                </tr>
+                <tr>
+                  <td>2. MaxPool2D</td>
+                  <td>2&times;2 pool, stride 2</td>
+                  <td>13 &times; 13 &times; 24</td>
+                  <td>Zero parameters</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>3. Conv2D</td>
+                  <td>36 filters, 3&times;3, valid, ReLU</td>
+                  <td>11 &times; 11 &times; 36</td>
+                  <td>(3&times;3&times;24 + 1) &times; 36</td>
+                  <td><strong class="highlight-num">7,812</strong></td>
+                </tr>
+                <tr>
+                  <td>4. MaxPool2D</td>
+                  <td>2&times;2 pool, stride 2</td>
+                  <td>5 &times; 5 &times; 36</td>
+                  <td>Zero parameters</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>5. Flatten</td>
+                  <td>Vectorize 5 &times; 5 &times; 36</td>
+                  <td>900</td>
+                  <td>Zero parameters</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>6. Dense</td>
+                  <td>128 neurons, ReLU</td>
+                  <td>128</td>
+                  <td>(900 + 1) &times; 128</td>
+                  <td><strong class="highlight-num">115,328</strong></td>
+                </tr>
+                <tr>
+                  <td>7. Dense</td>
+                  <td>10 classes (digits 0-9), Softmax</td>
+                  <td>10</td>
+                  <td>(128 + 1) &times; 10</td>
+                  <td><strong class="highlight-num">1,290</strong></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4"><strong>Total Trainable Model Parameters:</strong></td>
+                  <td><strong class="total-badge">124,670</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: INTERACTIVE 2D CONVOLUTION & POOLING VISUALIZER                   -->
+  <!-- ========================================================================= -->
+  <div id="visualizerModal" class="modal-overlay" style="display: none;">
+    <div class="modal-window large">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">👁️</span>
+          <h3>Interactive 2D Convolution & Pooling Visualizer</h3>
+        </div>
+        <button id="closeVisualizerBtn" class="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="viz-tab-btn active" data-tab="vizConvTab">2D Convolution (3x3 Kernel on 5x5 Input)</button>
+        <button class="viz-tab-btn" data-tab="vizPoolTab">2x2 Max Pooling (4x4 Input to 2x2 Output)</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Visualizer Tab 1: 2D Convolution -->
+        <div id="vizConvTab" class="viz-tab-content active">
+          <div class="viz-toolbar">
+            <div class="viz-control-group">
+              <label>Kernel Type:</label>
+              <select id="vizKernelSelect">
+                <option value="sobelH">Sobel Horizontal (Horizontal Edges)</option>
+                <option value="sobelV">Sobel Vertical (Vertical Edges)</option>
+                <option value="laplacian">Laplacian (All Edges)</option>
+                <option value="boxBlur">Box Blur (Smoothing)</option>
+              </select>
+            </div>
+            <div class="viz-buttons">
+              <button id="vizStepBtn" class="action-btn primary small">Step Forward &rarr;</button>
+              <button id="vizAutoPlayBtn" class="action-btn secondary small">▶ Auto Play</button>
+              <button id="vizResetBtn" class="action-btn secondary small">Reset</button>
+            </div>
+          </div>
+
+          <div class="viz-sandbox-grid">
+            <!-- 5x5 Input Grid -->
+            <div class="viz-panel">
+              <div class="viz-panel-header">
+                <span class="viz-panel-title">Input Matrix (5 &times; 5)</span>
+                <span class="viz-badge" id="vizInputCoords">Patch: (0, 0)</span>
+              </div>
+              <div class="matrix-grid-5x5" id="vizInputGrid"></div>
+            </div>
+
+            <!-- Operator Box -->
+            <div class="viz-operator-box">
+              <span class="math-operator">&bull;</span>
+              <div class="kernel-preview-card">
+                <span class="viz-panel-title">3 &times; 3 Filter</span>
+                <div class="matrix-grid-3x3" id="vizKernelGrid"></div>
+              </div>
+              <span class="math-operator">=</span>
+            </div>
+
+            <!-- 3x3 Output Grid -->
+            <div class="viz-panel">
+              <div class="viz-panel-header">
+                <span class="viz-panel-title">Output Feature Map (3 &times; 3)</span>
+                <span class="viz-badge" id="vizOutputCoords">Cell (0, 0)</span>
+              </div>
+              <div class="matrix-grid-3x3 output-grid" id="vizOutputGrid"></div>
+            </div>
+          </div>
+
+          <div class="viz-arithmetic-card" id="vizArithmeticCard">
+            <span class="calc-result-label">Step Calculation:</span>
+            <div class="calc-steps" id="vizMathFormula">Click "Step Forward" to slide the kernel across the input matrix.</div>
+          </div>
+        </div>
+
+        <!-- Visualizer Tab 2: 2x2 Max Pooling -->
+        <div id="vizPoolTab" class="viz-tab-content">
+          <p class="calc-desc">Max Pooling slides a 2x2 window with stride 2 and selects the maximum numerical value in each quadrant.</p>
+          <div class="viz-pool-layout">
+            <div class="viz-panel">
+              <div class="viz-panel-header">
+                <span class="viz-panel-title">Input Volume (4 &times; 4)</span>
+                <span class="viz-badge">Stride = 2</span>
+              </div>
+              <div class="matrix-grid-4x4" id="vizPoolInputGrid"></div>
+            </div>
+
+            <div class="viz-pool-arrow">&rarr;</div>
+
+            <div class="viz-panel">
+              <div class="viz-panel-header">
+                <span class="viz-panel-title">Max Pooled Output (2 &times; 2)</span>
+                <span class="viz-badge">0 Parameters</span>
+              </div>
+              <div class="matrix-grid-2x2" id="vizPoolOutputGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: FORMULA & CHEAT SHEET POPUP                                      -->
+  <!-- ========================================================================= -->
+  <div id="cheatSheetModal" class="modal-overlay" style="display: none;">
+    <div class="modal-window large">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">📑</span>
+          <h3>CECS 553 Quiz 1 Formula & Concept Cheat Sheet</h3>
+        </div>
+        <button id="closeCheatSheetBtn" class="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="modal-body cheat-sheet-body">
+        <div class="cheat-grid">
+          <div class="cheat-card">
+            <h4>📐 Spatial Output Formula</h4>
+            <div class="formula-box">O = ⌊(W - K + 2P) / S⌋ + 1</div>
+            <ul>
+              <li><strong>W:</strong> Input width / height</li>
+              <li><strong>K:</strong> Kernel / Filter dimension</li>
+              <li><strong>P:</strong> Padding (P=0 for Valid, P=(K-1)/2 for Same)</li>
+              <li><strong>S:</strong> Stride (step size)</li>
+            </ul>
+          </div>
+
+          <div class="cheat-card">
+            <h4>🔢 Conv Parameter Counting</h4>
+            <div class="formula-box">Params = (K_w &times; K_h &times; C_in + 1) &times; C_out</div>
+            <ul>
+              <li><strong>Weights:</strong> K_w &times; K_h &times; C_in &times; C_out</li>
+              <li><strong>Biases:</strong> 1 per output filter (= C_out)</li>
+              <li><strong>Max/Avg Pooling:</strong> Exactly 0 parameters!</li>
+            </ul>
+          </div>
+
+          <div class="cheat-card">
+            <h4>⚡ Activation Functions & Ranges</h4>
+            <ul>
+              <li><strong>Sigmoid:</strong> <code>σ(z) = 1/(1+e^-z)</code> &bull; Range: (0, 1) &bull; Max deriv: 0.25</li>
+              <li><strong>Tanh:</strong> <code>tanh(z) = (e^z-e^-z)/(e^z+e^-z)</code> &bull; Range: (-1, 1) &bull; Zero centered</li>
+              <li><strong>ReLU:</strong> <code>max(0, z)</code> &bull; Range: [0, ∞) &bull; Deriv: 1 (z>0), 0 (z&le;0)</li>
+              <li><strong>Leaky ReLU:</strong> <code>max(0.01z, z)</code> &bull; No dying ReLU problem!</li>
+              <li><strong>Softmax:</strong> <code>e^z_i / Σ e^z_j</code> &bull; Multi-class outputs sum to 1</li>
+            </ul>
+          </div>
+
+          <div class="cheat-card">
+            <h4>🛡️ Overfitting & Regularization</h4>
+            <ul>
+              <li><strong>Dropout:</strong> Random zeroing during training; scale by (1-p) at test time.</li>
+              <li><strong>Batch Norm:</strong> <code>y = γ * ((x-μ)/√(σ²+ε)) + β</code> &bull; speeds convergence.</li>
+              <li><strong>L1 Regularization:</strong> Penalizes Σ|w|, induces weight sparsity.</li>
+              <li><strong>L2 Weight Decay:</strong> Penalizes ½Σw², shrinks weights smoothly.</li>
+              <li><strong>Data Augmentation:</strong> Random flips, crops, rotations to expand support.</li>
+            </ul>
+          </div>
+
+          <div class="cheat-card">
+            <h4>🏛️ Classic CNN Milestones</h4>
+            <ul>
+              <li><strong>LeNet-5 (1998):</strong> 5 layers, Tanh/Sigmoid, checks & MNIST.</li>
+              <li><strong>AlexNet (2012):</strong> 8 layers, ImageNet winner, introduced ReLU, Dropout, GPUs.</li>
+              <li><strong>VGG (2014):</strong> Stacks of 3x3 filters (two 3x3 = 5x5 receptive field, fewer params).</li>
+              <li><strong>ResNet (2015):</strong> Residual connections <code>H(x) = F(x) + x</code>, solves vanishing gradients.</li>
+            </ul>
+          </div>
+
+          <div class="cheat-card">
+            <h4>🎯 Vision Tasks Hierarchy</h4>
+            <ul>
+              <li><strong>Classification:</strong> Single label for entire image.</li>
+              <li><strong>Object Detection:</strong> Bounding box <code>[x, y, w, h]</code> + class label (YOLO, R-CNN).</li>
+              <li><strong>Semantic Segmentation:</strong> Classify every pixel without instance distinction.</li>
+              <li><strong>IoU Metric:</strong> <code>Area(Overlap) / Area(Union)</code> &bull; True positive if IoU &ge; 0.5.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: KEYBOARD SHORTCUTS GUIDE                                         -->
+  <!-- ========================================================================= -->
+  <div id="shortcutsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">⌨️</span>
+          <h3>Keyboard Shortcuts Guide</h3>
+        </div>
+        <button id="closeShortcutsBtn" class="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="shortcuts-grid">
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>1</kbd> / <kbd>A</kbd></span>
+            <span class="shortcut-desc">Select Option A in Practice Quiz</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>2</kbd> / <kbd>B</kbd></span>
+            <span class="shortcut-desc">Select Option B in Practice Quiz</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>3</kbd> / <kbd>C</kbd></span>
+            <span class="shortcut-desc">Select Option C in Practice Quiz</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>4</kbd> / <kbd>D</kbd></span>
+            <span class="shortcut-desc">Select Option D in Practice Quiz</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>&rarr;</kbd> / <kbd>N</kbd></span>
+            <span class="shortcut-desc">Next Question / Next Flashcard</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>&larr;</kbd> / <kbd>P</kbd></span>
+            <span class="shortcut-desc">Previous Question / Prev Flashcard</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>Space</kbd></span>
+            <span class="shortcut-desc">Flip 3D Flashcard</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>F</kbd></span>
+            <span class="shortcut-desc">Flag / Unflag Question on Scantron</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>S</kbd></span>
+            <span class="shortcut-desc">Scroll to Scantron Bubble Sheet</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>C</kbd></span>
+            <span class="shortcut-desc">Open CNN Calculator</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>V</kbd></span>
+            <span class="shortcut-desc">Open 2D Convolution Visualizer</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>H</kbd></span>
+            <span class="shortcut-desc">Open Formula Cheat Sheet</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>M</kbd></span>
+            <span class="shortcut-desc">Toggle Sound Effects (Mute)</span>
+          </div>
+          <div class="shortcut-row">
+            <span class="shortcut-keys"><kbd>Esc</kbd></span>
+            <span class="shortcut-desc">Close any open modal window</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/questions.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
