@@ -1,11 +1,13 @@
 // ==============================================================================
-// CECS 553 - MACHINE VISION | QUIZ 1 COMPREHENSIVE QUESTION BANK (180 MCQS)
+// CECS 553 - MACHINE VISION | QUIZ 1 COMPREHENSIVE QUESTION BANK (220 MCQS)
 // Grounded in Course Slides, MIT 6.S191 Lectures 1 & 3, Bonus Module 1 & Labs
 // Modules Covered:
 //   - Module 01: PT_Part1_Intro.ipynb, Part1_TensorFlow.ipynb, data_augmentation.ipynb
 //   - Module 02: Part1_MNIST.ipynb, PT_Part1_MNIST.ipynb, CNN2025.pdf
 //   - Module 03: autoencoder.ipynb, PT_Part2_Debiasing.ipynb, Generative Models.pdf
-// Total Questions: 180 High-Yield Conceptual & Computational MCQs
+// Special Categories:
+//   - Line-by-Line Code & Equation Actions (40 questions from all 8 course .ipynb files)
+//   - Exact Slide Statements (50 verbatim definitions & theorems)
 // Features: 100% Complete Plain-English / Noob Breakdowns & Term Glossaries
 // ==============================================================================
 
@@ -4471,6 +4473,1003 @@ const QUESTION_BANK = [
       "terms": {
         "Latent Density Q(z|x)": "The probability density indicating how frequently a face's latent features appear in the training dataset.",
         "Adaptive Resampling Weight": "W(x) ~ 1 / (Q(z) + alpha), giving higher sampling probability to rare, underrepresented faces."
+      }
+    }
+  },
+  {
+    "id": 181,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`Part1_TensorFlow.ipynb`), what specific action does the line `x.assign(new_x)` perform during the manual SGD loop?",
+    "options": [
+      "Mutates the numerical value of the mutable tf.Variable in-place without reallocating tensor memory",
+      "Creates a new immutable tf.constant tensor and deletes the old variable from memory",
+      "Calculates the partial derivative of the loss function with respect to new_x",
+      "Casts new_x from float32 to float64 precision"
+    ],
+    "correctAnswer": "Mutates the numerical value of the mutable tf.Variable in-place without reallocating tensor memory",
+    "explanation": {
+      "summary": "In TensorFlow, you cannot reassign a tf.Variable using Python's 'x = new_x' syntax inside graphs; you must use .assign() to mutate its underlying memory buffer.",
+      "whyCorrect": "In Part1_TensorFlow.ipynb Section 1.4: `x.assign(new_x)` performs an in-place state update on the tf.Variable tensor x with the newly calculated SGD gradient step value.",
+      "whyWrong": "Python assignment 'x = new_x' would overwrite the variable with a standard tensor and break gradient tracking. It does not compute derivatives or change datatypes.",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `x.assign(new_x)` -> in-place state mutation for tf.Variable.",
+      "noobBreakdown": "In TensorFlow, a variable is like a whiteboard. Writing 'x.assign(new_x)' erases the old number on the whiteboard and writes the new number in its place, without throwing away the whiteboard!",
+      "terms": {
+        "tf.Variable": "A mutable TensorFlow tensor that holds and updates model weights and parameters.",
+        ".assign()": "An in-place mutation method used to update a tf.Variable's stored value.",
+        "In-Place Mutation": "Modifying existing computer memory directly rather than creating a new object."
+      }
+    }
+  },
+  {
+    "id": 182,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`Part1_TensorFlow.ipynb`), what exact action is initiated by executing `with tf.GradientTape() as tape:`?",
+    "options": [
+      "Starts recording all forward-pass tensor operations on watched variables onto an internal execution tape for automatic differentiation",
+      "Freezes all model parameters and layers so weights cannot be updated",
+      "Allocates GPU VRAM cache buffers for multi-threaded batch matrix multiplication",
+      "Converts all floating-point operations from 32-bit to 64-bit precision"
+    ],
+    "correctAnswer": "Starts recording all forward-pass tensor operations on watched variables onto an internal execution tape for automatic differentiation",
+    "explanation": {
+      "summary": "tf.GradientTape is TensorFlow's automatic differentiation engine context manager.",
+      "whyCorrect": "Inside `with tf.GradientTape() as tape:`, TensorFlow watches operations performed on tf.Variable tensors and records them onto a computational tape so derivatives can be computed during backpropagation.",
+      "whyWrong": "It does not freeze parameters (that would be setting trainable=False), does not allocate GPU memory, and does not alter datatypes.",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `with tf.GradientTape() as tape:` -> records forward operations for autodiff.",
+      "noobBreakdown": "Think of it like turning on a security camera tape recorder. While inside the 'with' block, TensorFlow records every mathematical addition and multiplication so it can rewind the tape later to calculate derivatives!",
+      "terms": {
+        "tf.GradientTape": "The context manager in TensorFlow 2 used to track operations for gradient computation.",
+        "Automatic Differentiation": "A computer science technique using the chain rule to calculate exact derivatives of computer programs.",
+        "Context Manager": "A Python 'with' statement managing the lifecycle of an active resource."
+      }
+    }
+  },
+  {
+    "id": 183,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`Part1_TensorFlow.ipynb`), what is the action of `dy_dx = tape.gradient(y, x)`?",
+    "options": [
+      "Queries the recorded tape to compute the symbolic or numerical derivative of target tensor y with respect to source tensor x",
+      "Clears all gradient buffers in x and resets them to zero",
+      "Executes an Adam optimizer step updating variable x using loss y",
+      "Evaluates whether y is mathematically equal to x"
+    ],
+    "correctAnswer": "Queries the recorded tape to compute the symbolic or numerical derivative of target tensor y with respect to source tensor x",
+    "explanation": {
+      "summary": "tape.gradient(target, sources) computes the reverse-mode derivative dy/dx using the chain rule.",
+      "whyCorrect": "In Part1_TensorFlow.ipynb Section 1.4: For y = x^2 with x=3.0, `tape.gradient(y, x)` evaluates dy/dx = 2x = 6.0 and releases non-persistent tape resources.",
+      "whyWrong": "It does not reset gradients to zero (that is PyTorch's zero_grad) and does not update weights (that requires an optimizer).",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `tape.gradient(y, x)` -> computes dy/dx via reverse-mode autodiff.",
+      "noobBreakdown": "You are pressing the 'Calculate Derivative' button on your recorded tape! It looks at how y was calculated from x and tells you the exact steepness (slope) of the curve at that point.",
+      "terms": {
+        "tape.gradient(y, x)": "Method computing the derivative of target y with respect to variable x.",
+        "Reverse-Mode Autodiff": "Computing gradients backwards from output to inputs using vector-Jacobian products."
+      }
+    }
+  },
+  {
+    "id": 184,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In `OurDenseLayer` (`Part1_TensorFlow.ipynb`), what is the action of `self.W = self.add_weight(name='weight', shape=[d, self.n_output_nodes])` inside the `build()` method?",
+    "options": [
+      "Allocates and registers a learnable parameter weight matrix of shape [input_features, output_nodes] within the layer's state",
+      "Computes the matrix multiplication of inputs with existing weights",
+      "Downloads pre-trained ImageNet weights from the TensorFlow Hub repository",
+      "Applies a Dropout mask to the layer's weights"
+    ],
+    "correctAnswer": "Allocates and registers a learnable parameter weight matrix of shape [input_features, output_nodes] within the layer's state",
+    "explanation": {
+      "summary": "add_weight() is Keras's official method to create and register trainable layer parameters once input shape is known.",
+      "whyCorrect": "In custom Layer subclassing, weights cannot be created until the input dimension d = input_shape[-1] is known. `build()` calls `self.add_weight` to create the weight matrix W.",
+      "whyWrong": "It does not perform multiplication (that happens in call()), does not download pre-trained weights, and does not apply Dropout.",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `self.add_weight(...)` inside `build()` -> creates learnable weight parameter matrix.",
+      "noobBreakdown": "Creating the dial knobs of your neural network! Because we now know how many inputs are arriving (d) and how many answers we need to output (n_output_nodes), this line carves out the exact grid of weights in memory.",
+      "terms": {
+        "add_weight()": "Keras Layer method used to declare trainable variables in a custom layer.",
+        "build(input_shape)": "Keras lifecycle method executed once input tensor dimensions are known."
+      }
+    }
+  },
+  {
+    "id": 185,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In `OurDenseLayer.call(x)` (`Part1_TensorFlow.ipynb`), what mathematical action is performed by `z = tf.matmul(x, self.W) + self.b`?",
+    "options": [
+      "Computes the linear pre-activation transformation by multiplying input tensor x by weight matrix W and adding bias vector b",
+      "Applies non-linear Sigmoid activation to input x",
+      "Calculates the Euclidean distance between x and W",
+      "Performs 2D convolution between image x and kernel W"
+    ],
+    "correctAnswer": "Computes the linear pre-activation transformation by multiplying input tensor x by weight matrix W and adding bias vector b",
+    "explanation": {
+      "summary": "tf.matmul performs matrix multiplication, computing the fundamental linear combination z = x*W + b.",
+      "whyCorrect": "In Part1_TensorFlow.ipynb Section 1.3: `z = tf.matmul(x, self.W) + self.b` computes the linear dot product transformation immediately preceding the activation y = tf.sigmoid(z).",
+      "whyWrong": "tf.matmul does not apply Sigmoid (that is tf.sigmoid) and does not perform convolution (that is tf.nn.conv2d).",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `z = tf.matmul(x, self.W) + self.b` -> linear combination pre-activation.",
+      "noobBreakdown": "The standard neuron math! Takes all incoming numbers in x, multiplies them by their corresponding weights in W, and adds a baseline bias number b.",
+      "terms": {
+        "tf.matmul": "TensorFlow matrix multiplication operation: A @ B.",
+        "Linear Pre-activation": "The weighted sum z = W*x + b before passing into an activation function."
+      }
+    }
+  },
+  {
+    "id": 186,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In Module 01 (`Part1_TensorFlow.ipynb`), what real-world computer vision data structure is represented by `images = tf.zeros([10, 256, 256, 3])`?",
+    "options": [
+      "A mini-batch of 10 RGB color images, each having height 256 pixels, width 256 pixels, and 3 color channels",
+      "A single 10-channel volumetric medical scan of size 256 x 256 x 3",
+      "A 3D video consisting of 10 frames of 256 x 256 grayscale pixels",
+      "A convolutional kernel containing 10 filters of size 256 x 256 with 3 biases"
+    ],
+    "correctAnswer": "A mini-batch of 10 RGB color images, each having height 256 pixels, width 256 pixels, and 3 color channels",
+    "explanation": {
+      "summary": "Standard vision tensor convention in TensorFlow is NHWC: Batch size, Height, Width, Channels.",
+      "whyCorrect": "In Part1_TensorFlow.ipynb Section 1.1: Shape [10, 256, 256, 3] defines 10 separate images, 256 height, 256 width, and 3 color channels (Red, Green, Blue).",
+      "whyWrong": "It is not a medical scan or video; it represents 10 standard color images.",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `tf.zeros([B, H, W, C])` -> 4D image batch tensor.",
+      "noobBreakdown": "A digital photo album! You have 10 separate photos. Each photo is 256 pixels tall and 256 pixels wide, and has 3 color layers: Red, Green, and Blue.",
+      "terms": {
+        "4-D Tensor": "A multi-dimensional array with 4 axes (here: [Batch, Height, Width, Channels]).",
+        "Color Channels": "The color components of an image (usually 3 for RGB: Red, Green, Blue)."
+      }
+    }
+  },
+  {
+    "id": 187,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In the manual SGD loop in `Part1_TensorFlow.ipynb`, what does `loss = tf.square(x - x_f)` calculate?",
+    "options": [
+      "The quadratic Mean Squared Error loss between current variable x and target value x_f = 4",
+      "The square root of distance between x and x_f",
+      "The derivative of x with respect to x_f",
+      "A categorical cross-entropy penalty between class x and class x_f"
+    ],
+    "correctAnswer": "The quadratic Mean Squared Error loss between current variable x and target value x_f = 4",
+    "explanation": {
+      "summary": "tf.square(x - x_f) computes L = (x - x_f)^2, measuring how far x is from target goal x_f.",
+      "whyCorrect": "In Part1_TensorFlow.ipynb Section 1.4: The objective is finding the minimum of L = (x - 4)^2 using SGD. tf.square calculates the squared error loss.",
+      "whyWrong": "It does not take square root (that would be tf.sqrt) and does not compute derivatives.",
+      "keyConcept": "Notebook Line Action (Part1_TensorFlow.ipynb): `loss = tf.square(x - x_f)` -> quadratic loss function.",
+      "noobBreakdown": "How far away are we from the bullseye? If our target is 4 and our current guess is 1, our mistake is (1 - 4) = -3, and squaring it gives a loss of 9.",
+      "terms": {
+        "tf.square": "Computes element-wise square: x^2.",
+        "Quadratic Loss": "A squared error loss function L = (x - target)^2."
+      }
+    }
+  },
+  {
+    "id": 188,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`PT_Part1_Intro.ipynb`), what is the action of `x = torch.tensor(3.0, requires_grad=True)` in PyTorch?",
+    "options": [
+      "Creates a scalar float tensor and signals PyTorch's autograd engine to track all downstream operations performed on it for gradient computation",
+      "Calculates the immediate derivative of 3.0",
+      "Freezes the tensor so its numerical value cannot be modified",
+      "Transfers the scalar tensor directly to GPU CUDA memory"
+    ],
+    "correctAnswer": "Creates a scalar float tensor and signals PyTorch's autograd engine to track all downstream operations performed on it for gradient computation",
+    "explanation": {
+      "summary": "requires_grad=True is PyTorch's mechanism to designate a tensor as a leaf node whose gradients should be tracked.",
+      "whyCorrect": "In PT_Part1_Intro.ipynb Section 1.2: Setting `requires_grad=True` turns on PyTorch's autograd tracking. Any operation involving x will build a dynamic computation graph.",
+      "whyWrong": "It does not compute derivatives immediately and does not move data to GPU (that requires .to('cuda')).",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `requires_grad=True` -> enables autograd gradient tracking on a PyTorch tensor.",
+      "noobBreakdown": "Telling PyTorch: 'Keep your eyes on this number!' Whenever this number is used in any equation, PyTorch takes notes so it can calculate its slope later.",
+      "terms": {
+        "requires_grad=True": "PyTorch tensor attribute that enables automatic gradient computation.",
+        "Autograd": "PyTorch's automatic differentiation engine that builds dynamic computation graphs on the fly."
+      }
+    }
+  },
+  {
+    "id": 189,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`PT_Part1_Intro.ipynb`), what action occurs when calling `y.backward()` on a scalar loss tensor?",
+    "options": [
+      "Traverses the computation graph backwards from y, applying the chain rule to compute gradients for all leaf tensors with requires_grad=True",
+      "Undoes the previous forward pass and reverts weights to their previous epoch state",
+      "Evaluates whether y is greater than zero and raises a runtime warning if negative",
+      "Updates the model weights using the Adam optimizer"
+    ],
+    "correctAnswer": "Traverses the computation graph backwards from y, applying the chain rule to compute gradients for all leaf tensors with requires_grad=True",
+    "explanation": {
+      "summary": "backward() executes backpropagation across PyTorch's dynamic autograd graph.",
+      "whyCorrect": "In PT_Part1_Intro.ipynb: Calling `.backward()` calculates partial derivatives of y with respect to all graph variables and stores them in each variable's `.grad` attribute.",
+      "whyWrong": "It does not undo weight steps and does not update weights (that is optimizer.step()).",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `y.backward()` -> executes backpropagation via the chain rule.",
+      "noobBreakdown": "Running backpropagation! It traces all the math steps backward from the final score y all the way to the starting weights, calculating how much each weight contributed to the mistake.",
+      "terms": {
+        ".backward()": "PyTorch method that computes gradients using reverse-mode automatic differentiation.",
+        "Leaf Tensors": "Starting inputs or weights in the computation graph created directly by the user."
+      }
+    }
+  },
+  {
+    "id": 190,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Module 01 (`PT_Part1_Intro.ipynb`), where does PyTorch store the gradient of `y = x**2` after running `y.backward()`?",
+    "options": [
+      "In the `.grad` attribute of tensor x (`x.grad`)",
+      "Inside a global variable named `torch.gradients`",
+      "In the return value of `y.backward()`",
+      "Inside the optimizer's cache dictionary"
+    ],
+    "correctAnswer": "In the `.grad` attribute of tensor x (`x.grad`)",
+    "explanation": {
+      "summary": "PyTorch accumulates computed gradients directly in each leaf tensor's .grad attribute.",
+      "whyCorrect": "In PT_Part1_Intro.ipynb Section 1.2: After running `y.backward()`, inspecting `x.grad` outputs the value `tensor(6.)` (since dy/dx = 2*3 = 6).",
+      "whyWrong": "y.backward() returns None; gradients are stored directly on the input tensor attribute `x.grad`.",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `x.grad` -> contains computed gradient dy/dx.",
+      "noobBreakdown": "The gradient is stamped directly onto the variable itself! If you want to see how steep the curve is for x, you just inspect `x.grad`.",
+      "terms": {
+        ".grad": "PyTorch tensor attribute storing the accumulated partial derivative of the loss."
+      }
+    }
+  },
+  {
+    "id": 191,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In PyTorch notebooks (`PT_Part1_Intro.ipynb` & `PT_Part1_MNIST.ipynb`), what is the primary benefit of wrapping code in `with torch.no_grad():`?",
+    "options": [
+      "Deactivates the autograd engine, reducing GPU memory consumption and speeding up inference by not building a backward computation graph",
+      "Sets all weight gradients in the model to zero",
+      "Prevents the model from making incorrect predictions on test data",
+      "Forces all computations to run on CPU instead of GPU"
+    ],
+    "correctAnswer": "Deactivates the autograd engine, reducing GPU memory consumption and speeding up inference by not building a backward computation graph",
+    "explanation": {
+      "summary": "torch.no_grad() disables gradient calculation context, saving memory during evaluation.",
+      "whyCorrect": "During evaluation/testing, backpropagation is not needed. `with torch.no_grad():` stops PyTorch from saving intermediate activation states in memory.",
+      "whyWrong": "It does not zero gradients (that is optimizer.zero_grad()) and does not force CPU execution.",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `with torch.no_grad():` -> disables autograd tracking for fast memory-efficient evaluation.",
+      "noobBreakdown": "Telling PyTorch: 'We are just testing, don't take notes!' Because we aren't training or calculating derivatives, this frees up computer memory and makes testing run much faster.",
+      "terms": {
+        "torch.no_grad()": "A PyTorch context manager that turns off gradient computation.",
+        "Inference Mode": "Evaluating an already-trained model on new data without updating weights."
+      }
+    }
+  },
+  {
+    "id": 192,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In PyTorch notebooks, why must you call `x.detach().numpy()` instead of simply `x.numpy()` when converting a tensor that required gradients?",
+    "options": [
+      "Because PyTorch prevents direct NumPy conversion of tensors that are attached to an active computation graph; .detach() separates it from the graph first",
+      "Because .detach() transfers the tensor from GPU memory to CPU memory",
+      "Because .detach() rounds floating-point numbers to integers",
+      "Because NumPy arrays cannot store more than 100 elements"
+    ],
+    "correctAnswer": "Because PyTorch prevents direct NumPy conversion of tensors that are attached to an active computation graph; .detach() separates it from the graph first",
+    "explanation": {
+      "summary": "Tensors requiring gradients cannot be converted to NumPy directly because NumPy cannot track PyTorch autograd history.",
+      "whyCorrect": "Calling `x.numpy()` on a tensor with `requires_grad=True` throws a RuntimeError. Calling `.detach()` creates a new tensor that shares storage but is disconnected from the gradient graph.",
+      "whyWrong": "Moving from GPU to CPU is done with `.cpu()`, not `.detach()`. It does not round numbers or limit size.",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `x.detach().numpy()` -> separates tensor from autograd graph before converting to NumPy.",
+      "noobBreakdown": "Cutting the umbilical cord! You cannot convert a live PyTorch tensor into a standard NumPy array while it is still plugged into the autograd calculation engine. Calling `.detach()` unplugs it safely.",
+      "terms": {
+        ".detach()": "Returns a new Tensor detached from the current autograd computation graph.",
+        ".numpy()": "Converts a PyTorch CPU tensor into a NumPy ndarray."
+      }
+    }
+  },
+  {
+    "id": 193,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In PyTorch (`PT_Part1_Intro.ipynb`), what layer transformation is instantiated by `nn.Linear(in_features=2, out_features=1, bias=True)`?",
+    "options": [
+      "A fully connected layer computing y = x * W^T + b, mapping 2 input features to 1 output feature",
+      "A 1D convolutional filter of width 2",
+      "A normalization layer calculating mean and variance across 2 channels",
+      "A non-linear activation squashing 2 inputs between 0 and 1"
+    ],
+    "correctAnswer": "A fully connected layer computing y = x * W^T + b, mapping 2 input features to 1 output feature",
+    "explanation": {
+      "summary": "nn.Linear is PyTorch's fully connected (dense) layer module.",
+      "whyCorrect": "In PT_Part1_Intro.ipynb Section 2.1: `nn.Linear(2, 1)` creates a weight matrix of shape [1, 2] and a bias vector of shape [1], implementing the linear transformation y = Wx + b.",
+      "whyWrong": "It is not a convolution (that is nn.Conv1d) and not an activation (that is nn.Sigmoid).",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `nn.Linear(in_f, out_f)` -> fully connected dense layer.",
+      "noobBreakdown": "A standard linear equation with 2 inputs and 1 output: y = w1*x1 + w2*x2 + b. This is PyTorch's version of Keras's `Dense(1)` layer.",
+      "terms": {
+        "nn.Linear": "PyTorch module applying an affine linear transformation y = xA^T + b.",
+        "in_features": "Size of each input sample.",
+        "out_features": "Size of each output sample."
+      }
+    }
+  },
+  {
+    "id": 194,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In PyTorch custom model definitions (`PT_Part1_Intro.ipynb` & `PT_Part1_MNIST.ipynb`), why must `super().__init__()` be executed inside `__init__`?",
+    "options": [
+      "Initializes the base nn.Module parent class, registering parameter tracking hooks, sub-modules, and PyTorch internal machinery",
+      "Loads the pre-trained weights from disk into the model",
+      "Sets the model automatically to evaluation mode",
+      "Allocates GPU CUDA memory for the entire network"
+    ],
+    "correctAnswer": "Initializes the base nn.Module parent class, registering parameter tracking hooks, sub-modules, and PyTorch internal machinery",
+    "explanation": {
+      "summary": "super().__init__() calls the constructor of nn.Module, which is mandatory in PyTorch OOP.",
+      "whyCorrect": "Without `super().__init__()`, PyTorch cannot initialize internal state dictionaries (_parameters, _buffers, _modules) and will crash as soon as you define a layer attribute like self.fc = nn.Linear().",
+      "whyWrong": "It does not load weights, does not toggle eval mode, and does not allocate GPU memory.",
+      "keyConcept": "Notebook Line Action (PT_Part1_Intro.ipynb): `super().__init__()` -> initializes nn.Module base class machinery.",
+      "noobBreakdown": "Inheriting the superpowers of PyTorch! When building a custom model class, calling `super().__init__()` ensures PyTorch hooks up all its internal gears so it can track your model's layers and weights.",
+      "terms": {
+        "nn.Module": "The base class for all neural network modules in PyTorch.",
+        "super().__init__()": "Calls the constructor of the parent class in Python object-oriented programming."
+      }
+    }
+  },
+  {
+    "id": 195,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Module 01 (`data_augmentation.ipynb`), what action is performed by `layers.RandomFlip('horizontal_and_vertical')`?",
+    "options": [
+      "Randomly applies horizontal (left-right) and vertical (up-down) mirror flips to training images with 50% probability",
+      "Inverts the RGB color values of the image from black to white",
+      "Rotates the image by exactly 90 degrees clockwise on every step",
+      "Transposes the batch dimension with the channel dimension"
+    ],
+    "correctAnswer": "Randomly applies horizontal (left-right) and vertical (up-down) mirror flips to training images with 50% probability",
+    "explanation": {
+      "summary": "RandomFlip applies random mirror reflections along specified axes during training.",
+      "whyCorrect": "In data_augmentation.ipynb Section 2: `layers.RandomFlip('horizontal_and_vertical')` randomly reflects inputs horizontally, vertically, or both, only during training.",
+      "whyWrong": "It does not invert colors (that is color inversion) and does not perform 90-degree rotations.",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `RandomFlip('horizontal_and_vertical')` -> random mirror reflections on images.",
+      "noobBreakdown": "Holding a mirror to the image! With a coin flip (50% chance), it flips the picture upside down or left-to-right so the network learns to recognize objects regardless of orientation.",
+      "terms": {
+        "RandomFlip": "Keras preprocessing layer for random geometric mirroring.",
+        "Data Augmentation": "Technique artificially expanding dataset diversity."
+      }
+    }
+  },
+  {
+    "id": 196,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In Module 01 (`data_augmentation.ipynb`), what does the parameter `0.2` specify in `layers.RandomRotation(0.2)`?",
+    "options": [
+      "A float representing a fraction of 2*pi, sampling random rotation angles uniformly from [-0.2 * 2*pi, +0.2 * 2*pi] (i.e. between -72 degrees and +72 degrees)",
+      "Rotates the image by exactly 0.2 degrees clockwise for all samples",
+      "Rotates 20% of the images in the batch while leaving 80% untouched",
+      "Shrinks the image size by 20% after rotating"
+    ],
+    "correctAnswer": "A float representing a fraction of 2*pi, sampling random rotation angles uniformly from [-0.2 * 2*pi, +0.2 * 2*pi] (i.e. between -72 degrees and +72 degrees)",
+    "explanation": {
+      "summary": "In Keras RandomRotation, the factor represents a fraction of 2*pi (360 degrees).",
+      "whyCorrect": "In data_augmentation.ipynb: `RandomRotation(0.2)` rotates images by a random angle sampled uniformly from [-20% of 360°, +20% of 360°], which equals [-72°, +72°].",
+      "whyWrong": "It is not a static 0.2-degree shift and does not mean 20% of images are rotated.",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `RandomRotation(factor)` -> factor is a fraction of 2*pi (full circle).",
+      "noobBreakdown": "Spinning the steering wheel! The number 0.2 means: spin the photo randomly clockwise or counter-clockwise by up to 20% of a full 360-degree circle (up to 72 degrees in either direction).",
+      "terms": {
+        "RandomRotation": "Keras preprocessing layer applying random rotations during training.",
+        "Rotation Factor": "Float representing a fraction of 2*pi."
+      }
+    }
+  },
+  {
+    "id": 197,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Module 01 (`data_augmentation.ipynb`), what action does `layers.RandomZoom(0.1)` perform?",
+    "options": [
+      "Randomly zooms into or out of the image by up to 10% along height and width",
+      "Increases pixel brightness by 10%",
+      "Zooms 10 times closer into the center pixel",
+      "Crops 90% of the outer boundary of the image"
+    ],
+    "correctAnswer": "Randomly zooms into or out of the image by up to 10% along height and width",
+    "explanation": {
+      "summary": "RandomZoom randomly scales the image dimensions by a factor up to the specified percentage.",
+      "whyCorrect": "In data_augmentation.ipynb: `RandomZoom(0.1)` applies a random zoom within the range [-10%, +10%] during training.",
+      "whyWrong": "It does not change brightness (that is RandomBrightness) and does not zoom by 10x.",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `RandomZoom(0.1)` -> random +/- 10% zoom.",
+      "noobBreakdown": "Pinching to zoom on your phone! It randomly zooms slightly in or slightly out by up to 10% so the model recognizes objects at different camera distances.",
+      "terms": {
+        "RandomZoom": "Keras preprocessing layer applying random zooming."
+      }
+    }
+  },
+  {
+    "id": 198,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Module 01 (`data_augmentation.ipynb`), what is the action of `layers.Rescaling(1./255)`?",
+    "options": [
+      "Linearly scales input pixel values from integer range [0, 255] into float range [0.0, 1.0]",
+      "Resizes the image resolution to 1 x 255 pixels",
+      "Compresses the image file size by a factor of 255",
+      "Normalizes the image to have zero mean and unit variance"
+    ],
+    "correctAnswer": "Linearly scales input pixel values from integer range [0, 255] into float range [0.0, 1.0]",
+    "explanation": {
+      "summary": "Rescaling multiplies each input pixel by the scale factor (1/255).",
+      "whyCorrect": "In data_augmentation.ipynb Section 1: Raw image pixels are 8-bit integers (0 to 255). `layers.Rescaling(1./255)` divides every pixel by 255, producing normalized floats in [0.0, 1.0].",
+      "whyWrong": "It does not change resolution (that is Resizing) and does not standardize mean/variance (that is Normalization).",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `layers.Rescaling(1./255)` -> scales pixel intensities to [0, 1].",
+      "noobBreakdown": "Dividing every pixel by 255! Turns integer color numbers between 0 and 255 into smooth decimals between 0.0 and 1.0 so neural network weights don't explode.",
+      "terms": {
+        "Rescaling": "Keras layer multiplying inputs by a constant scale factor.",
+        "Pixel Normalization": "Scaling pixel ranges to stabilize neural network training."
+      }
+    }
+  },
+  {
+    "id": 199,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In `data_augmentation.ipynb`, what is the purpose of `.prefetch(buffer_size=tf.data.AUTOTUNE)` in the dataset pipeline?",
+    "options": [
+      "Overlaps data preprocessing on CPU with model training execution on GPU by buffering batches in advance",
+      "Automatically tunes the model's learning rate hyperparameter during training",
+      "Pre-trains the model on ImageNet before fine-tuning",
+      "Compresses the dataset on hard drive storage to save space"
+    ],
+    "correctAnswer": "Overlaps data preprocessing on CPU with model training execution on GPU by buffering batches in advance",
+    "explanation": {
+      "summary": "prefetch allows data loading and model computation to run concurrently.",
+      "whyCorrect": "In data_augmentation.ipynb: `prefetch(AUTOTUNE)` prevents the GPU from idling while waiting for the next mini-batch to be augmented and loaded by the CPU.",
+      "whyWrong": "It does not tune learning rates (that is Keras Tuner) and does not download pre-trained weights.",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `.prefetch(AUTOTUNE)` -> overlaps CPU data loading with GPU compute.",
+      "noobBreakdown": "Like a kitchen assistant prepping ingredients ahead of time! While the head chef (GPU) is cooking batch #1, the assistant (CPU) is already chopping and prepping batch #2 so the chef never has to wait.",
+      "terms": {
+        "prefetch()": "tf.data method buffering elements ahead of time.",
+        "tf.data.AUTOTUNE": "Directs TensorFlow to dynamically optimize buffer sizes based on available hardware."
+      }
+    }
+  },
+  {
+    "id": 200,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Module 01 (`data_augmentation.ipynb`), what action does `image = tf.expand_dims(image, 0)` perform before passing an image into a Keras model?",
+    "options": [
+      "Adds a leading batch dimension, transforming a single image of shape (H, W, C) into a batch tensor of shape (1, H, W, C)",
+      "Doubles the spatial resolution of the image",
+      "Converts the image from RGB to RGBA by adding an alpha transparency channel",
+      "Flattens the image into a 1D vector"
+    ],
+    "correctAnswer": "Adds a leading batch dimension, transforming a single image of shape (H, W, C) into a batch tensor of shape (1, H, W, C)",
+    "explanation": {
+      "summary": "Keras models strictly require 4D batch inputs (B, H, W, C).",
+      "whyCorrect": "In data_augmentation.ipynb Section 2: A single image has shape (H, W, C). `tf.expand_dims(image, 0)` adds a batch axis of size 1 at index 0 so it can be fed into Keras layers.",
+      "whyWrong": "It does not resize spatial resolution or add color channels.",
+      "keyConcept": "Notebook Line Action (data_augmentation.ipynb): `tf.expand_dims(image, 0)` -> adds batch dimension (1, H, W, C).",
+      "noobBreakdown": "Wrapping a single photo into a batch box! Keras layers refuse to look at individual photos—they only accept 'boxes of photos' (batches). Putting a '1' at the front turns 1 photo into a batch of size 1.",
+      "terms": {
+        "tf.expand_dims": "Inserts a dimension of size 1 at the specified axis.",
+        "Batch Dimension": "The first axis representing the number of samples in a mini-batch."
+      }
+    }
+  },
+  {
+    "id": 201,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In `Friend_Part1_MNIST.ipynb`, what action is performed by `tf.keras.layers.Flatten(input_shape=(28, 28))`?",
+    "options": [
+      "Unrolls the 2D matrix of 28 x 28 pixels into a continuous 1D vector of 784 elements without altering the batch size",
+      "Compresses the image using lossy JPEG compression",
+      "Applies a 1x1 convolution across all pixels",
+      "Calculates the average pixel intensity of the 28 x 28 image"
+    ],
+    "correctAnswer": "Unrolls the 2D matrix of 28 x 28 pixels into a continuous 1D vector of 784 elements without altering the batch size",
+    "explanation": {
+      "summary": "Flatten transforms multi-dimensional feature maps into a 1D vector for dense classification.",
+      "whyCorrect": "In Friend_Part1_MNIST.ipynb: An input MNIST image is 28x28. `Flatten` reshapes it to 784 features (28*28 = 784) so it can connect to `Dense(128)`.",
+      "whyWrong": "It does not compress image files or compute averages.",
+      "keyConcept": "Notebook Line Action (Friend_Part1_MNIST.ipynb): `Flatten()` -> reshapes 2D image (28, 28) into 1D vector (784).",
+      "noobBreakdown": "Unrolling a carpet! It takes a 2D grid of 28 rows by 28 columns and lines up all 784 pixels in a single straight row.",
+      "terms": {
+        "Flatten Layer": "Keras layer reshaping input tensor of shape (B, H, W) to (B, H*W).",
+        "784 Features": "28 x 28 = 784 pixels in an MNIST image."
+      }
+    }
+  },
+  {
+    "id": 202,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In `Friend_Part1_MNIST.ipynb`, what does `tf.keras.layers.Dense(128, activation='relu')` create?",
+    "options": [
+      "A fully connected layer containing 128 artificial neurons with Rectified Linear Unit activation",
+      "A convolutional layer with 128 filters of size 128 x 128",
+      "A pooling layer that downsamples the input by a factor of 128",
+      "A normalization layer calculating moving average across 128 batches"
+    ],
+    "correctAnswer": "A fully connected layer containing 128 artificial neurons with Rectified Linear Unit activation",
+    "explanation": {
+      "summary": "Dense(128, activation='relu') is Keras's standard fully connected hidden layer.",
+      "whyCorrect": "In Friend_Part1_MNIST.ipynb: Connects all 784 inputs to 128 neurons, computing z = Wx + b and passing the result through ReLU: max(0, z).",
+      "whyWrong": "It is not a convolutional layer (that is Conv2D) and not a pooling layer.",
+      "keyConcept": "Notebook Line Action (Friend_Part1_MNIST.ipynb): `Dense(128, activation='relu')` -> fully connected layer with 128 ReLU units.",
+      "noobBreakdown": "A hidden layer with 128 neurons. Every single one of the 784 incoming pixels connects to all 128 neurons, and each neuron uses ReLU to stay active.",
+      "terms": {
+        "Dense Layer": "A fully connected neural network layer.",
+        "ReLU Activation": "max(0, z), zeroing negative values and keeping positive values."
+      }
+    }
+  },
+  {
+    "id": 203,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In `Friend_Part1_MNIST.ipynb`, what action does `tf.keras.layers.Dropout(0.2)` perform during training?",
+    "options": [
+      "Randomly drops 20% of the input neuron activations to zero on each training update to prevent overfitting",
+      "Permanently deletes 20% of the model's weights from hard drive storage",
+      "Reduces the learning rate by 20% whenever validation loss plateaus",
+      "Skips 20% of the training images in the dataset"
+    ],
+    "correctAnswer": "Randomly drops 20% of the input neuron activations to zero on each training update to prevent overfitting",
+    "explanation": {
+      "summary": "Dropout randomly deactivates a fraction of activations during training.",
+      "whyCorrect": "In Friend_Part1_MNIST.ipynb: `Dropout(0.2)` sets 20% of incoming features to 0 randomly on each forward pass, scaling remaining features by 1/(1-0.2) = 1.25.",
+      "whyWrong": "It does not delete weights permanently and does not change learning rate.",
+      "keyConcept": "Notebook Line Action (Friend_Part1_MNIST.ipynb): `Dropout(0.2)` -> randomly sets 20% of activations to 0 during training.",
+      "noobBreakdown": "Randomly muting 20% of the team members during practice so no single student dominates and everyone learns to work independently!",
+      "terms": {
+        "Dropout(p)": "Regularization layer setting fraction p of activations to zero during training.",
+        "Co-adaptation": "When neurons depend on each other excessively to fix errors."
+      }
+    }
+  },
+  {
+    "id": 204,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Exam Level",
+    "question": "In `Friend_Part1_MNIST.ipynb` and `Part1_MNIST.ipynb`, what does the argument `from_logits=True` specify in `tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)`?",
+    "options": [
+      "Indicates that the model outputs raw unnormalized logits (no final Softmax activation layer), allowing the loss function to compute a more numerically stable softmax internally",
+      "Indicates that the targets are one-hot encoded vectors",
+      "Tells the optimizer to ignore negative numbers",
+      "Enables multi-GPU training support"
+    ],
+    "correctAnswer": "Indicates that the model outputs raw unnormalized logits (no final Softmax activation layer), allowing the loss function to compute a more numerically stable softmax internally",
+    "explanation": {
+      "summary": "from_logits=True informs Keras that model outputs are raw logits, preventing numerical overflow/underflow.",
+      "whyCorrect": "In course notebooks: The final layer is `Dense(10)` with no activation. Setting `from_logits=True` computes log-sum-exp internally, avoiding precision issues with tiny probabilities.",
+      "whyWrong": "Target format is controlled by Sparse vs Categorical, not from_logits.",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `from_logits=True` -> model outputs raw unscaled logits; softmax computed internally.",
+      "noobBreakdown": "Telling Keras: 'My model is outputting raw scores, not finished percentages!' Keras then computes Softmax and Cross-Entropy together in one step to prevent computer rounding errors.",
+      "terms": {
+        "from_logits=True": "Flag indicating network outputs are raw scores rather than probabilities.",
+        "Numerical Stability": "Preventing rounding errors or NaN values during computer float calculations."
+      }
+    }
+  },
+  {
+    "id": 205,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Keras notebooks, what action is performed by `model.compile(optimizer='adam', loss=loss_fn, metrics=['accuracy'])`?",
+    "options": [
+      "Configures the model for training by associating the optimizer, loss objective, and evaluation metrics with the model graph",
+      "Executes the full 100-epoch training loop on the dataset",
+      "Converts the Python code into C++ binary machine instructions",
+      "Freezes the model weights so they cannot be updated"
+    ],
+    "correctAnswer": "Configures the model for training by associating the optimizer, loss objective, and evaluation metrics with the model graph",
+    "explanation": {
+      "summary": "model.compile configures the learning process before training begins.",
+      "whyCorrect": "In Part1_MNIST.ipynb: `model.compile()` specifies the optimization algorithm (Adam), loss function, and metrics to monitor during training and evaluation.",
+      "whyWrong": "It does not train the model (that is model.fit()) and does not compile to C++ binary.",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `model.compile(...)` -> sets up optimizer, loss, and metrics.",
+      "noobBreakdown": "Setting the rules of the game! Before you start training, you tell the model: 'Here is your coach (Adam), here is your grading rubric (loss), and here is your scorecard (accuracy).'",
+      "terms": {
+        "model.compile()": "Keras method configuring optimizer, loss, and metrics."
+      }
+    }
+  },
+  {
+    "id": 206,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 1",
+    "difficulty": "Basic",
+    "question": "In Keras notebooks, what action is executed when calling `model.fit(x_train, y_train, epochs=5)`?",
+    "options": [
+      "Runs the full training loop for 5 complete passes over the training dataset, updating weights using backpropagation",
+      "Evaluates model accuracy on the test set without updating weights",
+      "Compresses the dataset into an autoencoder format",
+      "Resizes all training images to 5 x 5 pixels"
+    ],
+    "correctAnswer": "Runs the full training loop for 5 complete passes over the training dataset, updating weights using backpropagation",
+    "explanation": {
+      "summary": "model.fit trains the model on data for a specified number of epochs.",
+      "whyCorrect": "In Friend_Part1_MNIST.ipynb: `model.fit` feeds mini-batches through the network, computes loss, backpropagates gradients, and updates weights for 5 full epochs.",
+      "whyWrong": "It is not evaluation (that is model.evaluate()) and does not resize images.",
+      "keyConcept": "Notebook Line Action (Friend_Part1_MNIST.ipynb): `model.fit(...)` -> trains the model across epochs.",
+      "noobBreakdown": "Hitting the 'Train' button! The model reviews all the training flashcards 5 full times (epochs), adjusting its weights every step to get smarter.",
+      "terms": {
+        "model.fit()": "Keras method that executes model training.",
+        "Epoch": "One complete pass through the entire training dataset."
+      }
+    }
+  },
+  {
+    "id": 207,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In Module 02 (`Part1_MNIST.ipynb`), what is the output spatial feature map shape after `layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1))` processes an image?",
+    "options": [
+      "(26, 26, 32)",
+      "(28, 28, 32)",
+      "(24, 24, 16)",
+      "(14, 14, 32)"
+    ],
+    "correctAnswer": "(26, 26, 32)",
+    "explanation": {
+      "summary": "Without padding (valid padding), a 3x3 filter shrinks a 28x28 image by 2 pixels to 26x26.",
+      "whyCorrect": "In Part1_MNIST.ipynb: Output size = (W - K + 2P)/S + 1 = (28 - 3 + 0)/1 + 1 = 26. With 32 filters, the output shape is (26, 26, 32).",
+      "whyWrong": "(28, 28, 32) would require padding='same'. (14, 14) would require stride=2 or pooling.",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `Conv2D(32, (3,3))` on (28, 28, 1) -> output shape is (26, 26, 32).",
+      "noobBreakdown": "Applying 32 filters of size 3x3 without extra border padding shrinks the 28x28 picture down to 26x26. Since there are 32 filters, we get 32 stacked feature maps of size 26x26!",
+      "terms": {
+        "Conv2D": "2D Convolutional layer.",
+        "Output Shape Formula": "O = (W - K + 2P)/S + 1."
+      }
+    }
+  },
+  {
+    "id": 208,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "In Module 02 (`Part1_MNIST.ipynb`), what is the output shape when a feature map of shape (26, 26, 32) passes through `layers.MaxPooling2D((2, 2))`?",
+    "options": [
+      "(13, 13, 32)",
+      "(24, 24, 32)",
+      "(13, 13, 16)",
+      "(26, 26, 16)"
+    ],
+    "correctAnswer": "(13, 13, 32)",
+    "explanation": {
+      "summary": "MaxPooling2D((2, 2)) halves height and width while keeping channel count unchanged.",
+      "whyCorrect": "In Part1_MNIST.ipynb: 26 / 2 = 13. Channel count remains 32. Output shape is exactly (13, 13, 32).",
+      "whyWrong": "Pooling never modifies the number of channels (32 stays 32).",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `MaxPooling2D((2, 2))` on (26, 26, 32) -> output shape is (13, 13, 32).",
+      "noobBreakdown": "Max pooling takes 2x2 blocks and picks the biggest number. That cuts 26 pixels down to 13 pixels in both height and width, but leaves all 32 channels untouched!",
+      "terms": {
+        "MaxPooling2D": "Keras layer downsampling spatial dimensions."
+      }
+    }
+  },
+  {
+    "id": 209,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "In Keras notebooks, what action is performed by calling `model.summary()`?",
+    "options": [
+      "Prints a formatted table displaying layer names, output tensor shapes, and total trainable vs non-trainable parameter counts",
+      "Saves the trained model architecture to an HDF5 (.h5) file on disk",
+      "Plots the loss and accuracy training curves using matplotlib",
+      "Evaluates test set accuracy"
+    ],
+    "correctAnswer": "Prints a formatted table displaying layer names, output tensor shapes, and total trainable vs non-trainable parameter counts",
+    "explanation": {
+      "summary": "model.summary() outputs the architectural overview of a Keras model.",
+      "whyCorrect": "In Part1_MNIST.ipynb: Calling `model.summary()` verifies layer shapes (e.g., (None, 26, 26, 32)) and total parameter count (e.g. 124,670 params).",
+      "whyWrong": "It does not save files to disk and does not plot curves.",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `model.summary()` -> prints layers, shapes, and parameter counts.",
+      "noobBreakdown": "The blueprint inspect tool! It prints out a clean table showing every layer in your model, how big the images are at each stage, and how many weights you have to train.",
+      "terms": {
+        "model.summary()": "Keras method displaying network architecture overview."
+      }
+    }
+  },
+  {
+    "id": 210,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "In Module 02 (`Part1_MNIST.ipynb`), what action does `model.evaluate(test_images, test_labels, verbose=2)` execute?",
+    "options": [
+      "Calculates the final loss and accuracy on unseen test data without updating any model weights",
+      "Runs backpropagation on test images to update model weights",
+      "Outputs visual predictions for individual images",
+      "Deletes the test images from memory"
+    ],
+    "correctAnswer": "Calculates the final loss and accuracy on unseen test data without updating any model weights",
+    "explanation": {
+      "summary": "model.evaluate tests model performance on unseen data without gradient updates.",
+      "whyCorrect": "In Part1_MNIST.ipynb: `model.evaluate` computes the test loss and test accuracy (achieving >99% on MNIST) in evaluation mode.",
+      "whyWrong": "It never computes gradients or updates weights.",
+      "keyConcept": "Notebook Line Action (Part1_MNIST.ipynb): `model.evaluate(...)` -> computes test metrics without updating weights.",
+      "noobBreakdown": "Taking the final exam! The model looks at 10,000 brand-new test photos it has never seen before and reports its final score (accuracy) without changing any of its weights.",
+      "terms": {
+        "model.evaluate()": "Keras method computing loss and metrics on evaluation datasets."
+      }
+    }
+  },
+  {
+    "id": 211,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In PyTorch CNN Lab 2 (`PT_Part1_MNIST.ipynb`), what do the arguments `(1, 32, 3, 1)` designate in `self.conv1 = nn.Conv2d(1, 32, 3, 1)`?",
+    "options": [
+      "1 input channel, 32 output filters/channels, kernel size 3x3, and stride 1",
+      "1 batch size, 32 epochs, 3 layers, and 1 learning rate",
+      "1 output channel, 32 input channels, kernel size 3x3, and padding 1",
+      "1 GPU device, 32 threads, 3 color channels, and 1 bias"
+    ],
+    "correctAnswer": "1 input channel, 32 output filters/channels, kernel size 3x3, and stride 1",
+    "explanation": {
+      "summary": "nn.Conv2d argument signature: (in_channels, out_channels, kernel_size, stride).",
+      "whyCorrect": "In PT_Part1_MNIST.ipynb Section 2.1: MNIST images have 1 grayscale channel. `nn.Conv2d(1, 32, 3, 1)` applies 32 filters of size 3x3 with stride 1.",
+      "whyWrong": "It does not designate batch size, epochs, or GPU devices.",
+      "keyConcept": "Notebook Line Action (PT_Part1_MNIST.ipynb): `nn.Conv2d(in_ch, out_ch, kernel, stride)`.",
+      "noobBreakdown": "Setting up the first convolutional layer in PyTorch: (1) Takes 1 grayscale channel as input, (2) spits out 32 feature maps, (3) uses a 3x3 filter stencil, and (4) slides 1 pixel at a time (stride 1).",
+      "terms": {
+        "nn.Conv2d": "PyTorch 2D Convolutional layer.",
+        "in_channels": "Number of channels in the input image (1 for grayscale, 3 for RGB).",
+        "out_channels": "Number of filters produced by the convolution."
+      }
+    }
+  },
+  {
+    "id": 212,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In `PT_Part1_MNIST.ipynb`, what action does `output = F.log_softmax(x, dim=1)` perform?",
+    "options": [
+      "Computes the natural logarithm of the softmax probability distribution across classes along dimension 1 for numerical stability",
+      "Applies standard Softmax and rounds numbers to nearest integers",
+      "Takes the matrix logarithm of the input weights",
+      "Computes binary cross entropy loss"
+    ],
+    "correctAnswer": "Computes the natural logarithm of the softmax probability distribution across classes along dimension 1 for numerical stability",
+    "explanation": {
+      "summary": "F.log_softmax computes log(softmax(x)) in a numerically stable way.",
+      "whyCorrect": "In PT_Part1_MNIST.ipynb: In Net.forward(), `F.log_softmax(x, dim=1)` produces log-probabilities across the 10 digit classes, designed to pair with `F.nll_loss`.",
+      "whyWrong": "It does not round numbers and is an activation function, not a loss function.",
+      "keyConcept": "Notebook Line Action (PT_Part1_MNIST.ipynb): `F.log_softmax(x, dim=1)` -> numerically stable log-probabilities.",
+      "noobBreakdown": "Computing the log of probabilities! Calculating Softmax and log together avoids rounding errors with tiny numbers like 0.0000001, making computer math much more accurate.",
+      "terms": {
+        "F.log_softmax": "Functional PyTorch operation computing log(Softmax(x)).",
+        "dim=1": "Applying the operation across the class dimension (axis 1)."
+      }
+    }
+  },
+  {
+    "id": 213,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In the PyTorch training loop (`PT_Part1_MNIST.ipynb`), why MUST `optimizer.zero_grad()` be executed before calling `loss.backward()`?",
+    "options": [
+      "PyTorch accumulates gradients in .grad buffers by default; zero_grad() flushes previous batch gradients so they don't corrupt the new update",
+      "It resets model weights to random initializations",
+      "It sets the learning rate to zero",
+      "It turns off gradient tracking for the validation loop"
+    ],
+    "correctAnswer": "PyTorch accumulates gradients in .grad buffers by default; zero_grad() flushes previous batch gradients so they don't corrupt the new update",
+    "explanation": {
+      "summary": "PyTorch's autograd accumulates gradients on each backward() call.",
+      "whyCorrect": "In PT_Part1_MNIST.ipynb: If you don't call `optimizer.zero_grad()`, gradients from the current batch will add onto gradients from previous batches, causing updates to blow up.",
+      "whyWrong": "It does not reset weights and does not change learning rate.",
+      "keyConcept": "Notebook Line Action (PT_Part1_MNIST.ipynb): `optimizer.zero_grad()` -> flushes accumulated gradients before backward pass.",
+      "noobBreakdown": "Erasing the chalkboard before writing new math! In PyTorch, calling backward adds gradients to existing ones. If you don't erase the board with zero_grad(), your mistakes keep piling up across batches.",
+      "terms": {
+        "optimizer.zero_grad()": "Clears the gradients of all optimized torch.Tensors.",
+        "Gradient Accumulation": "Adding gradients together across steps."
+      }
+    }
+  },
+  {
+    "id": 214,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In PyTorch training loops (`PT_Part1_MNIST.ipynb`), what action does `optimizer.step()` perform?",
+    "options": [
+      "Updates model parameter weights according to the optimizer's update rule using the computed gradients stored in .grad",
+      "Executes the forward pass through the neural network",
+      "Computes the loss value between predicted outputs and targets",
+      "Increments the epoch counter by 1"
+    ],
+    "correctAnswer": "Updates model parameter weights according to the optimizer's update rule using the computed gradients stored in .grad",
+    "explanation": {
+      "summary": "optimizer.step performs a parameter update based on current gradients.",
+      "whyCorrect": "In PT_Part1_MNIST.ipynb: Once `loss.backward()` populates `.grad`, `optimizer.step()` executes W = W - eta * grad for all model parameters.",
+      "whyWrong": "It does not execute the forward pass and does not compute loss.",
+      "keyConcept": "Notebook Line Action (PT_Part1_MNIST.ipynb): `optimizer.step()` -> updates weights using calculated gradients.",
+      "noobBreakdown": "Taking the step downhill! Now that we know which direction our mistakes are (from backward()), optimizer.step() actually turns the weight knobs to make the model better.",
+      "terms": {
+        "optimizer.step()": "Performs a single parameter update step in PyTorch."
+      }
+    }
+  },
+  {
+    "id": 215,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In PyTorch testing loops (`PT_Part1_MNIST.ipynb`), what action is executed when calling `model.eval()`?",
+    "options": [
+      "Switches the model to evaluation mode, deactivating Dropout and setting Batch Normalization to use running population statistics",
+      "Computes test set accuracy automatically",
+      "Freezes model weights permanently so they cannot be trained again",
+      "Exports the model to ONNX format"
+    ],
+    "correctAnswer": "Switches the model to evaluation mode, deactivating Dropout and setting Batch Normalization to use running population statistics",
+    "explanation": {
+      "summary": "model.eval() sets the module in evaluation mode.",
+      "whyCorrect": "In PT_Part1_MNIST.ipynb test function: `model.eval()` notifies layers like Dropout and BatchNorm to behave appropriately during testing (e.g. keeping 100% of neurons active).",
+      "whyWrong": "It does not compute accuracy automatically (you still must write the test loop).",
+      "keyConcept": "Notebook Line Action (PT_Part1_MNIST.ipynb): `model.eval()` -> switches model behavior for evaluation mode.",
+      "noobBreakdown": "Switching from 'Practice Mode' to 'Game Day Mode'! It turns off training tricks like Dropout so all neurons are active and the model gives its best performance.",
+      "terms": {
+        "model.eval()": "Sets PyTorch model to evaluation mode.",
+        "model.train()": "Sets PyTorch model to training mode."
+      }
+    }
+  },
+  {
+    "id": 216,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Module 03 (`autoencoder.ipynb` Section 'Image denoising'), what is the purpose of `x_train_noisy = x_train + noise_factor * tf.random.normal(shape=x_train.shape)`?",
+    "options": [
+      "Synthesizes corrupted training inputs by adding zero-mean Gaussian noise to clean images to train a Denoising Autoencoder",
+      "Normalizes the image pixels to have zero mean and unit variance",
+      "Deletes 20% of pixels to simulate missing data",
+      "Encodes the image into latent space"
+    ],
+    "correctAnswer": "Synthesizes corrupted training inputs by adding zero-mean Gaussian noise to clean images to train a Denoising Autoencoder",
+    "explanation": {
+      "summary": "Adding Gaussian noise creates corrupted inputs for denoising autoencoder training.",
+      "whyCorrect": "In autoencoder.ipynb: The model takes `x_train_noisy` as input and learns to reconstruct the clean `x_train`, teaching it to remove random Gaussian noise.",
+      "whyWrong": "It does not normalize images and does not delete pixels.",
+      "keyConcept": "Notebook Line Action (autoencoder.ipynb): `x_train + noise * tf.random.normal(...)` -> generates noisy inputs for denoising autoencoders.",
+      "noobBreakdown": "Adding TV static to a photo on purpose! By showing the AI a noisy picture and forcing it to output the clean original picture, it learns how to clean up blurry or noisy images.",
+      "terms": {
+        "Denoising Autoencoder": "An autoencoder trained to reconstruct clean images from noisy inputs.",
+        "Gaussian Noise": "Random noise following a normal bell-curve distribution."
+      }
+    }
+  },
+  {
+    "id": 217,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "In Module 03 (`autoencoder.ipynb`), why is `x_train_noisy = tf.clip_by_value(x_train_noisy, clip_value_min=0., clip_value_max=1.)` called immediately after adding noise?",
+    "options": [
+      "Clamps pixel values to stay strictly within the valid normalized range [0.0, 1.0], preventing pixel underflow (<0) or overflow (>1)",
+      "Removes all noise from the image",
+      "Converts the image to binary black and white pixels",
+      "Scales the image by 255"
+    ],
+    "correctAnswer": "Clamps pixel values to stay strictly within the valid normalized range [0.0, 1.0], preventing pixel underflow (<0) or overflow (>1)",
+    "explanation": {
+      "summary": "Adding random noise can push pixel values below 0.0 or above 1.0; clip_by_value enforces valid pixel bounds.",
+      "whyCorrect": "In autoencoder.ipynb: Because Gaussian noise is unbounded, some pixels become < 0 or > 1. `tf.clip_by_value(..., 0., 1.)` clamps all values to the valid [0, 1] range.",
+      "whyWrong": "It does not remove noise and does not binarize the image.",
+      "keyConcept": "Notebook Line Action (autoencoder.ipynb): `tf.clip_by_value(..., 0., 1.)` -> enforces pixel intensity bounds [0, 1].",
+      "noobBreakdown": "Keeping colors within legal limits! When you add random noise, some pixels might end up as -0.3 (too dark) or 1.4 (too bright). Clipping forces all pixels to stay between 0.0 (pure black) and 1.0 (pure white).",
+      "terms": {
+        "tf.clip_by_value": "Clamps tensor values to a specified minimum and maximum range.",
+        "Pixel Underflow/Overflow": "Pixel values exceeding allowable representation bounds."
+      }
+    }
+  },
+  {
+    "id": 218,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Module 03 (`autoencoder.ipynb`), what action does `layers.Conv2DTranspose(16, kernel_size=3, strides=2, padding='same', activation='relu')` perform in the decoder?",
+    "options": [
+      "Upsamples the spatial dimensions of the feature map (doubling height and width) through learnable transposed convolution to reconstruct the original image resolution",
+      "Downsamples the image by half using strided max pooling",
+      "Calculates the inverse matrix of the encoder weights",
+      "Flattens the feature map into a 1D bottleneck"
+    ],
+    "correctAnswer": "Upsamples the spatial dimensions of the feature map (doubling height and width) through learnable transposed convolution to reconstruct the original image resolution",
+    "explanation": {
+      "summary": "Conv2DTranspose performs learnable upsampling (fractionally strided convolution).",
+      "whyCorrect": "In autoencoder.ipynb Denoising Autoencoder: The decoder uses `Conv2DTranspose` with stride 2 to expand feature maps (e.g. 7x7 -> 14x14 -> 28x28) back to full resolution.",
+      "whyWrong": "It does not downsample (that is regular Conv2D) and does not compute matrix inverses.",
+      "keyConcept": "Notebook Line Action (autoencoder.ipynb): `Conv2DTranspose(..., strides=2)` -> doubles spatial height and width (upsampling).",
+      "noobBreakdown": "A reverse magnifying glass! While regular convolutions shrink images down, Transposed Convolution doubles the image's height and width (e.g. 7x7 into 14x14) to rebuild the full-sized photo.",
+      "terms": {
+        "Conv2DTranspose": "A transposed convolution layer used in decoders for learnable spatial upsampling.",
+        "Decoder": "The reconstructing half of an autoencoder."
+      }
+    }
+  },
+  {
+    "id": 219,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In Module 03 (`autoencoder.ipynb` Section 'Anomaly detection'), what action does `threshold = np.mean(train_loss) + np.std(train_loss)` perform?",
+    "options": [
+      "Establishes a statistical reconstruction error threshold (mean plus one standard deviation of normal data) to classify new ECG heartbeats as normal or anomalous",
+      "Sets the convergence threshold for early stopping",
+      "Calculates the classification accuracy of the autoencoder",
+      "Normalizes the ECG signal to zero mean and unit variance"
+    ],
+    "correctAnswer": "Establishes a statistical reconstruction error threshold (mean plus one standard deviation of normal data) to classify new ECG heartbeats as normal or anomalous",
+    "explanation": {
+      "summary": "Anomaly detection autoencoders use reconstruction error thresholds derived from training error statistics.",
+      "whyCorrect": "In autoencoder.ipynb: The autoencoder is trained strictly on normal ECGs. If an unseen heartbeat's reconstruction error exceeds `mean + std`, it is flagged as an anomaly.",
+      "whyWrong": "It is not an early stopping criterion and not a normalization step.",
+      "keyConcept": "Notebook Line Action (autoencoder.ipynb): `threshold = mean(loss) + std(loss)` -> sets anomaly detection decision boundary.",
+      "noobBreakdown": "Setting the alarm threshold! Since the model only knows what healthy heartbeats look like, we calculate the average mistake it makes on healthy people. If a new patient's heartbeat produces an error higher than this threshold, the alarm goes off (Anomaly detected)!",
+      "terms": {
+        "Reconstruction Error Threshold": "A cutoff value above which a sample is flagged as an anomaly.",
+        "Anomaly Detection": "Identifying rare or abnormal patterns that differ from normal training data."
+      }
+    }
+  },
+  {
+    "id": 220,
+    "category": "Line-by-Line Code Actions",
+    "module": "Module 3",
+    "difficulty": "Exam Level",
+    "question": "In MIT Lab 2 Part 2 (`PT_Part2_Debiasing.ipynb` Section 2.3), what action is executed by `z = mu + eps * torch.exp(0.5 * logsigma)`?",
+    "options": [
+      "Implements the VAE Reparameterization Trick, sampling latent vector z while keeping the operation differentiable with respect to mu and logsigma",
+      "Computes the KL divergence regularization loss",
+      "Calculates the binary cross-entropy reconstruction loss",
+      "Applies a Dropout mask to the latent variables"
+    ],
+    "correctAnswer": "Implements the VAE Reparameterization Trick, sampling latent vector z while keeping the operation differentiable with respect to mu and logsigma",
+    "explanation": {
+      "summary": "This equation is the exact PyTorch implementation of the VAE Reparameterization Trick.",
+      "whyCorrect": "In PT_Part2_Debiasing.ipynb: `z = mu + eps * torch.exp(0.5 * logsigma)` transforms random standard noise eps into samples from N(mu, sigma^2) while allowing backpropagation gradients to flow into mu and logsigma.",
+      "whyWrong": "It is not the KL loss calculation and not reconstruction loss.",
+      "keyConcept": "Notebook Line Action (PT_Part2_Debiasing.ipynb): `z = mu + eps * exp(0.5 * logsigma)` -> Reparameterization Trick sampling.",
+      "noobBreakdown": "The famous VAE math trick! Generates a random code z from the average (mu) and variance (sigma) without blocking the flow of calculus gradients.",
+      "terms": {
+        "Reparameterization Trick": "z = mu + sigma * eps, enabling backpropagation through random latent sampling.",
+        "logsigma": "Log of variance predicted for numerical stability."
       }
     }
   }

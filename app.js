@@ -393,6 +393,7 @@
       if (cat === 'Generative Models' && q.category !== 'Generative Models') return false;
       if (cat === 'Lab & Notebooks' && q.category !== 'Lab & Notebooks' && q.category !== 'Debiasing & VAEs') return false;
       if (cat === 'Debiasing & VAEs' && q.category !== 'Debiasing & VAEs') return false;
+      if (cat === 'Line-by-Line Code Actions' && q.category !== 'Line-by-Line Code Actions') return false;
       if (cat === 'Exact Slide Statements' && q.category !== 'Exact Slide Statements') return false;
 
       // Difficulty filter
@@ -719,6 +720,7 @@
         if (state.quizConfig.scope === 'Module 1') return q.module === 'Module 1';
         if (state.quizConfig.scope === 'Module 2') return q.module === 'Module 2';
         if (state.quizConfig.scope === 'Module 3') return q.module === 'Module 3';
+        if (state.quizConfig.scope === 'Line-by-Line Code Actions') return q.category === 'Line-by-Line Code Actions';
         if (state.quizConfig.scope === 'Exact Slide Statements') return q.category === 'Exact Slide Statements';
         return true;
       });
