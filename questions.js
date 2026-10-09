@@ -2208,6 +2208,206 @@ const QUESTION_BANK = [
       "whyWrong": "Autoencoders are unsupervised and do not output classification labels directly, do not compute time derivatives, and do not use lookup tables.",
       "keyConcept": "Lab Reference (Module 03 autoencoder.ipynb Anomaly Detection): Reconstruction Error > Threshold => Anomaly Detected."
     }
+  },
+  {
+    "id": 111,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "In MIT 6.S191 Lab 2 Part 2 (PT_Part2_Debiasing.ipynb), what is identified as the root cause of algorithmic bias in standard facial detection CNN models?",
+    "options": [
+      "Severe demographic imbalances in training datasets (such as CelebA having heavy over-representation of lighter-skinned faces compared to darker-skinned faces)",
+      "Using ReLU non-linearities instead of Sigmoid functions",
+      "Using convolutional filters smaller than 7x7",
+      "Using stochastic gradient descent with an adaptive momentum"
+    ],
+    "correctAnswer": "Severe demographic imbalances in training datasets (such as CelebA having heavy over-representation of lighter-skinned faces compared to darker-skinned faces)",
+    "explanation": {
+      "summary": "Standard vision models trained on imbalanced datasets inherit demographic disparities, exhibiting drastically higher error rates on minority subgroups.",
+      "whyCorrect": "As demonstrated in Lab 2 Part 2 (Section 2.1 & 2.2), datasets like CelebA are predominantly light-skinned. When a standard CNN is trained naively, it achieves high overall accuracy by maximizing performance on the majority group while failing significantly on under-represented demographics (e.g. darker females).",
+      "whyWrong": "Algorithmic bias is caused by data distribution skew and optimization incentives, not activation types or filter kernel sizes.",
+      "keyConcept": "Lab Reference (MIT Lab 2 PT_Part2_Debiasing.ipynb): Dataset Demographic Imbalance -> Skewed Latent Representations -> Algorithmic Bias."
+    }
+  },
+  {
+    "id": 112,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In Variational Autoencoders (VAEs) and DB-VAE, what is the critical purpose of the 'Reparameterization Trick' (z = mu + exp(0.5 * logsigma) * eps, where eps ~ N(0, I))?",
+    "options": [
+      "It makes the stochastic sampling operation differentiable by isolating randomness into an independent noise variable epsilon, allowing backpropagation gradients to flow into the encoder parameters mu and sigma",
+      "It guarantees that the latent dimension will strictly equal the input pixel resolution",
+      "It converts 32-bit floating point weights into 8-bit integers to reduce memory usage",
+      "It eliminates the need to compute reconstruction loss during decoder training"
+    ],
+    "correctAnswer": "It makes the stochastic sampling operation differentiable by isolating randomness into an independent noise variable epsilon, allowing backpropagation gradients to flow into the encoder parameters mu and sigma",
+    "explanation": {
+      "summary": "Standard random sampling is a non-differentiable stochastic operation with zero defined gradients. The reparameterization trick rewrites sampling as a differentiable affine transformation of random noise.",
+      "whyCorrect": "As derived in Section 2.4 (Reparameterization): Directly sampling z ~ N(mu, sigma^2) prevents gradient flow through the network. Setting z = mu + sigma * eps (where eps ~ N(0, I) has no learned parameters) ensures dz/dmu = 1 and dz/dsigma = eps, making the entire model end-to-end differentiable via standard backpropagation.",
+      "whyWrong": "It does not compress weight precision, does not equate latent size to input resolution, and does not bypass reconstruction loss.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): Reparameterization Trick: z = mu + exp(0.5 * logsigma) * eps (Differentiable Backprop through Stochastic Nodes)."
+    }
+  },
+  {
+    "id": 113,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In the VAE loss function, what fundamental regularization role is performed by the Kullback-Leibler (KL) Divergence loss term (L_KL)?",
+    "options": [
+      "It regularizes the latent space by penalizing the encoder when its predicted posterior distribution q(z|x) deviates from a standard isotropic Gaussian prior p(z) ~ N(0, I)",
+      "It forces the latent variables to become orthogonal binary one-hot vectors",
+      "It maximizes the training error to prevent gradient descent from converging prematurely",
+      "It replaces the cross-entropy classification loss entirely"
+    ],
+    "correctAnswer": "It regularizes the latent space by penalizing the encoder when its predicted posterior distribution q(z|x) deviates from a standard isotropic Gaussian prior p(z) ~ N(0, I)",
+    "explanation": {
+      "summary": "KL Divergence measures statistical distance between the encoder's predicted distribution and a standard unit Gaussian prior, ensuring a continuous, clustered, and smooth latent manifold.",
+      "whyCorrect": "Without the KL penalty, the encoder would isolate individual training points into distant, infinitesimally narrow clusters (overfitting, acting like a deterministic autoencoder). The KL term forces the latent space to center around mean 0 with variance 1, enabling smooth interpolation.",
+      "whyWrong": "KL divergence does not binarize latents, does not intentionally corrupt training, and works alongside (rather than replacing) classification/reconstruction losses.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): L_VAE = c * L_KL + L_recon. KL term prevents arbitrary latent cluster collapse."
+    }
+  },
+  {
+    "id": 114,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In PT_Part2_Debiasing.ipynb (Section 2.4), what is the analytical formula for the latent loss L_KL(mu, sigma) of a multivariate Gaussian with diagonal covariance relative to a standard unit Gaussian?",
+    "options": [
+      "L_KL = 0.5 * sum(sigma_j + mu_j^2 - 1 - log(sigma_j))",
+      "L_KL = sum(mu_j * sigma_j) / N",
+      "L_KL = (1/N) * sum((x_i - x_hat_i)^2)",
+      "L_KL = exp(mu_j) - exp(sigma_j)"
+    ],
+    "correctAnswer": "L_KL = 0.5 * sum(sigma_j + mu_j^2 - 1 - log(sigma_j))",
+    "explanation": {
+      "summary": "The KL divergence between N(mu, diag(sigma)) and N(0, I) has a closed-form analytical equation that can be computed without Monte Carlo sampling.",
+      "whyCorrect": "As explicitly coded in Section 2.4 of PT_Part2_Debiasing.ipynb: D_KL(N(mu, sigma) || N(0, I)) = 0.5 * sum(sigma + mu^2 - 1 - log(sigma)). When parameterized via log(sigma), it is written as 0.5 * sum(exp(2*logsigma) + mu^2 - 1 - 2*logsigma).",
+      "whyWrong": "The other options represent mean products, MSE reconstruction loss, or invalid heuristic exponentials.",
+      "keyConcept": "Lab Equation (PT_Part2_Debiasing.ipynb): L_KL = 0.5 * sum(sigma_j + mu_j^2 - 1 - log(sigma_j))."
+    }
+  },
+  {
+    "id": 115,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In the Debiasing Variational Autoencoder (DB-VAE) model, how is the total loss function mathematically formulated for a batch containing both face (y=1) and non-face (y=0) images?",
+    "options": [
+      "L_total = L_y(y, y_pred) + I_f(y) * [L_VAE], where I_f(y) is an indicator variable that applies VAE reconstruction and latent loss strictly to face images",
+      "L_total = L_VAE / L_y(y, y_pred)",
+      "L_total = (1 - I_f(y)) * L_VAE",
+      "L_total = L_y(y, y_pred) * L_VAE"
+    ],
+    "correctAnswer": "L_total = L_y(y, y_pred) + I_f(y) * [L_VAE], where I_f(y) is an indicator variable that applies VAE reconstruction and latent loss strictly to face images",
+    "explanation": {
+      "summary": "Non-face images should only train the binary classifier; they must NOT be reconstructed by the face decoder.",
+      "whyCorrect": "As derived in Section 2.5 ('Defining the DB-VAE loss function'): The goal is to learn the latent distribution of faces to debias facial detection. Non-faces (e.g. background trees, cars from ImageNet) are needed only for the binary classification task L_y. Thus, VAE loss is multiplied by I_f(y) where I_f=1 for faces and 0 for non-faces.",
+      "whyWrong": "Multiplying or dividing losses produces zero or undefined gradients, and applying VAE loss only to non-faces defeats the purpose of learning face latents.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): L_total = L_y(y, y_pred) + I_f(y) * [L_VAE]."
+    }
+  },
+  {
+    "id": 116,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "How does the DB-VAE algorithm perform automated 'Adaptive Resampling' during training to eliminate bias WITHOUT requiring explicit human demographic annotations?",
+    "options": [
+      "It estimates the empirical latent density Q(z|X) from the encoder and assigns selection probabilities inversely proportional to feature frequency (W(x) ~ 1 / (Q(z) + alpha)), sampling rare faces more often",
+      "It automatically crawls Wikipedia to find demographic labels for each CelebA identity",
+      "It applies heavy blur to all faces so that the model cannot distinguish skin tones or features",
+      "It permanently discards all majority demographic samples from the dataset before training begins"
+    ],
+    "correctAnswer": "It estimates the empirical latent density Q(z|X) from the encoder and assigns selection probabilities inversely proportional to feature frequency (W(x) ~ 1 / (Q(z) + alpha)), sampling rare faces more often",
+    "explanation": {
+      "summary": "DB-VAE discovers rare latent attributes in an unsupervised fashion, and re-weights sampling probabilities so rare features are visited equally during training.",
+      "whyCorrect": "In Section 2.5 ('Adaptive resampling for automated debiasing'): The encoder outputs latent means mu for all training faces. A histogram computes the marginal density Q(z_i). Samples residing in low-density bins (rare attributes like darker skin, hats, sunglasses) are assigned higher sampling weights W(x) = 1 / (Q(z) + alpha), achieving automated unsupervised debiasing.",
+      "whyWrong": "DB-VAE requires no external labels or web crawling, does not destroy image resolution with blur, and does not discard majority data.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): Adaptive Resampling: p_sample(x) ~ 1 / (Q(z|x) + alpha)."
+    }
+  },
+  {
+    "id": 117,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "In PT_Part2_Debiasing.ipynb (Section 2.6), which famous benchmark dataset was specifically utilized to evaluate facial detection accuracy across intersectional demographic groups (Dark Male, Dark Female, Light Male, Light Female)?",
+    "options": [
+      "Pilot Parliaments Benchmark (PPB)",
+      "MNIST Handwritten Digits",
+      "COCO (Common Objects in Context)",
+      "CIFAR-10"
+    ],
+    "correctAnswer": "Pilot Parliaments Benchmark (PPB)",
+    "explanation": {
+      "summary": "The PPB dataset (Buolamwini & Gebru, 2018) is the standard benchmark designed explicitly for evaluating demographic fairness in commercial and academic facial recognition.",
+      "whyCorrect": "As documented in Section 2.6 ('Evaluation of DB-VAE on Test Dataset'): The model is evaluated on the PPB dataset, which is balanced across skin type (Fitzpatrick scale) and gender, verifying that DB-VAE significantly closes the accuracy gap between Light Males and Dark Females.",
+      "whyWrong": "MNIST is for digits, COCO is for general object detection/segmentation, and CIFAR-10 is for 32x32 toy vehicle and animal classification.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.6): Pilot Parliaments Benchmark (PPB) evaluates intersectional accuracy across demographics."
+    }
+  },
+  {
+    "id": 118,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "What is the primary structural difference between a Standard Autoencoder and a Variational Autoencoder (VAE)?",
+    "options": [
+      "A standard autoencoder maps inputs deterministically to single discrete coordinates z, whereas a VAE maps inputs to parameters of probability distributions (mu and log(sigma)) from which latent codes are sampled",
+      "A standard autoencoder has no decoder network",
+      "A VAE cannot be trained on convolutional architectures",
+      "A standard autoencoder only works for speech signals while VAEs work only for text"
+    ],
+    "correctAnswer": "A standard autoencoder maps inputs deterministically to single discrete coordinates z, whereas a VAE maps inputs to parameters of probability distributions (mu and log(sigma)) from which latent codes are sampled",
+    "explanation": {
+      "summary": "Standard autoencoders learn deterministic mappings prone to gaps in latent space; VAEs learn a continuous probability density over the latent manifold.",
+      "whyCorrect": "In a standard autoencoder, z = Encoder(x). In a VAE (Section 2.4), mu, logsigma = Encoder(x), and z ~ N(mu, sigma^2). This probabilistic formulation ensures the latent space is continuous, complete, and generative.",
+      "whyWrong": "Both models possess decoders, both support convolutional layers, and both are standardly applied across vision and images.",
+      "keyConcept": "Autoencoder: x -> z (point) -> x_hat | VAE: x -> (mu, sigma) -> z ~ N(mu, sigma^2) -> x_hat."
+    }
+  },
+  {
+    "id": 119,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Basic",
+    "question": "In PT_Part2_Debiasing.ipynb (Section 2.5), what dimensionality is chosen for the bottleneck latent vector z in the DB-VAE architecture?",
+    "options": [
+      "100 latent variables",
+      "2 latent variables",
+      "10,000 latent variables",
+      "1 single scalar variable"
+    ],
+    "correctAnswer": "100 latent variables",
+    "explanation": {
+      "summary": "DB-VAE uses a 100-dimensional latent code to represent facial attributes (e.g. skin tone, pose, gender, accessories).",
+      "whyCorrect": "As explicitly specified in the DB-VAE architecture section (Cell 39 & 41): 'We will use a latent space with 100 latent variables' (self.fc_mu = nn.Linear(..., 100), self.fc_logsigma = nn.Linear(..., 100)).",
+      "whyWrong": "2 dimensions are typically used only for simple 2D toy visualizations; 10,000 would fail to compress the 64x64x3 image; 1 is too small to capture rich facial geometry.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.5): DB-VAE Latent Space Dimension = 100."
+    }
+  },
+  {
+    "id": 120,
+    "category": "Debiasing & VAEs",
+    "module": "Module 2",
+    "difficulty": "Exam Level",
+    "question": "In VAE reconstruction loss (PT_Part2_Debiasing.ipynb Section 2.4), which distance metric was implemented to measure fidelity between input image x and reconstructed output x_hat?",
+    "options": [
+      "L1 norm (Mean Absolute Error: ||x - x_hat||_1)",
+      "Categorical cross-entropy over 10 classes",
+      "Hinge loss with margin = 1.0",
+      "Perplexity score computed over token sequences"
+    ],
+    "correctAnswer": "L1 norm (Mean Absolute Error: ||x - x_hat||_1)",
+    "explanation": {
+      "summary": "L1 loss produces sharper reconstructed images compared to L2 (MSE), which tends to average pixel colors and create blurrier outputs.",
+      "whyCorrect": "In Section 2.4 ('Understanding VAEs: loss function'): 'Reconstruction loss (L_x(x, x_hat)): measures how accurately the reconstructed outputs match the input and is given by the L^1 norm of the input image and its reconstructed output: L_x(x, x_hat) = ||x - x_hat||_1'.",
+      "whyWrong": "Categorical cross-entropy is for discrete classification, Hinge loss is for SVMs, and Perplexity is for language modeling.",
+      "keyConcept": "Lab Reference (PT_Part2_Debiasing.ipynb Section 2.4): VAE Reconstruction Loss L_x(x, x_hat) = ||x - x_hat||_1."
+    }
   }
 ];
 

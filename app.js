@@ -390,7 +390,8 @@
       if (cat === 'Stride & Padding' && q.category !== 'Stride & Padding') return false;
       if (cat === 'CNN Architectures' && q.category !== 'CNN Architectures') return false;
       if (cat === 'Generative Models' && q.category !== 'Generative Models') return false;
-      if (cat === 'Lab & Notebooks' && q.category !== 'Lab & Notebooks') return false;
+      if (cat === 'Lab & Notebooks' && q.category !== 'Lab & Notebooks' && q.category !== 'Debiasing & VAEs') return false;
+      if (cat === 'Debiasing & VAEs' && q.category !== 'Debiasing & VAEs') return false;
 
       // Difficulty filter
       if (diff !== 'ALL' && q.difficulty !== diff) return false;
