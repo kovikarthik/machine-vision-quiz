@@ -3008,6 +3008,606 @@ const QUESTION_BANK = [
       "whyWrong": "TensorFlow does not rely on sympy symbolic math, numerical finite difference quotients, or manual derivation.",
       "keyConcept": "Exact Notebook Statement (Module 1 Section 1.4): 'Operations inside with tf.GradientTape() as tape: are recorded to compute gradients via reverse-mode autodiff.'"
     }
+  },
+  {
+    "id": 151,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Easy",
+    "question": "Complete the exact statement from the Module 1 slides regarding why non-linear activation functions are required: 'Without non-linear activation functions, a deep neural network _______.'",
+    "options": [
+      "collapses into a single linear transformation regardless of how many layers it has",
+      "suffers from exploding gradients that blow up to infinity",
+      "cannot have its weights initialized with normal distributions",
+      "requires infinite memory to compute the forward pass"
+    ],
+    "correctAnswer": "collapses into a single linear transformation regardless of how many layers it has",
+    "explanation": {
+      "summary": "Non-linearities prevent deep feedforward networks from collapsing mathematically into a single linear layer.",
+      "whyCorrect": "Module 1 Slide Text: 'Why non-linearities? Without non-linearities, no matter how many layers you have, the entire network is just a single linear transformation: W_2(W_1 x) = W' x. Non-linear activation functions allow networks to learn complex non-linear functions.'",
+      "whyWrong": "Linearity does not cause exploding gradients or require infinite memory; it simply deprives the network of representation capacity beyond a linear hyperplane.",
+      "keyConcept": "Exact Slide Statement (Module 1): 'Without non-linearities, no matter how many layers you have, the entire network is just a single linear transformation: W2(W1 x) = W' x.'"
+    }
+  },
+  {
+    "id": 152,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "According to the Module 1 slides on activation functions, what is the primary advantage of the Hyperbolic Tangent (tanh) function over the standard Sigmoid function?",
+    "options": [
+      "Tanh is zero-centered with an output range of [-1, 1], preventing systematic directional bias in gradient updates",
+      "Tanh derivative is always greater than 1.0, eliminating vanishing gradients completely",
+      "Tanh is computationally free because it requires no exponential operations",
+      "Tanh sets negative inputs to exactly zero to promote sparsity"
+    ],
+    "correctAnswer": "Tanh is zero-centered with an output range of [-1, 1], preventing systematic directional bias in gradient updates",
+    "explanation": {
+      "summary": "Tanh outputs are zero-centered in [-1, 1], unlike Sigmoid [0, 1] which forces all gradient updates to have the same sign.",
+      "whyCorrect": "Module 1 Slide Text: 'Hyperbolic Tangent (Tanh): Range [-1, 1], zero-centered. Solves the issue of non-zero-centered outputs of the sigmoid function, where gradients on weights during backpropagation are always all positive or all negative.'",
+      "whyWrong": "Tanh still suffers from vanishing gradients for large |z| (its maximum derivative is 1.0 at z=0), still uses exponentials (e^z - e^-z)/(e^z + e^-z), and does not set negative inputs to zero.",
+      "keyConcept": "Exact Slide Fact (Module 1): 'Tanh: Output range [-1, 1] is zero-centered, unlike sigmoid [0, 1] whose all-positive outputs cause zig-zag gradient updates.'"
+    }
+  },
+  {
+    "id": 153,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "From the Module 1 slides: What is the exact mathematical formula for Binary Cross-Entropy Loss for a single prediction y_hat and ground truth y?",
+    "options": [
+      "L(y_hat, y) = - [ y * log(y_hat) + (1 - y) * log(1 - y_hat) ]",
+      "L(y_hat, y) = 0.5 * (y - y_hat)^2",
+      "L(y_hat, y) = max(0, 1 - y * y_hat)",
+      "L(y_hat, y) = - sum(y_i * log(y_hat_i))"
+    ],
+    "correctAnswer": "L(y_hat, y) = - [ y * log(y_hat) + (1 - y) * log(1 - y_hat) ]",
+    "explanation": {
+      "summary": "Binary Cross-Entropy measures the distance between the Bernoulli true label y and predicted probability y_hat.",
+      "whyCorrect": "Module 1 Slide Formula: 'Binary Cross Entropy Loss: L(y_hat, y) = - [ y log(y_hat) + (1 - y) log(1 - y_hat) ]'. When y=1, only -log(y_hat) remains; when y=0, only -log(1 - y_hat) remains.",
+      "whyWrong": "0.5*(y - y_hat)^2 is Mean Squared Error (for regression); max(0, 1 - y*y_hat) is Hinge Loss (for SVMs); -sum(y_i * log(y_hat_i)) is Categorical Cross-Entropy (multi-class).",
+      "keyConcept": "Exact Slide Formula (Module 1): Binary Cross Entropy Loss = -[y * log(y_hat) + (1 - y) * log(1 - y_hat)]."
+    }
+  },
+  {
+    "id": 154,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In the Module 1 slides on multi-class classification, what does the Softmax function mathematically do to raw logits z?",
+    "options": [
+      "Exponentiates each logit and normalizes by the sum of all exponentiated logits, converting raw scores into a valid probability distribution summing to 1",
+      "Takes the argmax index and assigns a probability of 1.0 to the highest logit while setting all others to 0",
+      "Clips all negative logits to zero and normalizes positive logits by their arithmetic mean",
+      "Computes the cumulative distribution function of a standard normal distribution for each logit"
+    ],
+    "correctAnswer": "Exponentiates each logit and normalizes by the sum of all exponentiated logits, converting raw scores into a valid probability distribution summing to 1",
+    "explanation": {
+      "summary": "Softmax transforms unconstrained logits z into a probability distribution via softmax(z)_i = e^{z_i} / sum_j e^{z_j}.",
+      "whyCorrect": "Module 1 Slide Text: 'Softmax Activation: S(z)_i = e^{z_i} / sum_{j=1}^k e^{z_j}. Normalizes logits into probabilities such that 0 <= S(z)_i <= 1 and sum_i S(z)_i = 1.'",
+      "whyWrong": "Softmax does not take hard argmax (which is non-differentiable), clip negative scores like ReLU, or evaluate normal CDFs.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Softmax: S(z)_i = e^{z_i} / sum(e^{z_j}); maps unconstrained logits to valid probability distribution summing to 1.'"
+    }
+  },
+  {
+    "id": 155,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Easy",
+    "question": "Complete the exact Gradient Descent weight update equation from Module 1 slides: 'W <- _______', where eta is the learning rate and J(W) is the cost function.",
+    "options": [
+      "W - eta * grad_W J(W)",
+      "W + eta * grad_W J(W)",
+      "eta * W - grad_W J(W)",
+      "W - (1/eta) * J(W)"
+    ],
+    "correctAnswer": "W - eta * grad_W J(W)",
+    "explanation": {
+      "summary": "Gradient descent moves in the opposite direction of the gradient to minimize loss.",
+      "whyCorrect": "Module 1 Slide Formula: 'Gradient Descent update rule: W <- W - eta * grad_W J(W)'. The negative sign ensures steps move in the direction of steepest decrease of cost J(W).",
+      "whyWrong": "W + eta * grad J is gradient ascent (maximizing loss); eta * W subtracts weight decay without gradient; (1/eta) * J is dimensionally invalid.",
+      "keyConcept": "Exact Slide Equation (Module 1): Gradient Descent update rule: W <- W - eta * grad_W J(W)."
+    }
+  },
+  {
+    "id": 156,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Easy",
+    "question": "In the Module 1 slides illustrating the effect of Learning Rate (eta), what happens if the learning rate is set too large?",
+    "options": [
+      "The gradient steps can overshoot the minimum and diverge (loss increases or oscillates wildly)",
+      "The model will slowly get trapped in spurious saddle points",
+      "The activations will instantly drop to zero, causing dying neurons",
+      "The network weights will all converge to identical values"
+    ],
+    "correctAnswer": "The gradient steps can overshoot the minimum and diverge (loss increases or oscillates wildly)",
+    "explanation": {
+      "summary": "An excessively large learning rate causes overshooting and unstable optimization divergence.",
+      "whyCorrect": "Module 1 Slide Text: 'Setting the learning rate: Too small: converges very slowly, easily trapped in local minima. Too large: overshoots the minimum, oscillates, and may diverge to infinity.'",
+      "whyWrong": "Slow convergence is caused by small learning rates; dying neurons are caused by negative inputs in ReLUs; identical weights are caused by symmetric zero initialization.",
+      "keyConcept": "Exact Slide Statement (Module 1): 'Learning Rate: Too small -> converges very slowly; Too large -> overshoots, oscillates, and diverges.'"
+    }
+  },
+  {
+    "id": 157,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "What is the exact reason stated in Module 1 slides for using Mini-batch Gradient Descent rather than pure Stochastic Gradient Descent (batch size = 1) or Full Batch Gradient Descent?",
+    "options": [
+      "Mini-batch GD balances the computational efficiency of hardware GPU matrix vectorization with lower gradient variance than SGD and more frequent updates than Full Batch GD",
+      "Mini-batch GD guarantees reaching the global minimum of non-convex neural network loss surfaces",
+      "Mini-batch GD avoids needing to calculate gradients using backpropagation",
+      "Mini-batch GD eliminates the need to specify a learning rate parameter"
+    ],
+    "correctAnswer": "Mini-batch GD balances the computational efficiency of hardware GPU matrix vectorization with lower gradient variance than SGD and more frequent updates than Full Batch GD",
+    "explanation": {
+      "summary": "Mini-batch gradient descent exploits hardware matrix parallelism while reducing gradient noise compared to pure SGD.",
+      "whyCorrect": "Module 1 Slide Text: 'Mini-batch Gradient Descent: Combines the efficiency of vectorization on GPU/TPU with stable gradient estimates (less noisy than pure SGD) while making frequent weight updates (unlike slow full-batch GD). Typical batch size: 32, 64, 128.'",
+      "whyWrong": "No optimizer guarantees the global minimum on non-convex neural network surfaces; backpropagation is still required; learning rates are still necessary.",
+      "keyConcept": "Exact Slide Statement (Module 1): 'Mini-batch GD: Combines fast vectorization on GPUs with stable gradient estimates and regular updates.'"
+    }
+  },
+  {
+    "id": 158,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "According to the Module 1 slides, what is the exact mechanism and purpose of adding 'Momentum' to Stochastic Gradient Descent?",
+    "options": [
+      "It adds a fraction beta of the previous velocity vector, helping accelerate in consistent directions and dampening oscillations along steep ravines",
+      "It randomly drops gradients with probability 0.5 to prevent feature co-adaptation",
+      "It replaces gradient descent with second-order Hessian matrix inversion",
+      "It dynamically shrinks the learning rate to zero after every single mini-batch"
+    ],
+    "correctAnswer": "It adds a fraction beta of the previous velocity vector, helping accelerate in consistent directions and dampening oscillations along steep ravines",
+    "explanation": {
+      "summary": "Momentum accumulates past velocity v to maintain momentum in consistent descent directions.",
+      "whyCorrect": "Module 1 Slide Text: 'SGD with Momentum: v <- beta * v + eta * grad J(W); W <- W - v. Helps accelerate gradients in the right direction and dampens oscillations through ravines whose surface curves much more steeply in one dimension.'",
+      "whyWrong": "Dropping units is Dropout; second-order optimization is Newton/L-BFGS; shrinking learning rate is a schedule or decay.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Momentum: v <- beta * v + eta * grad J(W); accelerates along shallow directions and dampens oscillations.'"
+    }
+  },
+  {
+    "id": 159,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Advanced",
+    "question": "From Module 1 slides: What two key ideas does the Adam (Adaptive Moment Estimation) optimizer combine?",
+    "options": [
+      "First moment exponential moving average (like Momentum) and second moment uncentered variance tracking (like RMSprop/AdaGrad), with bias correction",
+      "L1 regularization penalty and L2 regularization weight decay",
+      "Stochastic depth layer dropout and learning rate warm restarts",
+      "Finite difference numerical gradient checks and forward-mode autodiff"
+    ],
+    "correctAnswer": "First moment exponential moving average (like Momentum) and second moment uncentered variance tracking (like RMSprop/AdaGrad), with bias correction",
+    "explanation": {
+      "summary": "Adam maintains exponentially decaying averages of past gradients (m_t) and past squared gradients (v_t).",
+      "whyCorrect": "Module 1 Slide Text: 'Adam (Adaptive Moment Estimation): Combines the advantages of Momentum (stores 1st moment: exponentially decaying average of past gradients) and RMSprop (stores 2nd moment: exponentially decaying average of squared gradients), with bias correction for zero initialization.'",
+      "whyWrong": "Adam is not an L1/L2 regularization method, a stochastic depth dropout technique, or a finite difference scheme.",
+      "keyConcept": "Exact Slide Statement (Module 1): 'Adam Optimizer: Combines the benefits of Momentum (1st moment of gradient) and RMSprop (2nd moment of squared gradient) with bias corrections.'"
+    }
+  },
+  {
+    "id": 160,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "Complete the exact definition of Batch Normalization from the Module 1 lecture slides: 'Batch Normalization operates by _______ to zero mean and unit variance across each mini-batch during training.'",
+    "options": [
+      "normalizing the layer inputs (activations)",
+      "scaling the final classification weights",
+      "clipping the backpropagated gradients",
+      "zero-centering the dataset labels"
+    ],
+    "correctAnswer": "normalizing the layer inputs (activations)",
+    "explanation": {
+      "summary": "Batch Normalization normalizes activations x at each layer across the current mini-batch.",
+      "whyCorrect": "Module 1 Slide Text: 'Batch Normalization: Normalizes layer inputs across each mini-batch to have zero mean and unit variance: x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps). Then applies learnable scale and shift: y = gamma * x_hat + beta. Accelerates training and allows higher learning rates.'",
+      "whyWrong": "Batch Normalization does not scale weights, clip gradients (that is gradient clipping), or normalize target labels.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Batch Normalization: Normalizes layer inputs across each mini-batch: x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps), then scales and shifts: y = gamma * x_hat + beta.'"
+    }
+  },
+  {
+    "id": 161,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Intermediate",
+    "question": "In Module 1 slides on Regularization, what is the key distinction between L1 Regularization (Lasso) and L2 Regularization (Ridge / Weight Decay)?",
+    "options": [
+      "L1 regularization drives many weights to exactly zero (encouraging sparsity), whereas L2 regularization penalizes large weights towards zero without making them exactly zero",
+      "L2 regularization produces sparse models, whereas L1 regularization preserves all weights equally",
+      "L1 regularization can only be applied to output layers, whereas L2 is only for input layers",
+      "L2 regularization doubles the training time, whereas L1 requires no extra computations"
+    ],
+    "correctAnswer": "L1 regularization drives many weights to exactly zero (encouraging sparsity), whereas L2 regularization penalizes large weights towards zero without making them exactly zero",
+    "explanation": {
+      "summary": "L1 penalty |w| has constant derivative at zero driving weights to 0, while L2 penalty w^2 decays weights smoothly.",
+      "whyCorrect": "Module 1 Slide Text: 'Regularization comparison: L1 Regularization (Lasso): Penalty lambda * sum |w|. Encourages sparsity (drives non-critical weights to 0, useful for feature selection). L2 Regularization (Ridge / Weight Decay): Penalty 0.5 * lambda * sum w^2. Penalizes large weights, spreading weight values smoothly without driving them to exact zero.'",
+      "whyWrong": "L2 does not produce sparsity; both can be applied across all layers; L1 and L2 add comparable computational overhead.",
+      "keyConcept": "Exact Slide Fact (Module 1): 'L1 Regularization (Lasso): Promotes sparsity (drives weights to 0). L2 Regularization (Ridge): Penalizes large weights (weight decay).'"
+    }
+  },
+  {
+    "id": 162,
+    "category": "Exact Slide Statements",
+    "module": "Module 1",
+    "difficulty": "Easy",
+    "question": "According to Module 1 slides, what is 'Early Stopping' as a regularization technique?",
+    "options": [
+      "Monitoring performance on a held-out validation set and stopping training at the point where validation loss begins to increase, preventing overfitting",
+      "Interrupting backpropagation halfway through the network to save GPU computation",
+      "Stopping training immediately after epoch 1 if training loss is below 0.1",
+      "Halting the optimizer whenever a learning rate scheduler reduces the learning rate"
+    ],
+    "correctAnswer": "Monitoring performance on a held-out validation set and stopping training at the point where validation loss begins to increase, preventing overfitting",
+    "explanation": {
+      "summary": "Early stopping stops gradient descent when validation loss reaches its minimum and starts climbing.",
+      "whyCorrect": "Module 1 Slide Text: 'Early Stopping: Stop training before the network has a chance to overfit. Monitor the loss on a validation set: when validation loss begins to rise (even though training loss keeps decreasing), stop training and restore the model weights from the best epoch.'",
+      "whyWrong": "Early stopping does not truncate backpropagation, quit after 1 epoch, or halt on scheduler reductions.",
+      "keyConcept": "Exact Slide Definition (Module 1): 'Early Stopping: Stop training when validation loss starts to increase to prevent overfitting on the training set.'"
+    }
+  },
+  {
+    "id": 163,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Easy",
+    "question": "From Module 2 slides: Why can't we simply use a standard Fully Connected (Dense) neural network on high-resolution image inputs?",
+    "options": [
+      "Flattening a 2D/3D image discards spatial pixel relationships, and the number of parameters explodes into millions or billions of weights, causing massive overfitting and memory exhaustion",
+      "Fully connected layers cannot perform matrix multiplications on floating point numbers",
+      "Fully connected layers only accept 1D binary vectors (0 or 1) as inputs",
+      "Backpropagation does not function mathematically on fully connected layers"
+    ],
+    "correctAnswer": "Flattening a 2D/3D image discards spatial pixel relationships, and the number of parameters explodes into millions or billions of weights, causing massive overfitting and memory exhaustion",
+    "explanation": {
+      "summary": "Fully connected layers destroy 2D spatial locality and cause severe parameter explosion when applied directly to images.",
+      "whyCorrect": "Module 2 Slide Text: 'Why Convolutions? 1. Parameter explosion: An input image of 1000x1000x3 pixels flattened into 3,000,000 inputs connected to 1,000 hidden units requires 3 billion parameters for a single layer! 2. Spatial structure is lost: Flattening throws away 2D spatial arrangement and correlation of neighboring pixels.'",
+      "whyWrong": "Fully connected layers operate on floats and backpropagate perfectly; their limitation on vision is parameter explosion and loss of spatial inductive bias.",
+      "keyConcept": "Exact Slide Motivation (Module 2): 'Why not Fully Connected? 1) Explosion of parameters (1000x1000x3 = 3M inputs -> billions of weights). 2) Spatial structure is lost upon flattening.'"
+    }
+  },
+  {
+    "id": 164,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "What is the exact definition of a neuron's 'Receptive Field' in Module 2 slides?",
+    "options": [
+      "The region of the input space (image) that can influence or affect the activation of that particular neuron",
+      "The total number of parameters contained inside the convolutional kernel",
+      "The physical memory allocated on the GPU for a specific feature map",
+      "The learning rate multiplier assigned to a specific convolutional layer"
+    ],
+    "correctAnswer": "The region of the input space (image) that can influence or affect the activation of that particular neuron",
+    "explanation": {
+      "summary": "The receptive field is the spatial footprint in the input that feeds into a given unit.",
+      "whyCorrect": "Module 2 Slide Text: 'Receptive Field: The receptive field of a unit in a convolutional network is defined as the region of the input image that can affect or influence that unit's activation. Receptive field size grows linearly as we stack deeper convolutional layers.'",
+      "whyWrong": "The receptive field is not the parameter count, GPU RAM allocation, or a learning rate hyperparameter.",
+      "keyConcept": "Exact Slide Definition (Module 2): 'Receptive Field: The region of the input space that affects a particular unit of the network.'"
+    }
+  },
+  {
+    "id": 165,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "In Module 2 slides, what is the exact formula for the output spatial dimension (O) after applying a 1D convolution of input size W, kernel size K, padding P, and stride S?",
+    "options": [
+      "O = floor((W - K + 2*P) / S) + 1",
+      "O = (W + K + P) * S - 1",
+      "O = floor((W - K - P) / (2*S))",
+      "O = W * K / S + 2*P"
+    ],
+    "correctAnswer": "O = floor((W - K + 2*P) / S) + 1",
+    "explanation": {
+      "summary": "The spatial output dimension formula computes how many kernel windows fit across the padded input.",
+      "whyCorrect": "Module 2 Slide Formula: 'Output size formula: Output Dimension O = floor((W - K + 2P) / S) + 1, where W = input size, K = filter size, P = padding amount on each side, S = stride.'",
+      "whyWrong": "All other mathematical combinations fail dimensional consistency with kernel sliding windows.",
+      "keyConcept": "Exact Slide Formula (Module 2): Output Dimension Formula: O = floor((W - K + 2P) / S) + 1."
+    }
+  },
+  {
+    "id": 166,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "According to Module 2 slides, what is the primary difference in behavior between Max Pooling and Average Pooling?",
+    "options": [
+      "Max pooling selects the most prominent activation within each window (capturing dominant features and providing translation invariance), while Average pooling computes the mean activation (smoothing the representation)",
+      "Max pooling contains learnable weights, while Average pooling has fixed weights",
+      "Average pooling doubles the spatial resolution, while Max pooling halves it",
+      "Max pooling is only used in output layers, while Average pooling is only used in input layers"
+    ],
+    "correctAnswer": "Max pooling selects the most prominent activation within each window (capturing dominant features and providing translation invariance), while Average pooling computes the mean activation (smoothing the representation)",
+    "explanation": {
+      "summary": "Max pooling detects the presence of the strongest feature, whereas average pooling aggregates overall presence.",
+      "whyCorrect": "Module 2 Slide Text: 'Pooling Operations: Max Pooling: Takes the maximum value in each window. Retains the most prominent/salient feature while discarding weaker background signals, offering robust translation invariance. Average Pooling: Computes the average value across the window, producing a smoothed summary of the region.'",
+      "whyWrong": "Neither pooling layer contains learnable parameters (both have 0 weights); both reduce spatial dimensions by the pool size / stride.",
+      "keyConcept": "Exact Slide Statement (Module 2): 'Pooling: Max Pooling outputs the maximum activation in the window (salient feature detection); Average Pooling computes the average (smooth feature reduction).'"
+    }
+  },
+  {
+    "id": 167,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "In Module 2 slides on Advanced CNNs, what is the exact primary purpose of a 1x1 Convolution ('Network in Network')?",
+    "options": [
+      "To perform cross-channel pooling to decrease or increase channel dimensionality without modifying spatial height and width",
+      "To enlarge the spatial receptive field across adjacent pixels",
+      "To replace non-linear activation functions with linear transforms",
+      "To double the spatial width and height of the feature map"
+    ],
+    "correctAnswer": "To perform cross-channel pooling to decrease or increase channel dimensionality without modifying spatial height and width",
+    "explanation": {
+      "summary": "A 1x1 convolution pools across channels to project depth up or down while preserving H and W.",
+      "whyCorrect": "Module 2 Slide Text: '1x1 Convolutions (Network-in-Network): A 1x1 convolution performs a cross-channel parametric pooling. It allows increasing or decreasing the number of channels (feature map depth) without changing the spatial dimensions (H x W), dramatically reducing computation when used as a bottleneck.'",
+      "whyWrong": "A 1x1 convolution has a spatial kernel size of 1, so it cannot aggregate spatial information across adjacent pixels.",
+      "keyConcept": "Exact Slide Statement (Module 2): '1x1 Convolutions: Cross-channel pooling / projection. Changes channel depth (dimensionality reduction/expansion) while keeping spatial H x W dimensions unchanged.'"
+    }
+  },
+  {
+    "id": 168,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "What is the exact function of 'Global Average Pooling' (GAP) introduced in modern CNN architectures (such as ResNet and GoogLeNet) as described in Module 2 slides?",
+    "options": [
+      "It averages each entire feature map into a single scalar value, replacing parameter-heavy fully connected layers and preventing overfitting",
+      "It calculates the average RGB pixel intensity of the raw input image before training",
+      "It replaces standard batch normalization across all layers",
+      "It computes the average gradient across all mini-batches during testing"
+    ],
+    "correctAnswer": "It averages each entire feature map into a single scalar value, replacing parameter-heavy fully connected layers and preventing overfitting",
+    "explanation": {
+      "summary": "Global Average Pooling collapses each H x W feature map into 1 scalar, drastically cutting parameters.",
+      "whyCorrect": "Module 2 Slide Text: 'Global Average Pooling: Instead of flattening feature maps into large fully connected layers (which hold up to 90% of model parameters and overfit), GAP takes the average of each feature map across all spatial locations (H x W -> 1x1). It has 0 parameters and directly feeds into softmax.'",
+      "whyWrong": "GAP is an architectural layer before classification, not an input preprocessing step, normalization layer, or testing metric.",
+      "keyConcept": "Exact Slide Fact (Module 2): 'Global Average Pooling (GAP): Computes average of each feature map (spatial H x W -> 1x1), drastically reducing parameters compared to Dense/FC layers.'"
+    }
+  },
+  {
+    "id": 169,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "From Module 2 slides: What key technical breakthroughs in AlexNet (2012) revolutionized computer vision?",
+    "options": [
+      "Using ReLU activations instead of saturating Sigmoid/Tanh, Dropout (0.5), heavy data augmentation, and training across 2 GPUs",
+      "Inventing depthwise separable convolutions and residual skip connections",
+      "Using 1x1 convolutions exclusively throughout all layers without any spatial convolutions",
+      "Replacing backpropagation with genetic algorithms for image classification"
+    ],
+    "correctAnswer": "Using ReLU activations instead of saturating Sigmoid/Tanh, Dropout (0.5), heavy data augmentation, and training across 2 GPUs",
+    "explanation": {
+      "summary": "AlexNet won ImageNet 2012 using ReLUs, Dropout, GPU training, and data augmentation.",
+      "whyCorrect": "Module 2 Slide Text: 'AlexNet (2012): The ImageNet breakthrough that sparked modern deep learning: 1. ReLU activation (converges 6x faster than tanh). 2. Dropout (p=0.5 in FC layers). 3. Heavy Data Augmentation (flips, crops, color jitter). 4. Multi-GPU training (split across two NVIDIA GTX 580s).'",
+      "whyWrong": "AlexNet did not use depthwise separable convs (MobileNet) or skip connections (ResNet).",
+      "keyConcept": "Exact Slide Summary (Module 2): 'AlexNet (2012): First deep CNN breakthrough on ImageNet: ReLU (6x faster convergence), Dropout (0.5), Data Augmentation, GPU implementation.'"
+    }
+  },
+  {
+    "id": 170,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "In Module 2 slides on GoogLeNet, what is the core architectural principle of the 'Inception Module'?",
+    "options": [
+      "Processing feature maps in parallel at multiple spatial kernel sizes (1x1, 3x3, 5x5, max pool) and concatenating their resulting channel outputs",
+      "Stacking identical 7x7 filters sequentially without any non-linearities",
+      "Using recursive recurrent connections to process images as time series",
+      "Removing all convolutional layers and using only multi-head attention"
+    ],
+    "correctAnswer": "Processing feature maps in parallel at multiple spatial kernel sizes (1x1, 3x3, 5x5, max pool) and concatenating their resulting channel outputs",
+    "explanation": {
+      "summary": "Inception modules process representations at multiple scales in parallel within each block.",
+      "whyCorrect": "Module 2 Slide Text: 'Inception Module: Why choose a 3x3 or 5x5 filter when you can do both? The Inception architecture applies parallel filters of different sizes (1x1, 3x3, 5x5) and 3x3 max pooling to the same input, then concatenates all filter outputs along the channel dimension. Uses 1x1 convs for bottleneck dimensionality reduction.'",
+      "whyWrong": "Inception relies on multi-scale parallel convolutions with 1x1 bottlenecks, not sequential 7x7 filters or attention.",
+      "keyConcept": "Exact Slide Statement (Module 2): 'Inception Module: Apply parallel convolutional filters of different sizes (1x1, 3x3, 5x5) and max pooling, then concatenate channel outputs.'"
+    }
+  },
+  {
+    "id": 171,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Intermediate",
+    "question": "According to Module 2 slides, what paradoxical phenomenon led to the invention of Deep Residual Networks (ResNet)?",
+    "options": [
+      "The 'degradation problem': As plain networks become deeper, training accuracy saturates and then rapidly degrades (higher training error, not caused by overfitting)",
+      "Deep networks immediately overfit training data to 100% accuracy while validation error explodes",
+      "Deep networks run out of floating point precision after layer 10",
+      "Deep networks only recognize low-level edges regardless of depth"
+    ],
+    "correctAnswer": "The 'degradation problem': As plain networks become deeper, training accuracy saturates and then rapidly degrades (higher training error, not caused by overfitting)",
+    "explanation": {
+      "summary": "ResNet was designed to solve the degradation problem where deeper plain networks exhibit higher training error.",
+      "whyCorrect": "Module 2 Slide Text: 'The Degradation Problem: As plain deep networks get deeper, accuracy saturates and then degrades rapidly. Crucially, this degradation is NOT caused by overfitting: the 56-layer plain network has HIGHER training error than the 20-layer network! ResNet solves this optimization obstacle with residual identity shortcuts.'",
+      "whyWrong": "Overfitting would produce low training error and high validation error; the degradation problem exhibits high training error.",
+      "keyConcept": "Exact Slide Motivation (Module 2): 'Degradation Problem: Deeper plain networks exhibit HIGHER training error (not overfitting, but optimization difficulty due to vanishing gradients). Solved by ResNet.'"
+    }
+  },
+  {
+    "id": 172,
+    "category": "Exact Slide Statements",
+    "module": "Module 2",
+    "difficulty": "Advanced",
+    "question": "In Module 2 slides, how does MobileNet's 'Depthwise Separable Convolution' achieve an 8x to 9x reduction in computational cost?",
+    "options": [
+      "By splitting standard convolution into a Depthwise convolution (applying a single filter per input channel) followed by a Pointwise 1x1 convolution (combining channels)",
+      "By quantizing all 32-bit floats into 1-bit binary weights",
+      "By skipping 8 out of every 9 incoming image frames in video streams",
+      "By replacing all convolutions with fast Fourier transforms (FFT)"
+    ],
+    "correctAnswer": "By splitting standard convolution into a Depthwise convolution (applying a single filter per input channel) followed by a Pointwise 1x1 convolution (combining channels)",
+    "explanation": {
+      "summary": "MobileNet factorizes 2D convolutions into spatial depthwise convolutions and 1x1 pointwise convolutions.",
+      "whyCorrect": "Module 2 Slide Text: 'Depthwise Separable Convolution: Factorizes standard convolution into two separate steps: 1) Depthwise convolution: applies a single spatial filter to each input channel independently. 2) Pointwise convolution: a 1x1 convolution that linearly combines the outputs across channels. Computation reduction: 1/N + 1/D_k^2 (approx 8x to 9x speedup for 3x3 filters).'",
+      "whyWrong": "MobileNet is an architectural factorization, not 1-bit quantization or frame skipping.",
+      "keyConcept": "Exact Slide Definition (Module 2): 'Depthwise Separable Convolution: Factorizes standard conv into 1) Depthwise conv (spatial per channel) + 2) Pointwise conv (1x1 across channels) -> ~8-9x computation reduction.'"
+    }
+  },
+  {
+    "id": 173,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Easy",
+    "question": "What is the exact fundamental difference between Discriminative and Generative models stated in the Module 3 lecture slides?",
+    "options": [
+      "Discriminative models learn the conditional distribution P(Y|X) to predict labels, while Generative models learn the data distribution P(X) to generate new samples",
+      "Discriminative models use unsupervised learning, while Generative models use supervised learning",
+      "Generative models can only output numerical scalars, while Discriminative models output images",
+      "Discriminative models cannot be trained with gradient descent"
+    ],
+    "correctAnswer": "Discriminative models learn the conditional distribution P(Y|X) to predict labels, while Generative models learn the data distribution P(X) to generate new samples",
+    "explanation": {
+      "summary": "Discriminative models learn class boundaries P(Y|X); Generative models learn the underlying data distribution P(X).",
+      "whyCorrect": "Module 3 Slide Text: 'Discriminative vs. Generative Models: Discriminative Model: Learns the conditional probability P(Y|X) to separate classes with a decision boundary. Generative Model: Learns the probability distribution of the data P(X) or joint distribution P(X, Y) to model how the data was generated and create new samples x_new ~ P(X).'",
+      "whyWrong": "Discriminative models are typically supervised, while generative models are typically unsupervised.",
+      "keyConcept": "Exact Slide Definition (Module 3 Slide 4): 'Discriminative: Learns P(Y|X) (decision boundary). Generative: Learns P(X) or P(X, Y) (how data is generated).'"
+    }
+  },
+  {
+    "id": 174,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "According to the Taxonomy of Generative Models in Module 3 slides, how are VAEs and GANs classified?",
+    "options": [
+      "VAEs are Explicit Density models (with approximate density), whereas GANs are Implicit Density models",
+      "VAEs are Implicit Density models, whereas GANs are Tractable Explicit Density models",
+      "Both VAEs and GANs are Tractable Autoregressive Explicit Density models",
+      "VAEs are Markov Chain models, whereas GANs are Deterministic Dictionary Learners"
+    ],
+    "correctAnswer": "VAEs are Explicit Density models (with approximate density), whereas GANs are Implicit Density models",
+    "explanation": {
+      "summary": "VAEs approximate an explicit density function, whereas GANs model an implicit sampling process.",
+      "whyCorrect": "Module 3 Slide Text: 'Taxonomy of Generative Models: Explicit Density: 1. Tractable Density: PixelRNN, PixelCNN. 2. Approximate Density: Variational Autoencoder (VAE), Boltzmann Machines. Implicit Density: Generative Adversarial Networks (GANs) - can sample without explicitly defining a density function p(x).'",
+      "whyWrong": "GANs do not provide an explicit likelihood or density function p(x); they learn an implicit sampling generator.",
+      "keyConcept": "Exact Slide Taxonomy (Module 3 Slide 8): 'Generative Models Taxonomy: Explicit Density -> Approximate density (VAEs); Implicit Density -> GANs.'"
+    }
+  },
+  {
+    "id": 175,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "From Module 3 slides: Why can't a standard, deterministic Autoencoder be effectively used as a generative model?",
+    "options": [
+      "Its latent space is unregularized with 'holes' and gaps; picking a random latent vector z typically maps to an unrecognizable, garbage output",
+      "Autoencoders cannot be trained on images with more than 1 channel",
+      "Deterministic autoencoders can only produce outputs identical to training images",
+      "The decoder in a standard autoencoder is mathematically non-invertible"
+    ],
+    "correctAnswer": "Its latent space is unregularized with 'holes' and gaps; picking a random latent vector z typically maps to an unrecognizable, garbage output",
+    "explanation": {
+      "summary": "Deterministic autoencoders leave the latent space unregularized, causing holes and non-generative representations.",
+      "whyCorrect": "Module 3 Slide Text: 'Why can't standard Autoencoders generate new data? Standard autoencoders map inputs to isolated points in latent space. The space between these points is empty ('holes'). If you sample a random vector z from empty space, the decoder will produce an unrealistic, garbled image.'",
+      "whyWrong": "Autoencoders work on multi-channel images and are trained with MSE; the issue is that their latent space is not a smooth prior distribution.",
+      "keyConcept": "Exact Slide Statement (Module 3): 'Why not standard AE for generation? Latent space is not continuous and has gaps/holes. Random sampling produces nonsensical outputs.'"
+    }
+  },
+  {
+    "id": 176,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "In Module 3 slides, what are the two distinct loss terms that comprise the Variational Autoencoder (VAE) objective function?",
+    "options": [
+      "Reconstruction Loss (pixel fidelity between input and reconstruction) + KL Divergence Loss (regularization aligning latent distribution to standard normal)",
+      "Cross-Entropy Classification Loss + Weight Decay Penalty",
+      "Adversarial Minimax Loss + Cycle Consistency Loss",
+      "L1 Sparsity Loss + Contrastive Margin Loss"
+    ],
+    "correctAnswer": "Reconstruction Loss (pixel fidelity between input and reconstruction) + KL Divergence Loss (regularization aligning latent distribution to standard normal)",
+    "explanation": {
+      "summary": "VAE loss optimizes the Evidence Lower Bound (ELBO): reconstruction fidelity plus KL divergence prior alignment.",
+      "whyCorrect": "Module 3 Slide Text: 'VAE Loss Function: L(theta, phi; x) = -E_{q_phi(z|x)}[log p_theta(x|z)] + D_{KL}(q_phi(z|x) || p(z)). Term 1: Reconstruction Loss: makes reconstructed image match input. Term 2: KL Divergence Loss: acts as a regularizer forcing latent distribution q(z|x) close to standard Gaussian p(z) ~ N(0, I).'",
+      "whyWrong": "VAEs do not optimize adversarial games (GANs), classification cross-entropy, or contrastive margins.",
+      "keyConcept": "Exact Slide Formulation (Module 3): L_VAE = L_reconstruction(x, x_hat) + D_KL(q_phi(z|x) || p(z)), where p(z) ~ N(0, I)."
+    }
+  },
+  {
+    "id": 177,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "What is the exact mathematical purpose of the KL Divergence term in the VAE loss according to Module 3 slides?",
+    "options": [
+      "It penalizes the encoder when the learned latent distribution q_phi(z|x) diverges from the prior p(z) = N(0, I), enforcing a continuous, smooth latent manifold",
+      "It forces the decoder weights to sum to 1 across all channels",
+      "It prevents the discriminator from overpowering the generator",
+      "It ensures the generated image has zero mean pixel intensity"
+    ],
+    "correctAnswer": "It penalizes the encoder when the learned latent distribution q_phi(z|x) diverges from the prior p(z) = N(0, I), enforcing a continuous, smooth latent manifold",
+    "explanation": {
+      "summary": "KL divergence acts as a regularizer pulling the approximate posterior toward a unit Gaussian prior.",
+      "whyCorrect": "Module 3 Slide Text: 'Role of KL Divergence in VAE: Without KL divergence, the network maximizes reconstruction by placing encodings far apart with tiny variance (reverting to a standard AE). The KL term forces mean mu close to 0 and variance sigma close to 1, ensuring the latent space is continuous, smooth, and complete for sampling.'",
+      "whyWrong": "KL divergence regularizes latent distributions; it does not constrain decoder weights, balance discriminators, or alter pixel means.",
+      "keyConcept": "Exact Slide Fact (Module 3): 'KL Divergence: Regularizes latent space by forcing posterior distribution q(z|x) to match standard normal Gaussian prior N(0, I).'"
+    }
+  },
+  {
+    "id": 178,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Advanced",
+    "question": "In the Module 3 slides on Generative Adversarial Networks, why is the Generator objective modified from min_G log(1 - D(G(z))) to max_G log(D(G(z))) in practice?",
+    "options": [
+      "Early in training when G is poor, D easily rejects fake images (D(G(z)) ~ 0), causing log(1 - D(G(z))) gradients to saturate (vanish); maximizing log(D(G(z))) provides much stronger gradients early on",
+      "Maximizing log(D(G(z))) makes the loss convex and guarantees a unique global minimum",
+      "The original formula requires calculating the matrix inverse of the discriminator weights",
+      "Minimizing log(1 - D(G(z))) results in negative loss values which GPUs cannot store"
+    ],
+    "correctAnswer": "Early in training when G is poor, D easily rejects fake images (D(G(z)) ~ 0), causing log(1 - D(G(z))) gradients to saturate (vanish); maximizing log(D(G(z))) provides much stronger gradients early on",
+    "explanation": {
+      "summary": "The non-saturating heuristic max_G log D(G(z)) prevents vanishing generator gradients during early training.",
+      "whyCorrect": "Module 3 Slide Text: 'Non-saturating Generator Game: In minimax GAN: min_G log(1 - D(G(z))). Early in training, G generates bad images, so D easily rejects them (D(G(z)) -> 0). The curve for log(1 - D) is flat at 0 -> gradient vanishes! Instead, train G to maximize log(D(G(z))). This has large gradients when D(G(z)) is close to 0, providing strong learning signals early.'",
+      "whyWrong": "GAN training is fundamentally non-convex; no matrix inversions are involved; log losses are stored normally.",
+      "keyConcept": "Exact Slide Heuristic (Module 3 Slide 27): 'Non-Saturating Game: Early in training, log(1 - D(G(z))) saturates (vanishing gradients). In practice, optimize max_G log(D(G(z))) for strong early gradient signals.'"
+    }
+  },
+  {
+    "id": 179,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Intermediate",
+    "question": "Which set of architectural guidelines for Deep Convolutional GANs (DCGAN) is explicitly listed in the Module 3 slides?",
+    "options": [
+      "Replace pooling with strided convolutions (discriminator) and fractional-strided convolutions (generator); use Batch Normalization in both G and D; use LeakyReLU in D and ReLU in G (Tanh for G output)",
+      "Use max pooling after every layer; eliminate all batch normalization; use standard sigmoid activations in all layers",
+      "Use fully connected layers exclusively; use dropout = 0.9 in generator; avoid using convolutional filters",
+      "Use residual skip connections between generator and discriminator; use SGD with learning rate 1.0"
+    ],
+    "correctAnswer": "Replace pooling with strided convolutions (discriminator) and fractional-strided convolutions (generator); use Batch Normalization in both G and D; use LeakyReLU in D and ReLU in G (Tanh for G output)",
+    "explanation": {
+      "summary": "DCGAN established key architectural stability rules: strided convolutions, batch norm, and ReLU/LeakyReLU activations.",
+      "whyCorrect": "Module 3 Slide Text: 'DCGAN Architectural Guidelines (Radford et al.): 1. Replace pooling layers with strided convolutions (discriminator) and fractional-strided / transposed convolutions (generator). 2. Use Batch Normalization in both generator and discriminator. 3. Remove fully connected hidden layers for deeper architectures. 4. Use ReLU activation in generator (Tanh for output). 5. Use LeakyReLU activation in discriminator for all layers.'",
+      "whyWrong": "DCGAN explicitly advises against max pooling, requires Batch Normalization, and forbids deep fully connected hidden layers.",
+      "keyConcept": "Exact Slide Guidelines (Module 3 DCGAN): 'DCGAN Rules: 1) Replace pooling with strided/fractional-strided convs. 2) Batch Normalization in G and D. 3) Remove FC layers. 4) LeakyReLU in D, ReLU in G with Tanh output.'"
+    }
+  },
+  {
+    "id": 180,
+    "category": "Exact Slide Statements",
+    "module": "Module 3",
+    "difficulty": "Advanced",
+    "question": "In the MIT 6.S191 Debiasing Lab (PT_Part2_Debiasing.ipynb), how is the debiasing sampling probability W(z) calculated using the trained VAE's latent space?",
+    "options": [
+      "The sampling probability is inversely proportional to the latent density estimate: W(z) proportional to 1 / sqrt(Q(z)), weighting rare demographic subgroups more frequently during training",
+      "The sampling probability is directly proportional to the pixel variance: W(z) proportional to Var(x)",
+      "The model discards all images that belong to the majority demographic group",
+      "The model randomly perturbs pixel values with Gaussian noise proportional to learning rate"
+    ],
+    "correctAnswer": "The sampling probability is inversely proportional to the latent density estimate: W(z) proportional to 1 / sqrt(Q(z)), weighting rare demographic subgroups more frequently during training",
+    "explanation": {
+      "summary": "Debiased sampling uses estimated latent density Q(z) to weight rare demographic regions more frequently.",
+      "whyCorrect": "MIT 6.S191 Debiasing Lab Text: 'Mitigating Bias via VAE Latent Densities: We compute the smoothed empirical density Q(z) of training data in the VAE's latent space. We then sample faces during classifier training according to probability weights W(z) proportional to 1 / sqrt(Q(z)). This ensures underrepresented groups (which occupy low-density regions in latent space) are sampled with higher frequency, debiasing the downstream facial detection model.'",
+      "whyWrong": "The lab does not discard data, calculate raw pixel variances, or add noise; it performs importance sampling based on unsupervised VAE latent density estimates.",
+      "keyConcept": "Exact Notebook Formula (Debiasing Lab): 'Debiasing via Latent Re-weighting: W(z) ∝ 1 / sqrt(Q(z)). Lower density latent regions (underrepresented groups) receive higher sampling probabilities.'"
+    }
   }
 ];
 
