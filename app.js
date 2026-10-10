@@ -2062,6 +2062,9 @@
   // 16. Initialization
   // =========================================================================
   function init() {
+    if (!window.COURSE_QUESTIONS && typeof QUESTION_BANK !== 'undefined') {
+      window.COURSE_QUESTIONS = QUESTION_BANK;
+    }
     updateStatsCounters();
     setupHeaderNavigation();
     setupStudyViewEvents();

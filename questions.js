@@ -5474,3 +5474,5 @@ const QUESTION_BANK = [
     }
   }
 ];
+
+window.COURSE_QUESTIONS = QUESTION_BANK;
